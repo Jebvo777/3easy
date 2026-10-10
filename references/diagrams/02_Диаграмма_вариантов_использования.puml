@@ -1,0 +1,308 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 12
+skinparam packageStyle rectangle
+left to right direction
+title EASY3 — варианты использования
+actor "Собственник" as Owner
+actor "Администратор" as Admin
+actor "Начальник" as Chief
+actor "Технолог" as Tech
+actor "Бригадир" as Lead
+actor "Исполнитель" as Worker
+actor "Контролёр ОТК" as QC
+package "Первый вход и компания" {
+  usecase "Создать учётную запись" as UC00_00
+  usecase "Войти в систему" as UC00_01
+  usecase "Восстановить доступ" as UC00_02
+  usecase "Создать компанию" as UC00_03
+  usecase "Переключить компанию" as UC00_04
+  usecase "Изменить реквизиты" as UC00_05
+  usecase "Выбрать валюту и часовой пояс" as UC00_06
+  usecase "Возобновить незаполненную настройку" as UC00_07
+  usecase "Проверить готовность паспорта" as UC00_08
+  usecase "Создать первый заказ без полного паспорта" as UC00_09
+}
+package "Люди и доступ" {
+  usecase "Создать профиль сотрудника" as UC01_00
+  usecase "Назначить несколько ролей" as UC01_01
+  usecase "Ограничить доступ подразделением" as UC01_02
+  usecase "Добавить цех и участок" as UC01_03
+  usecase "Создать бригаду" as UC01_04
+  usecase "Назначить бригадира" as UC01_05
+  usecase "Управлять составом бригады" as UC01_06
+  usecase "Назначить квалификацию" as UC01_07
+  usecase "Настроить правило подтверждения" as UC01_08
+  usecase "Заблокировать доступ" as UC01_09
+  usecase "Просмотреть журнал изменений" as UC01_10
+}
+package "Календарь и ресурсы" {
+  usecase "Настроить рабочую неделю" as UC02_00
+  usecase "Создать смены" as UC02_01
+  usecase "Учесть праздники и исключения" as UC02_02
+  usecase "Указать рабочие места" as UC02_03
+  usecase "Задать типы оборудования" as UC02_04
+  usecase "Указать совместимость операций" as UC02_05
+  usecase "Отметить простой машины" as UC02_06
+  usecase "Зарегистрировать материал" as UC02_07
+  usecase "Указать материал заказчика" as UC02_08
+  usecase "Отметить остаток и резерв" as UC02_09
+  usecase "Проверить доступность мощностей" as UC02_10
+}
+package "ЦЕЛЬ и заказ" {
+  usecase "Создать черновик заказа" as UC03_00
+  usecase "Добавить позиции изделия" as UC03_01
+  usecase "Описать варианты и единицы" as UC03_02
+  usecase "Выбрать своё производство" as UC03_03
+  usecase "Выбрать подряд" as UC03_04
+  usecase "Установить крайний срок" as UC03_05
+  usecase "Задать потолок себестоимости" as UC03_06
+  usecase "Указать договорную цену" as UC03_07
+  usecase "Добавить материалы и вложения" as UC03_08
+  usecase "Изменить условия новой версией" as UC03_09
+  usecase "Просмотреть портфель заказов" as UC03_10
+  usecase "Изменить приоритет заказа" as UC03_11
+  usecase "Приостановить или отменить заказ" as UC03_12
+  usecase "Закрыть выполненный заказ" as UC03_13
+}
+package "Экономика и деньги" {
+  usecase "Добавить постоянный расход" as UC04_00
+  usecase "Добавить переменный расход" as UC04_01
+  usecase "Настроить базу распределения" as UC04_02
+  usecase "Зарегистрировать прямые затраты" as UC04_03
+  usecase "Разделить резерв и использование" as UC04_04
+  usecase "Учесть компенсации заказчика" as UC04_05
+  usecase "Рассчитать предварительную оценку" as UC04_06
+  usecase "Рассчитать фактическую себестоимость" as UC04_07
+  usecase "Сравнить плановую и фактическую стоимость" as UC04_08
+  usecase "Рассчитать прибыль подряда" as UC04_09
+  usecase "Оценить результат собственной продукции" as UC04_10
+  usecase "Показать неполную экономику" as UC04_11
+  usecase "Просмотреть динамику по периоду" as UC04_12
+  usecase "Экспортировать разрешённую сводку" as UC04_13
+}
+package "Технология и нормы" {
+  usecase "Описать изделие текстом" as UC05_00
+  usecase "Выбрать технологию из библиотеки" as UC05_01
+  usecase "Загрузить технологическую таблицу" as UC05_02
+  usecase "Создать узлы изделия" as UC05_03
+  usecase "Добавить операцию" as UC05_04
+  usecase "Указать зависимости операций" as UC05_05
+  usecase "Создать параллельные ветви" as UC05_06
+  usecase "Назначить совместимую машину" as UC05_07
+  usecase "Указать требования к навыку" as UC05_08
+  usecase "Создать норму времени" as UC05_09
+  usecase "Указать основание и источник нормы" as UC05_10
+  usecase "Проверить применимость нормы" as UC05_11
+  usecase "Проверить цикл в маршруте" as UC05_12
+  usecase "Сохранить версию технологии" as UC05_13
+}
+package "ПЛАН и расписание" {
+  usecase "Рассчитать трудоёмкость" as UC06_00
+  usecase "Рассчитать требуемый такт" as UC06_01
+  usecase "Рассчитать загрузку ресурсов" as UC06_02
+  usecase "Построить календарный прогноз" as UC06_03
+  usecase "Обнаружить узкое место" as UC06_04
+  usecase "Определить критический путь" as UC06_05
+  usecase "Учесть конкурирующие заказы" as UC06_06
+  usecase "Организовать по изделиям" as UC06_07
+  usecase "Организовать по узлам" as UC06_08
+  usecase "Организовать по операциям" as UC06_09
+  usecase "Выбрать смешанную организацию" as UC06_10
+  usecase "Настроить размер пачки" as UC06_11
+  usecase "Перетащить работу на ресурс" as UC06_12
+  usecase "Просмотреть граф технологии" as UC06_13
+  usecase "Просмотреть карту рабочих мест" as UC06_14
+  usecase "Просмотреть календарный план" as UC06_15
+  usecase "Сравнить варианты размещения" as UC06_16
+  usecase "Отменить правку черновика" as UC06_17
+  usecase "Проверить жёсткие ограничения" as UC06_18
+  usecase "Подтвердить версию плана" as UC06_19
+  usecase "Опубликовать план" as UC06_20
+  usecase "Откатить к предыдущей версии" as UC06_21
+}
+package "Смена и назначения" {
+  usecase "Сформировать сменное задание" as UC07_00
+  usecase "Подтвердить состав смены" as UC07_01
+  usecase "Зафиксировать явку" as UC07_02
+  usecase "Зафиксировать неявку" as UC07_03
+  usecase "Назначить исполнителя" as UC07_04
+  usecase "Проверить двойную занятость" as UC07_05
+  usecase "Передать назначения технологу" as UC07_06
+  usecase "Проверить назначения технологом" as UC07_07
+  usecase "Утвердить начальником" as UC07_08
+  usecase "Выдать задания исполнителям" as UC07_09
+  usecase "Отозвать задание" as UC07_10
+  usecase "Передать работу другому исполнителю" as UC07_11
+}
+package "Факт выполнения" {
+  usecase "Открыть своё задание" as UC08_00
+  usecase "Получить пачку по QR" as UC08_01
+  usecase "Начать операцию" as UC08_02
+  usecase "Приостановить работу" as UC08_03
+  usecase "Продолжить операцию" as UC08_04
+  usecase "Указать выполненный объём" as UC08_05
+  usecase "Подтвердить частичный выпуск" as UC08_06
+  usecase "Передать пачку следующему месту" as UC08_07
+  usecase "Разделить производственную партию" as UC08_08
+  usecase "Объединить разрешённые партии" as UC08_09
+  usecase "Приложить подтверждающее фото" as UC08_10
+  usecase "Зафиксировать поломку и простой" as UC08_11
+  usecase "Завершить операцию" as UC08_12
+  usecase "Исправить факт корректирующим событием" as UC08_13
+  usecase "Посмотреть собственную историю" as UC08_14
+}
+package "ОТК и корректировки" {
+  usecase "Принять партию на контроль" as UC09_00
+  usecase "Проверить количество" as UC09_01
+  usecase "Отметить годные изделия" as UC09_02
+  usecase "Зафиксировать дефект" as UC09_03
+  usecase "Отправить на переделку" as UC09_04
+  usecase "Отметить безвозвратный брак" as UC09_05
+  usecase "Приложить фото дефекта" as UC09_06
+  usecase "Перепроверить после исправления" as UC09_07
+  usecase "Проследить происхождение партии" as UC09_08
+  usecase "Сопоставить вход и выход операций" as UC09_09
+}
+package "Контроль и аналитика" {
+  usecase "Посмотреть состояние всех заказов" as UC10_00
+  usecase "Посмотреть план-факт выпуска" as UC10_01
+  usecase "Посмотреть загрузку участка" as UC10_02
+  usecase "Посмотреть прогноз готовности" as UC10_03
+  usecase "Найти отклонения по срокам" as UC10_04
+  usecase "Определить причины простоя" as UC10_05
+  usecase "Проверить утреннюю готовность" as UC10_06
+  usecase "Проверить итог смены" as UC10_07
+  usecase "Показать новые события без перезагрузки" as UC10_08
+  usecase "Посмотреть качество и переделки" as UC10_09
+  usecase "Сравнить версии прогнозов" as UC10_10
+  usecase "Настроить критические уведомления" as UC10_11
+}
+package "Сценарии и AI" {
+  usecase "Создать вариант что-если" as UC11_00
+  usecase "Изменить состав смены в варианте" as UC11_01
+  usecase "Проверить замену оборудования" as UC11_02
+  usecase "Изменить приоритет заказов" as UC11_03
+  usecase "Сравнить сроки сценариев" as UC11_04
+  usecase "Сравнить стоимость сценариев" as UC11_05
+  usecase "Применить выбранный вариант через согласование" as UC11_06
+  usecase "Предложить операции по описанию" as UC11_07
+  usecase "Запросить недостающие данные" as UC11_08
+  usecase "Объяснить причину ограничения" as UC11_09
+  usecase "Проверить предложение AI" as UC11_10
+  usecase "Запретить передачу закрытых данных AI" as UC11_11
+}
+package "Импорт и управление данными" {
+  usecase "Загрузить CSV" as UC12_00
+  usecase "Загрузить XLSX" as UC12_01
+  usecase "Сопоставить столбцы" as UC12_02
+  usecase "Предпросмотреть строки" as UC12_03
+  usecase "Проверить единицы измерения" as UC12_04
+  usecase "Подтвердить импорт" as UC12_05
+  usecase "Просмотреть ошибки строк" as UC12_06
+  usecase "Повторить импорт без дублей" as UC12_07
+  usecase "Открыть исходный файл" as UC12_08
+  usecase "Проверить версии и аудит" as UC12_09
+  usecase "Восстановить состояние после сбоя" as UC12_10
+  usecase "Просмотреть журнал фоновых задач" as UC12_11
+}
+Owner --> UC00_00
+Owner --> UC00_03
+Owner --> UC00_09
+Admin --> UC00_01
+Admin --> UC00_05
+Admin --> UC00_08
+Owner --> UC01_00
+Owner --> UC01_03
+Owner --> UC01_10
+Chief --> UC01_01
+Chief --> UC01_05
+Chief --> UC01_09
+Owner --> UC02_00
+Owner --> UC02_03
+Owner --> UC02_10
+Chief --> UC02_01
+Chief --> UC02_05
+Chief --> UC02_09
+Tech --> UC02_02
+Tech --> UC02_07
+Tech --> UC02_08
+Owner --> UC03_00
+Owner --> UC03_03
+Owner --> UC03_13
+Chief --> UC03_01
+Chief --> UC03_05
+Chief --> UC03_12
+Owner --> UC04_00
+Owner --> UC04_03
+Owner --> UC04_13
+Tech --> UC05_00
+Tech --> UC05_03
+Tech --> UC05_13
+Chief --> UC05_01
+Chief --> UC05_05
+Chief --> UC05_12
+Tech --> UC06_00
+Tech --> UC06_03
+Tech --> UC06_21
+Chief --> UC06_01
+Chief --> UC06_05
+Chief --> UC06_20
+Owner --> UC06_02
+Owner --> UC06_07
+Owner --> UC06_19
+Lead --> UC07_00
+Lead --> UC07_03
+Lead --> UC07_11
+Chief --> UC07_01
+Chief --> UC07_05
+Chief --> UC07_10
+Tech --> UC07_02
+Tech --> UC07_07
+Tech --> UC07_09
+Worker --> UC08_00
+Worker --> UC08_03
+Worker --> UC08_14
+Lead --> UC08_01
+Lead --> UC08_05
+Lead --> UC08_13
+QC --> UC09_00
+QC --> UC09_03
+QC --> UC09_09
+Lead --> UC09_01
+Lead --> UC09_05
+Lead --> UC09_08
+Owner --> UC10_00
+Owner --> UC10_03
+Owner --> UC10_11
+Chief --> UC10_01
+Chief --> UC10_05
+Chief --> UC10_10
+Tech --> UC10_02
+Tech --> UC10_07
+Tech --> UC10_09
+Lead --> UC10_03
+Lead --> UC10_08
+Lead --> UC10_09
+Owner --> UC11_00
+Owner --> UC11_03
+Owner --> UC11_11
+Chief --> UC11_01
+Chief --> UC11_05
+Chief --> UC11_10
+Tech --> UC11_02
+Tech --> UC11_07
+Tech --> UC11_09
+Owner --> UC12_00
+Owner --> UC12_03
+Owner --> UC12_11
+Admin --> UC12_01
+Admin --> UC12_05
+Admin --> UC12_10
+Tech --> UC12_02
+Tech --> UC12_07
+Tech --> UC12_09
+@enduml

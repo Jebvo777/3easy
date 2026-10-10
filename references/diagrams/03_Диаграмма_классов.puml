@@ -1,0 +1,107 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 14
+hide empty methods
+class Company {
+  +id: UUID
+  +name: string
+  +currency: string
+}
+class Person {
+  +id: UUID
+  +displayName: string
+}
+class Membership {
+  +companyId: UUID
+  +roles: Role[]
+  +scopeIds: UUID[]
+}
+class Order {
+  +id: UUID
+  +status: OrderStatus
+  +currentTermsVersion: int
+}
+class OrderLine {
+  +quantity: decimal
+  +unit: string
+}
+class TermsVersion {
+  +version: int
+  +dueAt: datetime
+  +targetValue: decimal?
+}
+class RouteVersion {
+  +version: int
+  +status: RouteStatus
+}
+class Operation {
+  +id: UUID
+  +requiredSkill: string
+  +timeBasis: string
+}
+class Resource {
+  +id: UUID
+  +resourceType: string
+  +capacity: decimal
+}
+class Norm {
+  +value: decimal?
+  +unit: string
+  +origin: string
+  +confidence: string
+}
+class PlanVersion {
+  +version: int
+  +state: PlanState
+  +calculate(): Forecast
+}
+class Allocation {
+  +operationId: UUID
+  +resourceId: UUID
+  +timeWindow: Period
+}
+class Assignment {
+  +workerId: UUID
+  +state: AssignmentState
+}
+class ProductionEvent {
+  +eventType: EventType
+  +quantity: decimal
+  +occurredAt: datetime
+}
+class QualityCheck {
+  +good: decimal
+  +rework: decimal
+  +scrap: decimal
+}
+class ExpensePolicy {
+  +kind: string
+  +effectiveFrom: date
+  +formula: expression
+}
+class CalculationSnapshot {
+  +completeness: string
+  +inputsHash: string
+}
+Company "1" -- "*" Membership
+Person "1" -- "*" Membership
+Company "1" -- "*" Order
+Order "1" -- "*" OrderLine
+Order "1" -- "*" TermsVersion
+OrderLine "1" -- "*" RouteVersion
+RouteVersion "1" -- "*" Operation
+Operation "*" -- "0..1" Norm
+Company "1" -- "*" Resource
+Order "1" -- "*" PlanVersion
+PlanVersion "1" -- "*" Allocation
+Allocation "*" --> "1" Operation
+Allocation "*" --> "1" Resource
+PlanVersion "1" -- "*" Assignment
+Assignment "1" -- "*" ProductionEvent
+ProductionEvent "0..*" -- "0..1" QualityCheck
+Company "1" -- "*" ExpensePolicy
+Order "1" -- "*" CalculationSnapshot
+@enduml

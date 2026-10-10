@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 14
+left to right direction
+rectangle "Первый вход / Паспорт" as passport
+rectangle "ЦЕЛЬ
+Заказы и экономика" as goal
+rectangle "ПЛАН
+Технология и расписание" as plan
+rectangle "ПРОИЗВОДСТВО / ДЕЙСТВИЕ
+Смена, факт, ОТК" as prod
+rectangle "Оперативная картина
+План / факт / отклонения" as control
+rectangle "Сценарии и AI-помощник
+Только предложения" as ai
+rectangle "Общие службы
+Роли, аудит, импорт, документы" as platform
+passport --> goal : производственные исходные данные
+goal --> plan : заказ, объём, срок
+passport --> plan : ресурсы, календарь, нормы
+plan --> prod : подтверждённые задания
+prod --> control : события и годный выпуск
+control --> goal : прогноз и факт затрат
+control --> plan : остаток и ограничения
+plan --> ai : варианты и узкие места
+ai ..> plan : черновое предложение
+platform ..> passport
+platform ..> goal
+platform ..> plan
+platform ..> prod
+@enduml

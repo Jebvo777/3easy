@@ -1,0 +1,418 @@
+[
+  {
+    "message": "M001",
+    "role": "user",
+    "date": "2026-10-05 16:52:32",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M002",
+    "role": "assistant",
+    "date": "2026-10-05 17:02:43",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M003",
+    "role": "user",
+    "date": "2026-10-05 17:07:46",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M004",
+    "role": "assistant",
+    "date": "2026-10-05 17:08:40",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M005",
+    "role": "user",
+    "date": "2026-10-06 08:42:44",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M006",
+    "role": "assistant",
+    "date": "2026-10-06 08:46:55",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M007",
+    "role": "user",
+    "date": "2026-10-06 08:48:40",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M008",
+    "role": "assistant",
+    "date": "2026-10-06 08:49:12",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M009",
+    "role": "user",
+    "date": "2026-10-06 08:52:27",
+    "category": "technical",
+    "topic": "Техническое обследование",
+    "included": true
+  },
+  {
+    "message": "M010",
+    "role": "assistant",
+    "date": "2026-10-06 08:52:55",
+    "category": "technical",
+    "topic": "Технические вопросы",
+    "included": true
+  },
+  {
+    "message": "M011",
+    "role": "user",
+    "date": "2026-10-06 08:58:37",
+    "category": "technical",
+    "topic": "Прямые ответы владельца",
+    "included": true
+  },
+  {
+    "message": "M012",
+    "role": "assistant",
+    "date": "2026-10-06 09:01:11",
+    "category": "technical",
+    "topic": "Архитектурные предложения",
+    "included": true
+  },
+  {
+    "message": "M013",
+    "role": "user",
+    "date": "2026-10-06 09:04:21",
+    "category": "technical",
+    "topic": "Запрос архитектурного опросника",
+    "included": true
+  },
+  {
+    "message": "M014",
+    "role": "assistant",
+    "date": "2026-10-06 09:04:36",
+    "category": "technical",
+    "topic": "Архитектурные вопросы",
+    "included": true
+  },
+  {
+    "message": "M015",
+    "role": "user",
+    "date": "2026-10-06 09:07:51",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M016",
+    "role": "assistant",
+    "date": "2026-10-06 09:08:38",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M017",
+    "role": "user",
+    "date": "2026-10-06 09:25:06",
+    "category": "technical",
+    "topic": "Формат технического опросника",
+    "included": true
+  },
+  {
+    "message": "M018",
+    "role": "assistant",
+    "date": "2026-10-06 09:26:04",
+    "category": "historical-artifact-delivery-reference",
+    "topic": "Ссылки на подготовленные опросники; оригинал технического текстовика не предоставлен",
+    "included": false
+  },
+  {
+    "message": "M019",
+    "role": "user",
+    "date": "2026-10-06 18:17:42",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M020",
+    "role": "assistant",
+    "date": "2026-10-06 18:18:58",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M021",
+    "role": "user",
+    "date": "2026-10-06 18:24:28",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M022",
+    "role": "assistant",
+    "date": "2026-10-06 18:25:14",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M023",
+    "role": "user",
+    "date": "2026-10-06 18:28:10",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M024",
+    "role": "assistant",
+    "date": "2026-10-06 18:28:30",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M025",
+    "role": "user",
+    "date": "2026-10-06 18:38:09",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M026",
+    "role": "assistant",
+    "date": "2026-10-06 18:38:50",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M027",
+    "role": "user",
+    "date": "2026-10-06 18:42:53",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M028",
+    "role": "assistant",
+    "date": "2026-10-06 18:44:27",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M029",
+    "role": "user",
+    "date": "2026-10-06 18:49:07",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M030",
+    "role": "assistant",
+    "date": "2026-10-06 18:51:04",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M031",
+    "role": "user",
+    "date": "2026-10-06 18:53:52",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M032",
+    "role": "assistant",
+    "date": "2026-10-06 18:54:06",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M033",
+    "role": "user",
+    "date": "2026-10-08 11:27:51",
+    "category": "technical",
+    "topic": "Запрос полного ТЗ",
+    "included": true
+  },
+  {
+    "message": "M034",
+    "role": "assistant",
+    "date": "2026-10-08 11:54:29",
+    "category": "technical",
+    "topic": "Описание подготовленного ТЗ",
+    "included": true
+  },
+  {
+    "message": "M035",
+    "role": "user",
+    "date": "2026-10-08 21:21:12",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M036",
+    "role": "assistant",
+    "date": "2026-10-08 21:22:24",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M037",
+    "role": "user",
+    "date": "2026-10-08 21:28:58",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M038",
+    "role": "assistant",
+    "date": "2026-10-08 21:29:07",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M039",
+    "role": "user",
+    "date": "2026-10-09 15:07:13",
+    "category": "technical",
+    "topic": "Не ERP, красота и простота",
+    "included": true
+  },
+  {
+    "message": "M040",
+    "role": "assistant",
+    "date": "2026-10-09 15:15:45",
+    "category": "technical",
+    "topic": "Разбор паспорта и UX",
+    "included": true
+  },
+  {
+    "message": "M041",
+    "role": "user",
+    "date": "2026-10-09 15:23:03",
+    "category": "technical",
+    "topic": "Запрос полного комплекта",
+    "included": true
+  },
+  {
+    "message": "M042",
+    "role": "assistant",
+    "date": "2026-10-09 15:26:34",
+    "category": "technical",
+    "topic": "Описание подготовленных документов",
+    "included": true
+  },
+  {
+    "message": "M043",
+    "role": "user",
+    "date": "2026-10-09 16:28:20",
+    "category": "technical",
+    "topic": "Полный объём и 30 дней",
+    "included": true
+  },
+  {
+    "message": "M044",
+    "role": "assistant",
+    "date": "2026-10-09 17:04:02",
+    "category": "technical",
+    "topic": "Описание версии комплекта и БД",
+    "included": true
+  },
+  {
+    "message": "M045",
+    "role": "user",
+    "date": "2026-10-09 17:25:39",
+    "category": "technical",
+    "topic": "Запрет ПД и желаемый канал AI",
+    "included": true
+  },
+  {
+    "message": "M046",
+    "role": "assistant",
+    "date": "2026-10-09 17:36:53",
+    "category": "technical",
+    "topic": "Предложения по безопасности AI",
+    "included": true
+  },
+  {
+    "message": "M047",
+    "role": "user",
+    "date": "2026-10-09 17:40:15",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M048",
+    "role": "assistant",
+    "date": "2026-10-09 17:41:30",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M049",
+    "role": "user",
+    "date": "2026-10-09 17:45:24",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M050",
+    "role": "assistant",
+    "date": "2026-10-09 17:46:03",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M051",
+    "role": "user",
+    "date": "2026-10-09 18:10:10",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  },
+  {
+    "message": "M052",
+    "role": "assistant",
+    "date": "2026-10-09 18:11:08",
+    "category": "outside-public-project-context",
+    "topic": "Личный юридический/корпоративный/трудовой/финансовый контекст",
+    "included": false
+  }
+]

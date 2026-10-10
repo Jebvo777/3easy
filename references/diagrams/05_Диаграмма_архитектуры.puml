@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 14
+left to right direction
+node "Пользователи" { artifact "Web desktop / mobile PWA" as web }
+node "Контролируемый сервер" {
+  component "HTTPS + API Gateway
+Аутентификация и RBAC" as gateway
+  package "Модульный backend" {
+    component "Passport / Identity" as pass
+    component "Goal / Orders" as goal
+    component "Plan / Technology" as plan
+    component "Production / QC" as prod
+    component "Calc / Scenarios" as calc
+    component "Import / AI Adapter" as integr
+  }
+  database "PostgreSQL
+версии, события, проекции" as db
+  folder "Object Storage
+файлы, фото" as objects
+  queue "Jobs / Outbox
+фоновые задачи" as jobs
+  component "Realtime channel" as rt
+}
+cloud "Внешняя 1С / Excel" as xls
+cloud "AI provider (по политике)" as ai
+web --> gateway : HTTPS
+gateway --> pass
+gateway --> goal
+gateway --> plan
+gateway --> prod
+prod --> rt : обновления
+rt --> web : события
+pass --> db
+goal --> db
+plan --> db
+prod --> db
+calc --> db
+integr --> objects
+calc --> jobs
+integr --> jobs
+xls --> integr : файл/экспорт
+integr ..> ai : только разрешённые поля
+@enduml

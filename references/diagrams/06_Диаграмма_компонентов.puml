@@ -1,0 +1,50 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 14
+component "Onboarding UI" as onboard
+component "Goal UI" as goalUI
+component "Plan UI" as planUI
+component "Production UI" as prodUI
+component "API / Auth / RBAC" as api
+component "Passport Domain" as passport
+component "Order & Goal Domain" as goal
+component "Technology & Scheduler" as plan
+component "Dispatch & QC" as prod
+component "Events / Outbox" as events
+component "Economics Calculator" as econ
+component "Scenario Solver" as scenario
+component "AI Adapter" as ai
+component "File Import / Preview" as ingest
+component "Read Models / Realtime" as projection
+database "Operational DB" as db
+folder "Object Storage" as storage
+onboard --> api
+goalUI --> api
+planUI --> api
+prodUI --> api
+api --> passport
+api --> goal
+api --> plan
+api --> prod
+api --> scenario
+api --> ingest
+plan --> events
+prod --> events
+events --> projection
+events --> econ
+goal --> econ
+plan --> econ
+scenario --> plan
+scenario --> econ
+ai --> ingest
+ai --> plan
+passport --> db
+goal --> db
+plan --> db
+prod --> db
+ingest --> storage
+prod --> storage
+@enduml

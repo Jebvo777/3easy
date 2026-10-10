@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 14
+actor "Пользователь" as User
+actor "Технолог" as Tech
+actor "Бригадир" as Lead
+actor "Начальник" as Chief
+actor "Исполнитель" as Worker
+actor "ОТК" as QC
+participant "API / RBAC" as Api
+participant "ПЛАН" as Plan
+participant "Расчёты" as Calc
+database "БД + Outbox" as DB
+participant "UI / Проекции" as UI
+User -> Api : Создать черновик заказа
+Api -> DB : Сохранить Order/TermsVersion
+DB --> Api : ID + revision
+Tech -> Api : Сохранить технологию
+Api -> Plan : Рассчитать черновик
+Plan -> DB : Расчёт + ограничения
+Lead -> Api : Подготовить назначения
+Chief -> Api : Подтвердить выдачу
+Api -> Plan : Опубликовать PlanVersion
+Plan -> DB : Записать версию + задания
+Worker -> Api : Отправить факт + idempotency_key
+Api -> DB : Транзакция событие + outbox
+DB --> Calc : Запустить перерасчёт
+Calc -> DB : Остаток и прогноз
+DB --> UI : Обновить ролевое представление
+QC -> Api : Подтвердить или вернуть
+Api -> DB : Сохранить акт контроля
+@enduml

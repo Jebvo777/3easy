@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "provided_sources": 20,
+  "preserved_originals": 17,
+  "technical_editions": 3,
+  "authored_relative_links_checked": 97,
+  "sql": {
+    "tables": 61,
+    "columns": 502,
+    "foreign_keys": 166,
+    "checks": 5
+  },
+  "diagrams": {
+    "plantuml": 9,
+    "png": 9
+  },
+  "chat": {
+    "indexed": 52,
+    "technical": 17
+  },
+  "limitations": [
+    "No PostgreSQL execution",
+    "No full browser interaction/render verification",
+    "No real pilot financial reconciliation",
+    "No AI-provider integration or model training"
+  ],
+  "errors": []
+}

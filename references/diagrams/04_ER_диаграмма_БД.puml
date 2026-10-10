@@ -1,0 +1,802 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 12
+skinparam linetype ortho
+left to right direction
+hide circle
+hide methods
+title EASY3 — логическая схема данных
+entity "companies" as companies {
+  *id : uuid <<PK>>
+  +name : text
+  +currency : char3
+  +timezone : text
+  +status : text
+  +created_at : timestamptz
+  +updated_at : timestamptz
+}
+entity "accounts" as accounts {
+  *id : uuid <<PK>>
+  +email : text
+  +password_hash : text
+  +is_active : boolean
+  +created_at : timestamptz
+   last_login_at : timestamptz
+}
+entity "people" as people {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   account_id : uuid <<FK>>
+  +full_name : text
+   job_title : text
+  +status : text
+  +created_at : timestamptz
+}
+entity "memberships" as memberships {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +person_id : uuid <<FK>>
+  +active : boolean
+  +joined_at : timestamptz
+   disabled_at : timestamptz
+}
+entity "role_bindings" as role_bindings {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +membership_id : uuid <<FK>>
+  +role : text
+  +scope_kind : text
+   scope_id : uuid
+  +valid_from : timestamptz
+   valid_to : timestamptz
+}
+entity "units" as units {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   parent_unit_id : uuid <<FK>>
+  +kind : text
+  +name : text
+   code : text
+}
+entity "brigades" as brigades {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   unit_id : uuid <<FK>>
+   lead_person_id : uuid <<FK>>
+  +name : text
+  +active : boolean
+}
+entity "brigade_members" as brigade_members {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +brigade_id : uuid <<FK>>
+  +person_id : uuid <<FK>>
+  +valid_from : date
+   valid_to : date
+}
+entity "skills" as skills {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +code : text
+  +name : text
+   description : text
+}
+entity "person_skills" as person_skills {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +person_id : uuid <<FK>>
+  +skill_id : uuid <<FK>>
+   level : int
+   verified_at : timestamptz
+   valid_until : date
+}
+entity "shift_templates" as shift_templates {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   unit_id : uuid <<FK>>
+  +name : text
+  +week_days : jsonb
+  +start_local : time
+  +end_local : time
+   breaks : jsonb
+  +timezone : text
+}
+entity "shift_instances" as shift_instances {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   template_id : uuid <<FK>>
+   unit_id : uuid <<FK>>
+  +starts_at : timestamptz
+  +ends_at : timestamptz
+  +status : text
+}
+entity "calendar_exceptions" as calendar_exceptions {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   resource_id : uuid <<FK>>
+   person_id : uuid <<FK>>
+  +starts_at : timestamptz
+  +ends_at : timestamptz
+  +reason : text
+  +kind : text
+}
+entity "resources" as resources {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   unit_id : uuid <<FK>>
+   parent_resource_id : uuid <<FK>>
+  +type : text
+  +name : text
+  +quantity : numeric
+   capacity : numeric
+   unit : text
+  +status : text
+}
+entity "resource_skills" as resource_skills {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +resource_id : uuid <<FK>>
+  +skill_id : uuid <<FK>>
+   operation_kind : text
+   capacity_ratio : numeric
+}
+entity "resource_blocks" as resource_blocks {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +resource_id : uuid <<FK>>
+  +starts_at : timestamptz
+   ends_at : timestamptz
+  +reason : text
+  +status : text
+}
+entity "materials" as materials {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +name : text
+   code : text
+  +unit : text
+  +owner_kind : text
+   attributes : jsonb
+}
+entity "material_balances" as material_balances {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +material_id : uuid <<FK>>
+   unit_id : uuid <<FK>>
+  +available_qty : numeric
+  +reserved_qty : numeric
+  +updated_at : timestamptz
+}
+entity "material_movements" as material_movements {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +material_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+   batch_id : uuid <<FK>>
+  +kind : text
+  +quantity : numeric
+   unit_cost : numeric
+  +occurred_at : timestamptz
+   source_ref : text
+}
+entity "expense_policies" as expense_policies {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +name : text
+  +cost_kind : text
+  +allocation_basis : text
+   rate : numeric
+   amount : numeric
+   periodicity : text
+  +effective_from : date
+   effective_to : date
+}
+entity "expense_entries" as expense_entries {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   policy_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+  +period_from : date
+  +period_to : date
+  +amount : numeric
+  +currency : char3
+  +source_kind : text
+   source_ref : text
+}
+entity "expense_allocations" as expense_allocations {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +expense_entry_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+   calculation_id : uuid <<FK>>
+  +allocated_amount : numeric
+   basis_quantity : numeric
+  +version : int
+}
+entity "orders" as orders {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +code : text
+  +name : text
+  +order_kind : text
+  +status : text
+   created_by : uuid <<FK>>
+  +created_at : timestamptz
+  +updated_at : timestamptz
+   archived_at : timestamptz
+}
+entity "order_lines" as order_lines {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+  +product_name : text
+  +quantity : numeric
+  +unit : text
+   attributes : jsonb
+  +status : text
+}
+entity "order_terms_versions" as order_terms_versions {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+  +version : int
+   due_at : timestamptz
+   budget : numeric
+   sale_price : numeric
+   unit_price : numeric
+   notes : text
+  +status : text
+  +created_at : timestamptz
+}
+entity "order_requirements" as order_requirements {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_line_id : uuid <<FK>>
+   material_id : uuid <<FK>>
+  +quantity : numeric
+  +unit : text
+  +readiness : text
+}
+entity "order_attachments" as order_attachments {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+  +file_id : uuid <<FK>>
+  +attachment_kind : text
+  +created_at : timestamptz
+}
+entity "route_versions" as route_versions {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_line_id : uuid <<FK>>
+  +version : int
+  +source_kind : text
+  +state : text
+  +created_at : timestamptz
+   approved_at : timestamptz
+}
+entity "product_parts" as product_parts {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +route_version_id : uuid <<FK>>
+   parent_part_id : uuid <<FK>>
+  +name : text
+  +quantity : numeric
+  +unit : text
+}
+entity "operations" as operations {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +route_version_id : uuid <<FK>>
+   part_id : uuid <<FK>>
+   norm_id : uuid <<FK>>
+  +title : text
+  +result_unit : text
+   required_skill_id : uuid <<FK>>
+   sequence_no : int
+   required_resource_kind : text
+}
+entity "operation_edges" as operation_edges {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +route_version_id : uuid <<FK>>
+  +from_operation_id : uuid <<FK>>
+  +to_operation_id : uuid <<FK>>
+  +edge_kind : text
+}
+entity "norms" as norms {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +name : text
+   value : numeric
+  +unit : text
+  +basis : text
+  +origin : text
+   source_ref : text
+   valid_from : date
+   valid_to : date
+  +confidence : text
+}
+entity "operation_materials" as operation_materials {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +operation_id : uuid <<FK>>
+  +material_id : uuid <<FK>>
+  +quantity : numeric
+  +unit : text
+}
+entity "plan_versions" as plan_versions {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+   route_version_id : uuid <<FK>>
+  +version : int
+  +state : text
+   effective_at : timestamptz
+  +created_at : timestamptz
+  +inputs_hash : text
+   forecast_at : timestamptz
+}
+entity "plan_allocations" as plan_allocations {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +plan_version_id : uuid <<FK>>
+  +operation_id : uuid <<FK>>
+   resource_id : uuid <<FK>>
+   shift_id : uuid <<FK>>
+   starts_at : timestamptz
+   ends_at : timestamptz
+  +quantity : numeric
+   batch_size : numeric
+  +status : text
+}
+entity "plan_approvals" as plan_approvals {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +plan_version_id : uuid <<FK>>
+  +role : text
+  +actor_id : uuid <<FK>>
+  +status : text
+   decided_at : timestamptz
+   comment : text
+}
+entity "plan_forecasts" as plan_forecasts {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +plan_version_id : uuid <<FK>>
+  +calculated_at : timestamptz
+   ready_at : timestamptz
+  +confidence : text
+  +bottlenecks : jsonb
+  +constraints : jsonb
+  +inputs_hash : text
+}
+entity "scenarios" as scenarios {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+  +base_plan_version_id : uuid <<FK>>
+  +name : text
+  +status : text
+  +created_by : uuid <<FK>>
+  +created_at : timestamptz
+}
+entity "scenario_changes" as scenario_changes {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +scenario_id : uuid <<FK>>
+  +object_kind : text
+  +object_id : uuid
+  +parameter : text
+  +value_json : jsonb
+}
+entity "scenario_results" as scenario_results {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +scenario_id : uuid <<FK>>
+  +calculated_at : timestamptz
+   deadline : timestamptz
+   load_delta : jsonb
+   economy_delta : jsonb
+   warnings : jsonb
+}
+entity "batches" as batches {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_line_id : uuid <<FK>>
+  +plan_version_id : uuid <<FK>>
+   parent_batch_id : uuid <<FK>>
+  +quantity : numeric
+  +unit : text
+  +status : text
+   qr_token : text
+}
+entity "assignments" as assignments {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +plan_allocation_id : uuid <<FK>>
+  +batch_id : uuid <<FK>>
+  +worker_id : uuid <<FK>>
+   shift_id : uuid <<FK>>
+  +state : text
+   issued_at : timestamptz
+   completed_at : timestamptz
+  +revision : int
+}
+entity "attendance_events" as attendance_events {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +person_id : uuid <<FK>>
+  +shift_id : uuid <<FK>>
+  +kind : text
+  +occurred_at : timestamptz
+  +recorded_by : uuid <<FK>>
+   reason : text
+}
+entity "production_events" as production_events {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +assignment_id : uuid <<FK>>
+  +batch_id : uuid <<FK>>
+  +actor_id : uuid <<FK>>
+  +kind : text
+  +quantity : numeric
+  +unit : text
+  +occurred_at : timestamptz
+  +received_at : timestamptz
+  +idempotency_key : text
+   correction_of : uuid <<FK>>
+}
+entity "quality_checks" as quality_checks {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +batch_id : uuid <<FK>>
+   assignment_id : uuid <<FK>>
+  +inspector_id : uuid <<FK>>
+  +accepted_qty : numeric
+  +rework_qty : numeric
+  +scrap_qty : numeric
+  +checked_at : timestamptz
+  +status : text
+}
+entity "quality_defects" as quality_defects {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +check_id : uuid <<FK>>
+  +code : text
+  +quantity : numeric
+   severity : text
+   comment : text
+}
+entity "downtime_events" as downtime_events {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   resource_id : uuid <<FK>>
+   assignment_id : uuid <<FK>>
+  +reported_by : uuid <<FK>>
+  +starts_at : timestamptz
+   ends_at : timestamptz
+  +kind : text
+  +reason : text
+}
+entity "file_objects" as file_objects {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +storage_key : text
+  +original_name : text
+  +mime_type : text
+  +size_bytes : bigint
+  +sha256 : text
+  +created_at : timestamptz
+}
+entity "event_evidence" as event_evidence {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   event_id : uuid <<FK>>
+   check_id : uuid <<FK>>
+  +file_id : uuid <<FK>>
+  +evidence_kind : text
+  +created_at : timestamptz
+}
+entity "cost_calculations" as cost_calculations {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+   terms_version_id : uuid <<FK>>
+   plan_version_id : uuid <<FK>>
+  +mode : text
+   result_amount : numeric
+  +currency : char3
+  +completeness : text
+  +inputs_hash : text
+  +calculated_at : timestamptz
+}
+entity "cost_lines" as cost_lines {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +calculation_id : uuid <<FK>>
+   expense_entry_id : uuid <<FK>>
+  +category : text
+   quantity : numeric
+   rate : numeric
+  +amount : numeric
+  +origin : text
+}
+entity "progress_snapshots" as progress_snapshots {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +order_id : uuid <<FK>>
+   plan_version_id : uuid <<FK>>
+  +calculated_at : timestamptz
+  +good_qty : numeric
+  +rework_qty : numeric
+  +remaining_qty : numeric
+   projected_ready_at : timestamptz
+}
+entity "deviations" as deviations {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+   plan_version_id : uuid <<FK>>
+  +detected_at : timestamptz
+  +metric : text
+   expected_value : numeric
+   observed_value : numeric
+  +severity : text
+   reason : text
+  +status : text
+}
+entity "alerts" as alerts {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   deviation_id : uuid <<FK>>
+   recipient_id : uuid <<FK>>
+  +kind : text
+  +status : text
+   scheduled_at : timestamptz
+   delivered_at : timestamptz
+}
+entity "ai_requests" as ai_requests {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +actor_id : uuid <<FK>>
+   order_id : uuid <<FK>>
+  +prompt_digest : text
+  +permitted_scope : jsonb
+  +status : text
+  +created_at : timestamptz
+}
+entity "ai_suggestions" as ai_suggestions {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +request_id : uuid <<FK>>
+   scenario_id : uuid <<FK>>
+  +suggestion_json : jsonb
+  +safety_status : text
+   applied_at : timestamptz
+}
+entity "import_jobs" as import_jobs {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +created_by : uuid <<FK>>
+  +file_id : uuid <<FK>>
+  +target_kind : text
+  +mapping : jsonb
+  +status : text
+   started_at : timestamptz
+   finished_at : timestamptz
+}
+entity "import_rows" as import_rows {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +import_job_id : uuid <<FK>>
+   sheet_name : text
+  +row_no : int
+  +raw_data : jsonb
+   normalized_data : jsonb
+   error_json : jsonb
+   applied_entity_id : uuid
+}
+entity "audit_events" as audit_events {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+   actor_id : uuid <<FK>>
+  +entity_kind : text
+   entity_id : uuid
+  +action : text
+  +happened_at : timestamptz
+   old_digest : text
+   new_digest : text
+   correlation_id : uuid
+}
+entity "outbox_events" as outbox_events {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +aggregate_kind : text
+  +aggregate_id : uuid
+  +event_kind : text
+  +payload : jsonb
+  +occurred_at : timestamptz
+   published_at : timestamptz
+  +attempts : int
+}
+entity "idempotency_records" as idempotency_records {
+  *id : uuid <<PK>>
+  +company_id : uuid <<FK>>
+  +actor_id : uuid <<FK>>
+  +action_kind : text
+  +request_key : text
+  +response_json : jsonb
+  +created_at : timestamptz
+   expires_at : timestamptz
+}
+companies ||--o{ people : company_id
+accounts ||--o{ people : account_id
+companies ||--o{ memberships : company_id
+people ||--o{ memberships : person_id
+companies ||--o{ role_bindings : company_id
+memberships ||--o{ role_bindings : membership_id
+companies ||--o{ units : company_id
+units ||--o{ units : parent_unit_id
+companies ||--o{ brigades : company_id
+units ||--o{ brigades : unit_id
+people ||--o{ brigades : lead_person_id
+companies ||--o{ brigade_members : company_id
+brigades ||--o{ brigade_members : brigade_id
+people ||--o{ brigade_members : person_id
+companies ||--o{ skills : company_id
+companies ||--o{ person_skills : company_id
+people ||--o{ person_skills : person_id
+skills ||--o{ person_skills : skill_id
+companies ||--o{ shift_templates : company_id
+units ||--o{ shift_templates : unit_id
+companies ||--o{ shift_instances : company_id
+shift_templates ||--o{ shift_instances : template_id
+units ||--o{ shift_instances : unit_id
+companies ||--o{ calendar_exceptions : company_id
+resources ||--o{ calendar_exceptions : resource_id
+people ||--o{ calendar_exceptions : person_id
+companies ||--o{ resources : company_id
+units ||--o{ resources : unit_id
+resources ||--o{ resources : parent_resource_id
+companies ||--o{ resource_skills : company_id
+resources ||--o{ resource_skills : resource_id
+skills ||--o{ resource_skills : skill_id
+companies ||--o{ resource_blocks : company_id
+resources ||--o{ resource_blocks : resource_id
+companies ||--o{ materials : company_id
+companies ||--o{ material_balances : company_id
+materials ||--o{ material_balances : material_id
+units ||--o{ material_balances : unit_id
+companies ||--o{ material_movements : company_id
+materials ||--o{ material_movements : material_id
+orders ||--o{ material_movements : order_id
+batches ||--o{ material_movements : batch_id
+companies ||--o{ expense_policies : company_id
+companies ||--o{ expense_entries : company_id
+expense_policies ||--o{ expense_entries : policy_id
+orders ||--o{ expense_entries : order_id
+companies ||--o{ expense_allocations : company_id
+expense_entries ||--o{ expense_allocations : expense_entry_id
+orders ||--o{ expense_allocations : order_id
+cost_calculations ||--o{ expense_allocations : calculation_id
+companies ||--o{ orders : company_id
+people ||--o{ orders : created_by
+companies ||--o{ order_lines : company_id
+orders ||--o{ order_lines : order_id
+companies ||--o{ order_terms_versions : company_id
+orders ||--o{ order_terms_versions : order_id
+companies ||--o{ order_requirements : company_id
+order_lines ||--o{ order_requirements : order_line_id
+materials ||--o{ order_requirements : material_id
+companies ||--o{ order_attachments : company_id
+orders ||--o{ order_attachments : order_id
+file_objects ||--o{ order_attachments : file_id
+companies ||--o{ route_versions : company_id
+order_lines ||--o{ route_versions : order_line_id
+companies ||--o{ product_parts : company_id
+route_versions ||--o{ product_parts : route_version_id
+product_parts ||--o{ product_parts : parent_part_id
+companies ||--o{ operations : company_id
+route_versions ||--o{ operations : route_version_id
+product_parts ||--o{ operations : part_id
+norms ||--o{ operations : norm_id
+skills ||--o{ operations : required_skill_id
+companies ||--o{ operation_edges : company_id
+route_versions ||--o{ operation_edges : route_version_id
+operations ||--o{ operation_edges : from_operation_id
+operations ||--o{ operation_edges : to_operation_id
+companies ||--o{ norms : company_id
+companies ||--o{ operation_materials : company_id
+operations ||--o{ operation_materials : operation_id
+materials ||--o{ operation_materials : material_id
+companies ||--o{ plan_versions : company_id
+orders ||--o{ plan_versions : order_id
+route_versions ||--o{ plan_versions : route_version_id
+companies ||--o{ plan_allocations : company_id
+plan_versions ||--o{ plan_allocations : plan_version_id
+operations ||--o{ plan_allocations : operation_id
+resources ||--o{ plan_allocations : resource_id
+shift_instances ||--o{ plan_allocations : shift_id
+companies ||--o{ plan_approvals : company_id
+plan_versions ||--o{ plan_approvals : plan_version_id
+people ||--o{ plan_approvals : actor_id
+companies ||--o{ plan_forecasts : company_id
+plan_versions ||--o{ plan_forecasts : plan_version_id
+companies ||--o{ scenarios : company_id
+orders ||--o{ scenarios : order_id
+plan_versions ||--o{ scenarios : base_plan_version_id
+people ||--o{ scenarios : created_by
+companies ||--o{ scenario_changes : company_id
+scenarios ||--o{ scenario_changes : scenario_id
+companies ||--o{ scenario_results : company_id
+scenarios ||--o{ scenario_results : scenario_id
+companies ||--o{ batches : company_id
+order_lines ||--o{ batches : order_line_id
+plan_versions ||--o{ batches : plan_version_id
+batches ||--o{ batches : parent_batch_id
+companies ||--o{ assignments : company_id
+plan_allocations ||--o{ assignments : plan_allocation_id
+batches ||--o{ assignments : batch_id
+people ||--o{ assignments : worker_id
+shift_instances ||--o{ assignments : shift_id
+companies ||--o{ attendance_events : company_id
+people ||--o{ attendance_events : person_id
+shift_instances ||--o{ attendance_events : shift_id
+people ||--o{ attendance_events : recorded_by
+companies ||--o{ production_events : company_id
+assignments ||--o{ production_events : assignment_id
+batches ||--o{ production_events : batch_id
+people ||--o{ production_events : actor_id
+production_events ||--o{ production_events : correction_of
+companies ||--o{ quality_checks : company_id
+batches ||--o{ quality_checks : batch_id
+assignments ||--o{ quality_checks : assignment_id
+people ||--o{ quality_checks : inspector_id
+companies ||--o{ quality_defects : company_id
+quality_checks ||--o{ quality_defects : check_id
+companies ||--o{ downtime_events : company_id
+resources ||--o{ downtime_events : resource_id
+assignments ||--o{ downtime_events : assignment_id
+people ||--o{ downtime_events : reported_by
+companies ||--o{ file_objects : company_id
+companies ||--o{ event_evidence : company_id
+production_events ||--o{ event_evidence : event_id
+quality_checks ||--o{ event_evidence : check_id
+file_objects ||--o{ event_evidence : file_id
+companies ||--o{ cost_calculations : company_id
+orders ||--o{ cost_calculations : order_id
+order_terms_versions ||--o{ cost_calculations : terms_version_id
+plan_versions ||--o{ cost_calculations : plan_version_id
+companies ||--o{ cost_lines : company_id
+cost_calculations ||--o{ cost_lines : calculation_id
+expense_entries ||--o{ cost_lines : expense_entry_id
+companies ||--o{ progress_snapshots : company_id
+orders ||--o{ progress_snapshots : order_id
+plan_versions ||--o{ progress_snapshots : plan_version_id
+companies ||--o{ deviations : company_id
+orders ||--o{ deviations : order_id
+plan_versions ||--o{ deviations : plan_version_id
+companies ||--o{ alerts : company_id
+deviations ||--o{ alerts : deviation_id
+people ||--o{ alerts : recipient_id
+companies ||--o{ ai_requests : company_id
+people ||--o{ ai_requests : actor_id
+orders ||--o{ ai_requests : order_id
+companies ||--o{ ai_suggestions : company_id
+ai_requests ||--o{ ai_suggestions : request_id
+scenarios ||--o{ ai_suggestions : scenario_id
+companies ||--o{ import_jobs : company_id
+people ||--o{ import_jobs : created_by
+file_objects ||--o{ import_jobs : file_id
+companies ||--o{ import_rows : company_id
+import_jobs ||--o{ import_rows : import_job_id
+companies ||--o{ audit_events : company_id
+people ||--o{ audit_events : actor_id
+companies ||--o{ outbox_events : company_id
+companies ||--o{ idempotency_records : company_id
+people ||--o{ idempotency_records : actor_id
+@enduml

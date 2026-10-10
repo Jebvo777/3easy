@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "scope": "Isolated synthetic TargetModel arithmetic only",
+  "month": {
+    "income": 3840000,
+    "cost": 3428000,
+    "result": 412000,
+    "delta": -168000,
+    "current": -126000
+  },
+  "own": {
+    "unitCost": 230,
+    "income": null,
+    "result": null
+  },
+  "limitations": [
+    "No browser rendering or interaction",
+    "No production economics validation"
+  ]
+}
