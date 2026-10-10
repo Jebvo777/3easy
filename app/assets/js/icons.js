@@ -1,0 +1,28 @@
+const paths={
+ desktop:'<rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/>',
+ goal:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 8-8m-5 0h5v5"/>',
+ plan:'<path d="M5 4h14M5 12h14M5 20h14"/><rect x="7" y="2" width="4" height="4" rx="1"/><rect x="13" y="10" width="4" height="4" rx="1"/><rect x="5" y="18" width="4" height="4" rx="1"/>',
+ production:'<path d="M3 20V9l6 4V9l6 4V5h5v15zM6 17h1m4 0h1m4 0h1"/>',
+ builder:'<path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/>',
+ passport:'<rect x="4" y="3" width="16" height="18" rx="3"/><circle cx="12" cy="9" r="2"/><path d="M8 15h8m-6 3h4"/>',
+ arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',chevron:'<path d="m9 5 7 7-7 7"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>', close:'<path d="m6 6 12 12M6 18 18 6"/>',
+ check:'<path d="m5 12 4 4L19 6"/>', search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+ sparkle:'<path d="m12 3 2.8 6.2L21 12l-6.2 2.8L12 21l-2.8-6.2L3 12l6.2-2.8zM20 3v4m-2-2h4"/>',
+ upload:'<path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/>',logout:'<path d="M10 4H4v16h6m5-12 4 4-4 4m-7-4h11"/>',
+ people:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-3a6 6 0 0 1 12 0v3m2-16a3 3 0 0 1 0 6m2 3a5 5 0 0 1 2 4v3"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/>',
+ play:'<path d="m8 5 11 7-11 7z"/>',pause:'<path d="M9 5v14M15 5v14"/>',warning:'<path d="m12 3 10 18H2zM12 9v5m0 3v.1"/>',
+ shirt:'<path d="m8 3-6 4 3 5 3-2v11h8V10l3 2 3-5-6-4a4 4 0 0 1-8 0z"/>',
+ machine:'<path d="M3 19h18M5 16V5h10v6h4v5zM8 8h2m6 4v4"/>', scissors:'<circle cx="5" cy="6" r="3"/><circle cx="5" cy="18" r="3"/><path d="m7 8 14 13M7 16 21 3"/>',
+ rotate:'<path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/>', undo:'<path d="M4 10h9a7 7 0 0 1 0 14M4 10l5-5m-5 5 5 5"/>',
+ redo:'<path d="M20 10h-9a7 7 0 0 0 0 14m9-14-5-5m5 5-5 5"/>',trash:'<path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
+ link:'<path d="m10 14 4-4m-6 6-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2 0 2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0"/>',
+ save:'<path d="M5 3h13l3 3v15H3V3zM7 3v6h10V3M7 21v-8h10v8"/>',expand:'<path d="M3 9V3h6m6 0h6v6M3 15v6h6m6 0h6v-6"/>',
+ moon:'<path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11z"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>',
+ history:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7M12 7v5l4 2"/>',shield:'<path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6z"/><path d="m8 12 3 3 5-6"/>',
+ fabric:'<path d="M4 5h16v15H4zM4 9h16M8 5v15M16 5v15"/>',money:'<rect x="2" y="5" width="20" height="14" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M5 12h.1M19 12h.1"/>',
+ bell:'<path d="M4 17h16l-2-3V9a6 6 0 0 0-12 0v5zm6 4h4"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/>', down:'<path d="m6 9 6 6 6-6"/>'
+};
+export function icon(name,cls=''){return `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]||paths.grid}</svg>`;}
