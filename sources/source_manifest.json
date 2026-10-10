@@ -271,5 +271,63 @@
     "stored_bytes": 111015,
     "stored_sha256": "6c640b98739e7ccff1ad3aaf967e4c82558fee714a3d6eb28d9ac244a48e2326",
     "text_sha256": "5ed71c8721f9ad682dadff6c2f8f0ce95868e267283e17a7a689f2d3326a2ea8"
+  },
+  {
+    "id": "S21",
+    "original_name": "bandicam 2026-10-09 19-19-50-143.mp4",
+    "original_bytes": 198028393,
+    "original_sha256": "2a6abfe273417c61f8342fe0405706302f7377dc5777bbad7c94b4c36c83988e",
+    "duration_seconds": 1931.183,
+    "recorded_date": "2026-10-09",
+    "original_in_repository": false,
+    "archive_path": "sources/recordings/S21-transcript.json",
+    "edition": "asr-technical-public-edition",
+    "stored_bytes": 120460,
+    "stored_sha256": "f8853e017389e1434ad547c4afcc7513740fffd1b889e0bf3812c81eac641ab9",
+    "text_path": "sources/recordings/S21-transcript.md",
+    "text_sha256": "05139086e23efc76fd1cbcfc9a6ac6aff07fc8536029ace89c052031253c6ca9",
+    "derived_paths": [
+      "sources/recordings/S21-transcript.md",
+      "sources/recordings/S21-transcript.srt",
+      "sources/recordings/README.md",
+      "sources/recordings/PROCESSING.md",
+      "sources/recordings/frames-index.json",
+      "sources/recordings/frames/S21-0120-portfolio.jpg",
+      "sources/recordings/frames/S21-0240-basis.jpg",
+      "sources/recordings/frames/S21-0480-contract-price.jpg",
+      "sources/recordings/frames/S21-1080-materials.jpg",
+      "sources/recordings/frames/S21-1560-company-overview.jpg"
+    ],
+    "asr_model": "Systran/faster-whisper-small",
+    "asr_model_revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "asr_segment_count": 267,
+    "public_segment_count": 233,
+    "notes": "Original MP4 is identified by size and SHA-256; only technical transcript and selected cropped UI frames are archived. No speaker diarization. Private/non-project passages explicitly marked."
+  },
+  {
+    "id": "S22",
+    "original_name": "bandicam 2026-10-09 19-52-15-605.mp4",
+    "original_bytes": 413264276,
+    "original_sha256": "f66dafe809dc7cd0f4dffa4eea7154c32818afa3d5819885b209413c7f5acd42",
+    "duration_seconds": 974.634813,
+    "recorded_date": "2026-10-09",
+    "original_in_repository": false,
+    "archive_path": "sources/recordings/S22-transcript.json",
+    "edition": "asr-technical-public-edition",
+    "stored_bytes": 53577,
+    "stored_sha256": "c7f0d0ab70edf4e590e0771094160698358070f00137901c5e576e8b502875f2",
+    "text_path": "sources/recordings/S22-transcript.md",
+    "text_sha256": "decd8ff7952a4568e680509fff27ed4c40b5ce1b5e0e7a569d2397966dac1933",
+    "derived_paths": [
+      "sources/recordings/S22-transcript.md",
+      "sources/recordings/S22-transcript.srt",
+      "sources/recordings/README.md",
+      "sources/recordings/PROCESSING.md"
+    ],
+    "asr_model": "Systran/faster-whisper-small",
+    "asr_model_revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "asr_segment_count": 164,
+    "public_segment_count": 104,
+    "notes": "Original MP4 is identified by size and SHA-256; only technical transcript and selected cropped UI frames are archived. No speaker diarization. Private/non-project passages explicitly marked."
   }
 ]

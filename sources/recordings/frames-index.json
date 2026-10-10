@@ -1,0 +1,117 @@
+[
+  {
+    "source_id": "S21",
+    "seconds": 120,
+    "path": "sources/recordings/frames/S21-0120-portfolio.jpg",
+    "source_frame_dimensions": [
+      1280,
+      720
+    ],
+    "crop_box_xyxy": [
+      270,
+      100,
+      1200,
+      640
+    ],
+    "published_dimensions": [
+      930,
+      540
+    ],
+    "sha256": "e0ad86b8730a87ada273faa9aefdb834234cea51973145d51d086ab458825361",
+    "bytes": 93222,
+    "edition": "cropped-ui-only",
+    "note": "UI excerpt from resized video frame; conference faces and surrounding chats excluded."
+  },
+  {
+    "source_id": "S21",
+    "seconds": 240,
+    "path": "sources/recordings/frames/S21-0240-basis.jpg",
+    "source_frame_dimensions": [
+      1280,
+      720
+    ],
+    "crop_box_xyxy": [
+      270,
+      100,
+      1200,
+      640
+    ],
+    "published_dimensions": [
+      930,
+      540
+    ],
+    "sha256": "f0e3455651e2db35d86399276283fff6164dbcaa46191781cd5ebeed6173f2be",
+    "bytes": 51972,
+    "edition": "cropped-ui-only",
+    "note": "UI excerpt from resized video frame; conference faces and surrounding chats excluded."
+  },
+  {
+    "source_id": "S21",
+    "seconds": 480,
+    "path": "sources/recordings/frames/S21-0480-contract-price.jpg",
+    "source_frame_dimensions": [
+      1280,
+      720
+    ],
+    "crop_box_xyxy": [
+      270,
+      100,
+      1200,
+      640
+    ],
+    "published_dimensions": [
+      930,
+      540
+    ],
+    "sha256": "e3f50c4fdd592a54753a068b2488fb3ac744b0d1cf8de11868c403e201fb3f16",
+    "bytes": 54374,
+    "edition": "cropped-ui-only",
+    "note": "UI excerpt from resized video frame; conference faces and surrounding chats excluded."
+  },
+  {
+    "source_id": "S21",
+    "seconds": 1080,
+    "path": "sources/recordings/frames/S21-1080-materials.jpg",
+    "source_frame_dimensions": [
+      1280,
+      720
+    ],
+    "crop_box_xyxy": [
+      270,
+      100,
+      1200,
+      640
+    ],
+    "published_dimensions": [
+      930,
+      540
+    ],
+    "sha256": "fc5be9ee17ffcc999456c1126b2e101864815dc05d33ee49d7ec31e729eef9e9",
+    "bytes": 64117,
+    "edition": "cropped-ui-only",
+    "note": "UI excerpt from resized video frame; conference faces and surrounding chats excluded."
+  },
+  {
+    "source_id": "S21",
+    "seconds": 1560,
+    "path": "sources/recordings/frames/S21-1560-company-overview.jpg",
+    "source_frame_dimensions": [
+      1280,
+      720
+    ],
+    "crop_box_xyxy": [
+      270,
+      100,
+      1200,
+      640
+    ],
+    "published_dimensions": [
+      930,
+      540
+    ],
+    "sha256": "597256a1a9c388ed3c2872e5ab739b3d6c6d12162d891648c89f1781a3cb84c3",
+    "bytes": 107281,
+    "edition": "cropped-ui-only",
+    "note": "UI excerpt from resized video frame; conference faces and surrounding chats excluded."
+  }
+]

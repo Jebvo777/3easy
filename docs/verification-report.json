@@ -1,9 +1,9 @@
 {
   "status": "passed",
-  "provided_sources": 20,
+  "provided_sources": 22,
   "preserved_originals": 17,
-  "technical_editions": 3,
-  "authored_relative_links_checked": 97,
+  "technical_editions": 5,
+  "authored_relative_links_checked": 171,
   "sql": {
     "tables": 61,
     "columns": 502,
@@ -18,11 +18,35 @@
     "indexed": 52,
     "technical": 17
   },
+  "recordings": [
+    {
+      "source_id": "S21",
+      "video_duration_seconds": 1931.183,
+      "audio_processed_seconds": 1931.1573125,
+      "asr_segments": 267,
+      "public_segments": 233,
+      "all_asr_ids_accounted_for": true,
+      "unclear_segments": 26,
+      "original_video_in_repository": false
+    },
+    {
+      "source_id": "S22",
+      "video_duration_seconds": 974.634813,
+      "audio_processed_seconds": 974.6346875,
+      "asr_segments": 164,
+      "public_segments": 104,
+      "all_asr_ids_accounted_for": true,
+      "unclear_segments": 10,
+      "original_video_in_repository": false
+    }
+  ],
+  "reviewed_ui_frames": 5,
   "limitations": [
     "No PostgreSQL execution",
-    "No full browser interaction/render verification",
+    "Recorded UI frames reviewed; no independent full browser interaction/render verification",
+    "Machine ASR editions; no certified verbatim transcript or speaker diarization",
     "No real pilot financial reconciliation",
-    "No AI-provider integration or model training"
+    "No production AI-provider integration or model training"
   ],
   "errors": []
 }

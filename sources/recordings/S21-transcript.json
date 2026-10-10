@@ -1,0 +1,3709 @@
+{
+  "source_id": "S21",
+  "id": "S21",
+  "original_name": "bandicam 2026-10-09 19-19-50-143.mp4",
+  "original_bytes": 198028393,
+  "original_sha256": "2a6abfe273417c61f8342fe0405706302f7377dc5777bbad7c94b4c36c83988e",
+  "duration_seconds": 1931.183,
+  "recorded_date": "2026-10-09",
+  "recorded_date_basis": "original filename; not independently authenticated",
+  "original_in_repository": false,
+  "edition": "asr-technical-public-edition",
+  "audio_extraction": {
+    "recording": 1,
+    "bytes": 61797112,
+    "sha256": "8e36ad65634339bac5d44096cd22d2f1b9ae4c47d69863d701acf839ecd18b6f",
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "sample_width_bytes": 2,
+    "duration_seconds": 1931.1573125
+  },
+  "asr": {
+    "model": "Systran/faster-whisper-small",
+    "model_revision": "536b0662742c02347bc0e980a01041f333bce120",
+    "model_weights_sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671",
+    "device": "cpu",
+    "compute_type": "int8",
+    "cpu_threads": 6,
+    "versions": {
+      "faster-whisper": "1.2.1",
+      "ctranslate2": "4.8.2",
+      "numpy": "2.5.4",
+      "av": "19.0.1",
+      "onnxruntime": "1.31.0",
+      "huggingface-hub": "2.2.0",
+      "tokenizers": "0.23.3",
+      "socksio": "1.0.0"
+    },
+    "settings": {
+      "language": "ru",
+      "beam_size": 3,
+      "vad_filter": false,
+      "condition_on_previous_text": false,
+      "word_timestamps": false
+    },
+    "speaker_diarization": false,
+    "raw_output_sha256": "cff1c8316a5cf984239dca13fa5fa37c56e33f008c38d35ab7512e7a3131ddc0",
+    "raw_segment_count": 267,
+    "audio_processed_seconds": 1931.1573125
+  },
+  "public_segment_count": 233,
+  "boundary_adjustments": [
+    {
+      "source_segment_id": 267,
+      "raw_end_seconds": 1933.0,
+      "public_end_seconds": 1931.183
+    }
+  ],
+  "edition_policy": "Machine ASR, reviewed for project context. Names masked; private/non-project passages explicitly marked; technical summaries labeled. No speaker attribution or verbatim certification.",
+  "segments": [
+    {
+      "id": 1,
+      "source_segment_ids": [
+        1
+      ],
+      "start_seconds": 0.0,
+      "end_seconds": 9.28,
+      "kind": "asr",
+      "text": "неделю и дню, конкретно, какие у меня показатели денежные. Что на сегодня? Какой прогноз",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.23058507523753427,
+        "no_speech_prob": 0.3700796663761139
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 2,
+      "source_segment_ids": [
+        2
+      ],
+      "start_seconds": 9.28,
+      "end_seconds": 17.6,
+      "kind": "asr",
+      "text": "идёт 31 октября, собранный из всей системы? Да, наконец месяца. Вот, я думаю, пока что,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23058507523753427,
+        "no_speech_prob": 0.3700796663761139
+      }
+    },
+    {
+      "id": 3,
+      "source_segment_ids": [
+        3
+      ],
+      "start_seconds": 17.6,
+      "end_seconds": 23.400000000000002,
+      "kind": "asr",
+      "text": "наверное, на этом остановимся, но ты сам понимаешь, что потом можно ещё чуть-чуть вот",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23058507523753427,
+        "no_speech_prob": 0.3700796663761139
+      }
+    },
+    {
+      "id": 4,
+      "source_segment_ids": [
+        4
+      ],
+      "start_seconds": 23.400000000000002,
+      "end_seconds": 37.68000000000001,
+      "kind": "asr",
+      "text": "это прогнозчик увеличил. Да, и при этом он мне сейчас не совсем показывает, сейчас я попробую попасть в",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4920023295187181,
+        "no_speech_prob": 0.5253739953041077
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 5,
+      "source_segment_ids": [
+        5
+      ],
+      "start_seconds": 37.68,
+      "end_seconds": 63.379999999999995,
+      "kind": "asr",
+      "text": "он будет заходить сюда с главного экрана помнишь где вот эту восьмерку была с",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4606194562382168,
+        "no_speech_prob": 0.759911835193634
+      }
+    },
+    {
+      "id": 6,
+      "source_segment_ids": [
+        6
+      ],
+      "start_seconds": 63.38,
+      "end_seconds": 69.7,
+      "kind": "asr",
+      "text": "разрывами, то есть там ценным нажимаем и проваливаемся вот сюда. Восьмерки показываются",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.28340482965428776,
+        "no_speech_prob": 0.4341809153556824
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 7,
+      "source_segment_ids": [
+        7
+      ],
+      "start_seconds": 69.7,
+      "end_seconds": 75.02000000000001,
+      "kind": "asr",
+      "text": "конкретное отклонение, которое есть. Это для собственника, если он не хочет туда даже дальше",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28340482965428776,
+        "no_speech_prob": 0.4341809153556824
+      }
+    },
+    {
+      "id": 8,
+      "source_segment_ids": [
+        8
+      ],
+      "start_seconds": 75.02000000000001,
+      "end_seconds": 80.46000000000001,
+      "kind": "asr",
+      "text": "выходить, то есть он там тыкает и попадает сразу туда-куда на. Но если нужно более-менее такое",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28340482965428776,
+        "no_speech_prob": 0.4341809153556824
+      }
+    },
+    {
+      "id": 9,
+      "source_segment_ids": [
+        9
+      ],
+      "start_seconds": 80.46000000000001,
+      "end_seconds": 86.82000000000001,
+      "kind": "asr",
+      "text": "конструктивное понимание, то он заходит. И вот здесь опять же идут степени погружения. То есть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28340482965428776,
+        "no_speech_prob": 0.4341809153556824
+      }
+    },
+    {
+      "id": 10,
+      "source_segment_ids": [
+        10
+      ],
+      "start_seconds": 86.82000000000001,
+      "end_seconds": 92.9,
+      "kind": "asr",
+      "text": "здесь идёт совокупность по всему, по всем заказам, по всей [неразборчиво], которая происходит",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.28340482965428776,
+        "no_speech_prob": 0.4341809153556824
+      },
+      "edit_types": [
+        "annotated_review"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 11,
+      "source_segment_ids": [
+        11
+      ],
+      "start_seconds": 92.9,
+      "end_seconds": 99.5,
+      "kind": "asr",
+      "text": "в целом. Потом, что происходит с заказами, попадаем сюда. И вот здесь я даже поставил,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.32985224404672936,
+        "no_speech_prob": 0.6018058657646179
+      }
+    },
+    {
+      "id": 12,
+      "source_segment_ids": [
+        12
+      ],
+      "start_seconds": 99.5,
+      "end_seconds": 105.86000000000001,
+      "kind": "asr",
+      "text": "как примеры другие, например, ниши, там панели для корпуса, монтажный кронштейн от балдет,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.32985224404672936,
+        "no_speech_prob": 0.6018058657646179
+      }
+    },
+    {
+      "id": 13,
+      "source_segment_ids": [
+        13
+      ],
+      "start_seconds": 105.86000000000001,
+      "end_seconds": 114.26,
+      "kind": "asr",
+      "text": "короче, брался. Вот, но суть такая же, то есть он сюда заходит и здесь идут конкретно заказы.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.32985224404672936,
+        "no_speech_prob": 0.6018058657646179
+      }
+    },
+    {
+      "id": 14,
+      "source_segment_ids": [
+        14
+      ],
+      "start_seconds": 114.26,
+      "end_seconds": 121.34,
+      "kind": "asr",
+      "text": "И вот там вот, прописывай, сразу же видишь, здесь сборка идет за один этап. Здесь материалы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.32985224404672936,
+        "no_speech_prob": 0.6018058657646179
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 15,
+      "source_segment_ids": [
+        15
+      ],
+      "start_seconds": 121.34,
+      "end_seconds": 128.5,
+      "kind": "asr",
+      "text": "дороже первоначального просчета. Вот эти рекомендации должны вот так вот выглядеть. Понял? Вот",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26790749015552656,
+        "no_speech_prob": 0.7626360058784485
+      }
+    },
+    {
+      "id": 16,
+      "source_segment_ids": [
+        16
+      ],
+      "start_seconds": 128.5,
+      "end_seconds": 133.46,
+      "kind": "asr",
+      "text": "таким текстом, но по дизайну это должно быть более явно. То есть я понимаю то, что мне надо",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26790749015552656,
+        "no_speech_prob": 0.7626360058784485
+      }
+    },
+    {
+      "id": 17,
+      "source_segment_ids": [
+        17
+      ],
+      "start_seconds": 133.46,
+      "end_seconds": 144.26,
+      "kind": "asr",
+      "text": "смотреть, то есть зоны комментариев, они должны всегда быть выделены. То есть туда, куда внимание,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26790749015552656,
+        "no_speech_prob": 0.7626360058784485
+      }
+    },
+    {
+      "id": 18,
+      "source_segment_ids": [
+        18
+      ],
+      "start_seconds": 144.26,
+      "end_seconds": 150.66,
+      "kind": "asr",
+      "text": "там должно быть более это видно, то есть чтобы попадало туда, куда надо. Он как бы делает вот",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26790749015552656,
+        "no_speech_prob": 0.7626360058784485
+      }
+    },
+    {
+      "id": 19,
+      "source_segment_ids": [
+        19
+      ],
+      "start_seconds": 150.66,
+      "end_seconds": 158.26,
+      "kind": "asr",
+      "text": "вот это вот все, но мне приходится всматриваться, здесь вот важно вот это будет элемент уделить внимание,",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3187934421656424,
+        "no_speech_prob": 0.6064568161964417
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 20,
+      "source_segment_ids": [
+        20
+      ],
+      "start_seconds": 158.26,
+      "end_seconds": 162.9,
+      "kind": "asr",
+      "text": "но я буду как бы говорить когда это будет, просто имею в виду, что это надо будет переделывать со",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3187934421656424,
+        "no_speech_prob": 0.6064568161964417
+      }
+    },
+    {
+      "id": 21,
+      "source_segment_ids": [
+        21
+      ],
+      "start_seconds": 162.9,
+      "end_seconds": 172.34,
+      "kind": "asr",
+      "text": "временем вот этим моментом, то есть вот в этом дизайне. Вот дальше мы естественно в следующей",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3187934421656424,
+        "no_speech_prob": 0.6064568161964417
+      }
+    },
+    {
+      "id": 22,
+      "source_segment_ids": [
+        22
+      ],
+      "start_seconds": 172.34,
+      "end_seconds": 179.66,
+      "kind": "asr",
+      "text": "степени погружения это мы попадаем в конкретный заказ, он показывает сколько еще сделано,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3187934421656424,
+        "no_speech_prob": 0.6064568161964417
+      }
+    },
+    {
+      "id": 23,
+      "source_segment_ids": [
+        23
+      ],
+      "start_seconds": 179.66,
+      "end_seconds": 185.46,
+      "kind": "asr",
+      "text": "какая процентовка, он показывает себестоимость и первоначальность себестоимость на плане,",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3941853619241095,
+        "no_speech_prob": 0.055485647171735764
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 24,
+      "source_segment_ids": [
+        24
+      ],
+      "start_seconds": 185.46,
+      "end_seconds": 196.5,
+      "kind": "asr",
+      "text": "показывает цель какая была, что происходит сейчас, и результат подряд его, когда на певюде на сегодня,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3941853619241095,
+        "no_speech_prob": 0.055485647171735764
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 25,
+      "source_segment_ids": [
+        25
+      ],
+      "start_seconds": 196.5,
+      "end_seconds": 207.26,
+      "kind": "asr",
+      "text": "условно какое есть, то есть пока двигаемся в этой логике, здесь понятно все?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3941853619241095,
+        "no_speech_prob": 0.055485647171735764
+      }
+    },
+    {
+      "id": 26,
+      "source_segment_ids": [
+        26
+      ],
+      "start_seconds": 209.66,
+      "end_seconds": 219.66,
+      "kind": "asr",
+      "text": "И, соответственно, самая детальная степень погружения — это создать заказ.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      }
+    },
+    {
+      "id": 27,
+      "source_segment_ids": [
+        27
+      ],
+      "start_seconds": 219.66,
+      "end_seconds": 223.66,
+      "kind": "asr",
+      "text": "Вот когда мы создаем заказ, он попадает уже.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      }
+    },
+    {
+      "id": 28,
+      "source_segment_ids": [
+        28
+      ],
+      "start_seconds": 223.66,
+      "end_seconds": 226.66,
+      "kind": "asr",
+      "text": "Для себя, для заказчика я над терминологией буду еще думать,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      }
+    },
+    {
+      "id": 29,
+      "source_segment_ids": [
+        29
+      ],
+      "start_seconds": 226.66,
+      "end_seconds": 229.66,
+      "kind": "asr",
+      "text": "как она должна выглядеть, то есть там тоже зону оставим,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      }
+    },
+    {
+      "id": 30,
+      "source_segment_ids": [
+        30
+      ],
+      "start_seconds": 229.66,
+      "end_seconds": 233.66,
+      "kind": "asr",
+      "text": "чтобы мы ее сделали, может быть, более профессиональные,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      }
+    },
+    {
+      "id": 31,
+      "source_segment_ids": [
+        31
+      ],
+      "start_seconds": 233.66,
+      "end_seconds": 236.66,
+      "kind": "asr",
+      "text": "ежели такой фреймбли, вроде бы, подумали.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.31058435129082723,
+        "no_speech_prob": 0.6925699710845947
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 32,
+      "source_segment_ids": [
+        32
+      ],
+      "start_seconds": 236.66,
+      "end_seconds": 244.66,
+      "kind": "asr",
+      "text": "То есть для себя и для заказчика. Тут разница будет в том, что по-разному будет считаться сама экономика.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.17190274620844312,
+        "no_speech_prob": 0.6144057512283325
+      }
+    },
+    {
+      "id": 33,
+      "source_segment_ids": [
+        33
+      ],
+      "start_seconds": 244.66,
+      "end_seconds": 253.66,
+      "kind": "asr",
+      "text": "То есть если мы делаем для себя, то цель будет прийти к заданной себестоимости, ту, которая назначает производство,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.17190274620844312,
+        "no_speech_prob": 0.6144057512283325
+      }
+    },
+    {
+      "id": 34,
+      "source_segment_ids": [
+        34
+      ],
+      "start_seconds": 253.66,
+      "end_seconds": 258.65999999999997,
+      "kind": "asr",
+      "text": "в контексте производственного контура. То есть мы не делаем туда продажи.",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.17190274620844312,
+        "no_speech_prob": 0.6144057512283325
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 35,
+      "source_segment_ids": [
+        35
+      ],
+      "start_seconds": 258.65999999999997,
+      "end_seconds": 263.65999999999997,
+      "kind": "asr",
+      "text": "Ну, условно, если это бренд, как у нас было, то есть там продажа – это немного другая история.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.17190274620844312,
+        "no_speech_prob": 0.6144057512283325
+      }
+    },
+    {
+      "id": 36,
+      "source_segment_ids": [
+        36
+      ],
+      "start_seconds": 263.66,
+      "end_seconds": 271.06,
+      "kind": "asr",
+      "text": "вообще она отдельно там идет, но всегда задача была производство, а в контексте времени прийти к",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27163749316643027,
+        "no_speech_prob": 0.5178033709526062
+      }
+    },
+    {
+      "id": 37,
+      "source_segment_ids": [
+        37
+      ],
+      "start_seconds": 271.06,
+      "end_seconds": 275.90000000000003,
+      "kind": "asr",
+      "text": "необходимой заданной себестоимости, которая идет условно от отдела продаж, то есть тут некий",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27163749316643027,
+        "no_speech_prob": 0.5178033709526062
+      }
+    },
+    {
+      "id": 38,
+      "source_segment_ids": [
+        38
+      ],
+      "start_seconds": 275.90000000000003,
+      "end_seconds": 282.66,
+      "kind": "asr",
+      "text": "заказчик, это отдел продаж получается, и здесь учитывается цена, так чтобы мы были именно в себестоимости.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27163749316643027,
+        "no_speech_prob": 0.5178033709526062
+      }
+    },
+    {
+      "id": 39,
+      "source_segment_ids": [
+        39
+      ],
+      "start_seconds": 282.66,
+      "end_seconds": 293.58000000000004,
+      "kind": "asr",
+      "text": "То есть там выписание я писал. Для заказчика это когда идет там услуга по факту идет.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.37713318574623983,
+        "no_speech_prob": 0.44552484154701233
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 40,
+      "source_segment_ids": [
+        40
+      ],
+      "start_seconds": 293.58000000000004,
+      "end_seconds": 309.1,
+      "kind": "asr",
+      "text": "Ну и все, я дальше уже здесь как конструктор. Количество, чего. Какое надо себестоимость остаться.",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.37713318574623983,
+        "no_speech_prob": 0.44552484154701233
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 41,
+      "source_segment_ids": [
+        41
+      ],
+      "start_seconds": 309.1,
+      "end_seconds": 318.82000000000005,
+      "kind": "asr",
+      "text": "что потребуется для заказа, то нечет распор, заказчик, то есть материал производства, закупка заказ, прямой",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.37783087491989137,
+        "no_speech_prob": 0.6418846249580383
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 42,
+      "source_segment_ids": [
+        42
+      ],
+      "start_seconds": 318.82000000000005,
+      "end_seconds": 324.94,
+      "kind": "asr",
+      "text": "распор, тогда или так подобное, то есть, ну вот уже это непосредственно такой блок, как бы менеджер,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.37783087491989137,
+        "no_speech_prob": 0.6418846249580383
+      }
+    },
+    {
+      "id": 43,
+      "source_segment_ids": [
+        43
+      ],
+      "start_seconds": 324.94,
+      "end_seconds": 333.26000000000005,
+      "kind": "asr",
+      "text": "или тот, ну или за производство, и срок завершения, то есть вот все это как бы создалось и дальше все",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.37783087491989137,
+        "no_speech_prob": 0.6418846249580383
+      }
+    },
+    {
+      "id": 44,
+      "source_segment_ids": [
+        44
+      ],
+      "start_seconds": 333.26,
+      "end_seconds": 340.5,
+      "kind": "asr",
+      "text": "уходит в план сразу то есть план уже делает как это все будет ну по плану я тебе уже дальше буду",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2557919801850068,
+        "no_speech_prob": 0.5767946243286133
+      }
+    },
+    {
+      "id": 45,
+      "source_segment_ids": [
+        45
+      ],
+      "start_seconds": 340.5,
+      "end_seconds": 346.58,
+      "kind": "asr",
+      "text": "собирать ну и действия ты примерно понимаешь ну вот как бы по сути вот этот модуль можно уже",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2557919801850068,
+        "no_speech_prob": 0.5767946243286133
+      }
+    },
+    {
+      "id": 46,
+      "source_segment_ids": [
+        46
+      ],
+      "start_seconds": 346.58,
+      "end_seconds": 353.65999999999997,
+      "kind": "asr",
+      "text": "прям собирать я считаю даже очень ну таким цельным достаточно то есть какие-то моменты может",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2557919801850068,
+        "no_speech_prob": 0.5767946243286133
+      }
+    },
+    {
+      "id": 47,
+      "source_segment_ids": [
+        47
+      ],
+      "start_seconds": 353.66,
+      "end_seconds": 361.1,
+      "kind": "asr",
+      "text": "может, ну, убавиться, но в целом, логика, я считаю, то здесь, ну, плюс-минус продумано.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.450395781742899,
+        "no_speech_prob": 0.10568701475858688
+      }
+    },
+    {
+      "id": 48,
+      "source_segment_ids": [
+        48
+      ],
+      "start_seconds": 383.66,
+      "end_seconds": 391.66,
+      "kind": "asr",
+      "text": "[участник], как тебе вообще? Как вам?",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 49,
+      "source_segment_ids": [
+        49
+      ],
+      "start_seconds": 391.66,
+      "end_seconds": 395.66,
+      "kind": "asr",
+      "text": "Я бы хотел вернуться в этот...",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      }
+    },
+    {
+      "id": 50,
+      "source_segment_ids": [
+        50
+      ],
+      "start_seconds": 395.66,
+      "end_seconds": 398.66,
+      "kind": "asr",
+      "text": "Давай к заказчику еще, мы можем провалить?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      }
+    },
+    {
+      "id": 51,
+      "source_segment_ids": [
+        51
+      ],
+      "start_seconds": 398.66,
+      "end_seconds": 400.66,
+      "kind": "asr",
+      "text": "Да.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      }
+    },
+    {
+      "id": 52,
+      "source_segment_ids": [
+        52
+      ],
+      "start_seconds": 405.66,
+      "end_seconds": 407.66,
+      "kind": "asr",
+      "text": "Создать заказ?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      }
+    },
+    {
+      "id": 53,
+      "source_segment_ids": [
+        53
+      ],
+      "start_seconds": 407.66,
+      "end_seconds": 412.66,
+      "kind": "asr",
+      "text": "Нет. Там где мы контролировали себестоимость",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.25935944734197675,
+        "no_speech_prob": 0.6648411750793457
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 54,
+      "source_segment_ids": [
+        54
+      ],
+      "start_seconds": 412.66,
+      "end_seconds": 418.54,
+      "kind": "asr",
+      "text": "и там, где мы не контролируем, а вот цели заказчика.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      }
+    },
+    {
+      "id": 55,
+      "source_segment_ids": [
+        55
+      ],
+      "start_seconds": 418.54,
+      "end_seconds": 424.1,
+      "kind": "asr",
+      "text": "Вот, которая предыдущая была до этого. Откуда мы пришли?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      }
+    },
+    {
+      "id": 56,
+      "source_segment_ids": [
+        56
+      ],
+      "start_seconds": 424.1,
+      "end_seconds": 430.18,
+      "kind": "asr",
+      "text": "Ну, вот это вот первый диет общий конток. Потом вот, что заказами идёт.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 57,
+      "source_segment_ids": [
+        57
+      ],
+      "start_seconds": 430.18,
+      "end_seconds": 432.98,
+      "kind": "asr",
+      "text": "Нет, нет. Ты...",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      }
+    },
+    {
+      "id": 58,
+      "source_segment_ids": [
+        58
+      ],
+      "start_seconds": 432.98,
+      "end_seconds": 436.22,
+      "kind": "asr",
+      "text": "Остать заказ? Вот это для кого производим?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      }
+    },
+    {
+      "id": 59,
+      "source_segment_ids": [
+        59
+      ],
+      "start_seconds": 436.22,
+      "end_seconds": 438.86,
+      "kind": "asr",
+      "text": "Для заказчика. Вот мы можем сюда провалиться?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4139528963543953,
+        "no_speech_prob": 0.45965510606765747
+      }
+    },
+    {
+      "id": 60,
+      "source_segment_ids": [
+        60
+      ],
+      "start_seconds": 438.86,
+      "end_seconds": 450.22,
+      "kind": "asr",
+      "text": "Ну, от количества, например, полторы тысячи единиц.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      }
+    },
+    {
+      "id": 61,
+      "source_segment_ids": [
+        61
+      ],
+      "start_seconds": 450.22,
+      "end_seconds": 453.22,
+      "kind": "asr",
+      "text": "Товарную честь.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 62,
+      "source_segment_ids": [
+        62
+      ],
+      "start_seconds": 453.22,
+      "end_seconds": 459.52000000000004,
+      "kind": "asr",
+      "text": "Что это показывает, для кого это информация, для",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      }
+    },
+    {
+      "id": 63,
+      "source_segment_ids": [
+        63
+      ],
+      "start_seconds": 459.52000000000004,
+      "end_seconds": 460.52000000000004,
+      "kind": "asr",
+      "text": "собственника?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      }
+    },
+    {
+      "id": 64,
+      "source_segment_ids": [
+        64
+      ],
+      "start_seconds": 460.52000000000004,
+      "end_seconds": 462.5,
+      "kind": "asr",
+      "text": "Что он здесь видит?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      }
+    },
+    {
+      "id": 65,
+      "source_segment_ids": [
+        65
+      ],
+      "start_seconds": 462.5,
+      "end_seconds": 466.94,
+      "kind": "asr",
+      "text": "Нет, здесь, ну, как бы, если он участвует во всех",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.49188530565919103,
+        "no_speech_prob": 0.6239021420478821
+      }
+    },
+    {
+      "id": 66,
+      "source_segment_ids": [
+        66
+      ],
+      "start_seconds": 466.94,
+      "end_seconds": 473.76,
+      "kind": "asr",
+      "text": "ролях он как бы создает вот эту историю того то ж ну как бы создает цель то есть количество",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3130455022411687,
+        "no_speech_prob": 0.6828039884567261
+      }
+    },
+    {
+      "id": 67,
+      "source_segment_ids": [
+        67
+      ],
+      "start_seconds": 473.76,
+      "end_seconds": 491.44,
+      "kind": "asr",
+      "text": "что нужно отшить вообще вот какова цена за изделие 1700 там идет дальше материалы расход я не понимаю",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3130455022411687,
+        "no_speech_prob": 0.6828039884567261
+      }
+    },
+    {
+      "id": 68,
+      "source_segment_ids": [
+        68
+      ],
+      "start_seconds": 491.44,
+      "end_seconds": 504.48,
+      "kind": "asr",
+      "text": "Заказчик это кто? Заказчик это тому, кому мы производим. А что мы здесь хотим",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3266943508181079,
+        "no_speech_prob": 0.7331865429878235
+      }
+    },
+    {
+      "id": 69,
+      "source_segment_ids": [
+        69
+      ],
+      "start_seconds": 504.48,
+      "end_seconds": 511.52,
+      "kind": "asr",
+      "text": "вообще посмотреть? У нас цель вот этой вкладки, она какая? А эта цель пора посмотреть, это",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3266943508181079,
+        "no_speech_prob": 0.7331865429878235
+      }
+    },
+    {
+      "id": 70,
+      "source_segment_ids": [
+        70
+      ],
+      "start_seconds": 511.52,
+      "end_seconds": 520.32,
+      "kind": "asr",
+      "text": "цель про создать этот заказ. То есть мы создаем тут цель, то есть это уже конечное, это именно",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3266943508181079,
+        "no_speech_prob": 0.7331865429878235
+      }
+    },
+    {
+      "id": 71,
+      "source_segment_ids": [
+        71
+      ],
+      "start_seconds": 520.32,
+      "end_seconds": 528.32,
+      "kind": "asr",
+      "text": "создать заказ, то есть он здесь набирает и создает сам заказ.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4013134319274152,
+        "no_speech_prob": 0.37895524501800537
+      }
+    },
+    {
+      "id": 72,
+      "source_segment_ids": [
+        72
+      ],
+      "start_seconds": 528.32,
+      "end_seconds": 531.32,
+      "kind": "asr",
+      "text": "Так я чего?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4013134319274152,
+        "no_speech_prob": 0.37895524501800537
+      }
+    },
+    {
+      "id": 73,
+      "source_segment_ids": [
+        73
+      ],
+      "start_seconds": 531.32,
+      "end_seconds": 536.32,
+      "kind": "asr",
+      "text": "То есть заказчик же уже с заказом пришел?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4013134319274152,
+        "no_speech_prob": 0.37895524501800537
+      }
+    },
+    {
+      "id": 74,
+      "source_segment_ids": [
+        74
+      ],
+      "start_seconds": 539.32,
+      "end_seconds": 544.32,
+      "kind": "asr",
+      "text": "Ну, для того, чтобы он внесся в систему.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4013134319274152,
+        "no_speech_prob": 0.37895524501800537
+      }
+    },
+    {
+      "id": 75,
+      "source_segment_ids": [
+        75
+      ],
+      "start_seconds": 544.32,
+      "end_seconds": 553.32,
+      "kind": "asr",
+      "text": "Или чтобы он видел вообще, что ему надо сделать?",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      }
+    },
+    {
+      "id": 76,
+      "source_segment_ids": [
+        76
+      ],
+      "start_seconds": 553.32,
+      "end_seconds": 557.32,
+      "kind": "asr",
+      "text": "Нет, а для того, чтобы система начала работать,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      }
+    },
+    {
+      "id": 77,
+      "source_segment_ids": [
+        77
+      ],
+      "start_seconds": 557.32,
+      "end_seconds": 561.32,
+      "kind": "asr",
+      "text": "ну, к примеру, то есть это форма, да, даже с условиями,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      }
+    },
+    {
+      "id": 78,
+      "source_segment_ids": [
+        78
+      ],
+      "start_seconds": 561.32,
+      "end_seconds": 565.32,
+      "kind": "asr",
+      "text": "если мы прокладываем там какую-то [термин неясен: ASR «IP-шку»], то что автоматически",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      },
+      "edit_types": [
+        "annotated_review"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 79,
+      "source_segment_ids": [
+        79
+      ],
+      "start_seconds": 565.32,
+      "end_seconds": 568.32,
+      "kind": "asr",
+      "text": "сюда она закладывает, сейчас надо создать форму,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      }
+    },
+    {
+      "id": 80,
+      "source_segment_ids": [
+        80
+      ],
+      "start_seconds": 568.32,
+      "end_seconds": 572.32,
+      "kind": "asr",
+      "text": "так чтобы оно раскладывалось по вот этим блокам, условно, да.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21961511587196925,
+        "no_speech_prob": 0.8051659464836121
+      }
+    },
+    {
+      "id": 81,
+      "source_segment_ids": [
+        81
+      ],
+      "start_seconds": 572.32,
+      "end_seconds": 578.0,
+      "kind": "asr",
+      "text": "ну какая стоимость и так далее. То есть это условно цель. Это модуль цель,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2859623582808526,
+        "no_speech_prob": 0.380537211894989
+      }
+    },
+    {
+      "id": 82,
+      "source_segment_ids": [
+        82
+      ],
+      "start_seconds": 578.0,
+      "end_seconds": 584.5600000000001,
+      "kind": "asr",
+      "text": "которую мы сейчас разрабатываем. Дальше из этого модуля цель, как заказ, она",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2859623582808526,
+        "no_speech_prob": 0.380537211894989
+      }
+    },
+    {
+      "id": 83,
+      "source_segment_ids": [
+        83
+      ],
+      "start_seconds": 584.5600000000001,
+      "end_seconds": 591.4000000000001,
+      "kind": "asr",
+      "text": "поступает в план. И план уже будет, согласно вот этому, как тех заданий,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2859623582808526,
+        "no_speech_prob": 0.380537211894989
+      }
+    },
+    {
+      "id": 84,
+      "source_segment_ids": [
+        84
+      ],
+      "start_seconds": 591.4000000000001,
+      "end_seconds": 597.96,
+      "kind": "asr",
+      "text": "делать и создавать уже непосредственно, как оно будет это делаться.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2859623582808526,
+        "no_speech_prob": 0.380537211894989
+      }
+    },
+    {
+      "id": 85,
+      "source_segment_ids": [
+        85
+      ],
+      "start_seconds": 597.96,
+      "end_seconds": 601.96,
+      "kind": "asr",
+      "text": "А дальше идёт ещё и действие, факт.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.366512804098849,
+        "no_speech_prob": 0.5963061451911926
+      }
+    },
+    {
+      "id": 86,
+      "source_segment_ids": [
+        86
+      ],
+      "start_seconds": 601.96,
+      "end_seconds": 611.96,
+      "kind": "asr",
+      "text": "Короче, это просто администрация оберегатора данных, которые потом используются для учёных плановых показателей.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.366512804098849,
+        "no_speech_prob": 0.5963061451911926
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 87,
+      "source_segment_ids": [
+        87
+      ],
+      "start_seconds": 611.96,
+      "end_seconds": 616.96,
+      "kind": "asr",
+      "text": "Да-да-да, нам надо так, чтобы система как-то функционировала условно.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.366512804098849,
+        "no_speech_prob": 0.5963061451911926
+      }
+    },
+    {
+      "id": 88,
+      "source_segment_ids": [
+        88
+      ],
+      "start_seconds": 616.96,
+      "end_seconds": 624.96,
+      "kind": "asr",
+      "text": "Мы сейчас делаем форму, которая, условно, мне сейчас зашёл заказ и я его должен зарегистрировать.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.366512804098849,
+        "no_speech_prob": 0.5963061451911926
+      }
+    },
+    {
+      "id": 89,
+      "source_segment_ids": [
+        89
+      ],
+      "start_seconds": 624.96,
+      "end_seconds": 631.26,
+      "kind": "asr",
+      "text": "Вот, я его регистрирую. Как он будет автоматически сюда заходить или не автоматически,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3487816614263198,
+        "no_speech_prob": 0.23310989141464233
+      }
+    },
+    {
+      "id": 90,
+      "source_segment_ids": [
+        90
+      ],
+      "start_seconds": 631.26,
+      "end_seconds": 642.76,
+      "kind": "asr",
+      "text": "но с учетом того, что у нас на первых парах, оно может быть как и так, и так, но примеры, даже если мы подтягиваем заказ и мы с [участник] обсуждали из-за, ну,",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3487816614263198,
+        "no_speech_prob": 0.23310989141464233
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 91,
+      "source_segment_ids": [
+        91
+      ],
+      "start_seconds": 642.76,
+      "end_seconds": 649.6,
+      "kind": "asr",
+      "text": "примеру документов, [вероятно: ТОРГ-12] или накладной и так далее, то есть он будет сюда",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.21313747499997798,
+        "no_speech_prob": 0.3466509282588959
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 92,
+      "source_segment_ids": [
+        92
+      ],
+      "start_seconds": 649.6,
+      "end_seconds": 655.8,
+      "kind": "asr",
+      "text": "заходить автоматически, раскладываться по вот этим блокам, так чтобы этот заказ",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21313747499997798,
+        "no_speech_prob": 0.3466509282588959
+      }
+    },
+    {
+      "id": 93,
+      "source_segment_ids": [
+        93
+      ],
+      "start_seconds": 655.8,
+      "end_seconds": 661.92,
+      "kind": "asr",
+      "text": "сформировался и ушел в систему, потом он автоматически заходит в план. В плане,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21313747499997798,
+        "no_speech_prob": 0.3466509282588959
+      }
+    },
+    {
+      "id": 94,
+      "source_segment_ids": [
+        94
+      ],
+      "start_seconds": 661.92,
+      "end_seconds": 666.88,
+      "kind": "asr",
+      "text": "с учетом того, что мы идем к тому, что мы автоматизируем и техпоследовательностей",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.21313747499997798,
+        "no_speech_prob": 0.3466509282588959
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 95,
+      "source_segment_ids": [
+        95
+      ],
+      "start_seconds": 666.88,
+      "end_seconds": 672.4,
+      "kind": "asr",
+      "text": "распределения, то по факту уже в плане будет появляться элемент прогноза.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.21313747499997798,
+        "no_speech_prob": 0.3466509282588959
+      }
+    },
+    {
+      "id": 96,
+      "source_segment_ids": [
+        96
+      ],
+      "start_seconds": 672.4,
+      "end_seconds": 681.4399999999999,
+      "kind": "asr",
+      "text": "то есть как он будет оттуда данные заходит уже в целевые и в цели уже будет появляться после того",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23112953312340237,
+        "no_speech_prob": 0.7814658284187317
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 97,
+      "source_segment_ids": [
+        97
+      ],
+      "start_seconds": 681.4399999999999,
+      "end_seconds": 687.9599999999999,
+      "kind": "asr",
+      "text": "когда план сработал прогносить определенную понятно я понял да это короче это производственная",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23112953312340237,
+        "no_speech_prob": 0.7814658284187317
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 98,
+      "source_segment_ids": [
+        98
+      ],
+      "start_seconds": 687.9599999999999,
+      "end_seconds": 694.8,
+      "kind": "asr",
+      "text": "цель я бы просто ну для меня по крайней мере непонятно там цель посебестоимости это как бы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23112953312340237,
+        "no_speech_prob": 0.7814658284187317
+      }
+    },
+    {
+      "id": 99,
+      "source_segment_ids": [
+        99
+      ],
+      "start_seconds": 694.8000000000001,
+      "end_seconds": 700.1600000000001,
+      "kind": "asr",
+      "text": "понятно для собственника здесь ну просто само название там как как оно еще раз",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.41764730128689087,
+        "no_speech_prob": 0.8001736998558044
+      }
+    },
+    {
+      "id": 100,
+      "source_segment_ids": [
+        100
+      ],
+      "start_seconds": 700.1600000000001,
+      "end_seconds": 710.9200000000001,
+      "kind": "asr",
+      "text": "для себя для заказчика да просто там есть цель себе стоимости цель производственное",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.41764730128689087,
+        "no_speech_prob": 0.8001736998558044
+      }
+    },
+    {
+      "id": 101,
+      "source_segment_ids": [
+        101
+      ],
+      "start_seconds": 710.9200000000001,
+      "end_seconds": 717.5200000000001,
+      "kind": "asr",
+      "text": "ну так так бы мне понятнее был крайне мере это да это обсуждается момент это условно сейчас",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.41764730128689087,
+        "no_speech_prob": 0.8001736998558044
+      }
+    },
+    {
+      "id": 102,
+      "source_segment_ids": [
+        102
+      ],
+      "start_seconds": 717.52,
+      "end_seconds": 726.8,
+      "kind": "asr",
+      "text": "я говорю, с терминологией надо... здесь прям вот как для тупых, можно сказать, для кого мы шьем,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.33528319065985474,
+        "no_speech_prob": 0.8611590266227722
+      }
+    },
+    {
+      "id": 103,
+      "source_segment_ids": [
+        103
+      ],
+      "start_seconds": 726.8,
+      "end_seconds": 736.3199999999999,
+      "kind": "asr",
+      "text": "для себя мы шьем, для закращик, типа... просто здесь разная формулируется экономик,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.33528319065985474,
+        "no_speech_prob": 0.8611590266227722
+      }
+    },
+    {
+      "id": 104,
+      "source_segment_ids": [
+        104
+      ],
+      "start_seconds": 736.3199999999999,
+      "end_seconds": 741.76,
+      "kind": "asr",
+      "text": "то есть за этим как раз и будет вот этот алгоритм, почему мы идем. То есть если в услуге,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.33528319065985474,
+        "no_speech_prob": 0.8611590266227722
+      }
+    },
+    {
+      "id": 105,
+      "source_segment_ids": [
+        105
+      ],
+      "start_seconds": 741.76,
+      "end_seconds": 749.16,
+      "kind": "asr",
+      "text": "то она считается условно, то есть конечной 1700 рублей условно, и там будет закладываться",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3156635829772072,
+        "no_speech_prob": 0.8770410418510437
+      }
+    },
+    {
+      "id": 106,
+      "source_segment_ids": [
+        106
+      ],
+      "start_seconds": 749.16,
+      "end_seconds": 757.72,
+      "kind": "asr",
+      "text": "вот эта маржинальность, та самая вот эта прибыльность. А когда производство работает на себя, то у них",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3156635829772072,
+        "no_speech_prob": 0.8770410418510437
+      }
+    },
+    {
+      "id": 107,
+      "source_segment_ids": [
+        107
+      ],
+      "start_seconds": 757.72,
+      "end_seconds": 767.26,
+      "kind": "asr",
+      "text": "там прибыль идет от продаж, то есть это немного другой формат. Ну, может быть, да, на самом",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3156635829772072,
+        "no_speech_prob": 0.8770410418510437
+      }
+    },
+    {
+      "id": 108,
+      "source_segment_ids": [
+        108
+      ],
+      "start_seconds": 767.26,
+      "end_seconds": 774.9399999999999,
+      "kind": "asr",
+      "text": "производстве там как раз для них более понятно будет. Слушай, ну и у меня этот",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.24401480758732016,
+        "no_speech_prob": 0.8167657852172852
+      }
+    },
+    {
+      "id": 109,
+      "source_segment_ids": [
+        109
+      ],
+      "start_seconds": 774.9399999999999,
+      "end_seconds": 782.38,
+      "kind": "asr",
+      "text": "самый большой вопрос это по расходам и подоходам. Если мы будем туда делать, ну то есть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.24401480758732016,
+        "no_speech_prob": 0.8167657852172852
+      }
+    },
+    {
+      "id": 110,
+      "source_segment_ids": [
+        110
+      ],
+      "start_seconds": 782.38,
+      "end_seconds": 790.54,
+      "kind": "asr",
+      "text": "какой-то шаблон, то есть вероятность, что мы не учтем каких-то расходов. Если туда пихать",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.24401480758732016,
+        "no_speech_prob": 0.8167657852172852
+      }
+    },
+    {
+      "id": 111,
+      "source_segment_ids": [
+        111
+      ],
+      "start_seconds": 790.54,
+      "end_seconds": 796.7,
+      "kind": "asr",
+      "text": "все расходы, то ну как бы надо понимать, у нас там есть транспортная, то есть как бы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.24401480758732016,
+        "no_speech_prob": 0.8167657852172852
+      }
+    },
+    {
+      "id": 112,
+      "source_segment_ids": [
+        112
+      ],
+      "start_seconds": 796.7,
+      "end_seconds": 804.7800000000001,
+      "kind": "asr",
+      "text": "сейчас непонятно это ну все расходы по бухгалтерии или это только производственные расходы там ну",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.1580167297612537,
+        "no_speech_prob": 0.7694393396377563
+      }
+    },
+    {
+      "id": 113,
+      "source_segment_ids": [
+        113
+      ],
+      "start_seconds": 804.7800000000001,
+      "end_seconds": 815.7800000000001,
+      "kind": "asr",
+      "text": "например транспортные на связь там какие-то корпоративные какие там еще есть у нас на",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.1580167297612537,
+        "no_speech_prob": 0.7694393396377563
+      }
+    },
+    {
+      "id": 114,
+      "source_segment_ids": [
+        114
+      ],
+      "start_seconds": 815.7800000000001,
+      "end_seconds": 822.0200000000001,
+      "kind": "asr",
+      "text": "командировочные то есть будут ли они там учитываться или нет и смотри если мы делаем шаблон и они там",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.1580167297612537,
+        "no_speech_prob": 0.7694393396377563
+      }
+    },
+    {
+      "id": 115,
+      "source_segment_ids": [
+        115
+      ],
+      "start_seconds": 822.02,
+      "end_seconds": 830.88,
+      "kind": "asr",
+      "text": "не будут учитываться. Тогда есть вероятность, что собственник увидит одну цифру, а бухгалтер",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23083503956490375,
+        "no_speech_prob": 0.8395134210586548
+      }
+    },
+    {
+      "id": 116,
+      "source_segment_ids": [
+        116
+      ],
+      "start_seconds": 830.88,
+      "end_seconds": 839.78,
+      "kind": "asr",
+      "text": "ему будет доводить другую цифру. На этой стадии у них может конфликт интересов выйти,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23083503956490375,
+        "no_speech_prob": 0.8395134210586548
+      }
+    },
+    {
+      "id": 117,
+      "source_segment_ids": [
+        117
+      ],
+      "start_seconds": 839.78,
+      "end_seconds": 848.68,
+      "kind": "asr",
+      "text": "конфликт данных. Когда у бухгалтера будет одна условна цифра, а собственник ее не видит",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23083503956490375,
+        "no_speech_prob": 0.8395134210586548
+      }
+    },
+    {
+      "id": 118,
+      "source_segment_ids": [
+        118
+      ],
+      "start_seconds": 848.6800000000001,
+      "end_seconds": 859.0400000000001,
+      "kind": "asr",
+      "text": "и его картинки без учета всех этого всего количества расходов по предприятию у него как бы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29226390948129255,
+        "no_speech_prob": 0.7319443821907043
+      }
+    },
+    {
+      "id": 119,
+      "source_segment_ids": [
+        119
+      ],
+      "start_seconds": 859.0400000000001,
+      "end_seconds": 866.5600000000001,
+      "kind": "asr",
+      "text": "более радужное складываться в картинах. Вот какой момент. Ну и по доходам точно так же, то есть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29226390948129255,
+        "no_speech_prob": 0.7319443821907043
+      }
+    },
+    {
+      "id": 120,
+      "source_segment_ids": [
+        120
+      ],
+      "start_seconds": 866.5600000000001,
+      "end_seconds": 873.4000000000001,
+      "kind": "asr",
+      "text": "точно считать доходами, доходы исключительно от продажи изделий или вообще все доходы от",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29226390948129255,
+        "no_speech_prob": 0.7319443821907043
+      }
+    },
+    {
+      "id": 121,
+      "source_segment_ids": [
+        121
+      ],
+      "start_seconds": 873.4,
+      "end_seconds": 881.72,
+      "kind": "asr",
+      "text": "от предприятия. Мы понимаем, что они не только от продажи могут быть. То есть по бухгалтерскому балансовать,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3217569361714756,
+        "no_speech_prob": 0.909722626209259
+      }
+    },
+    {
+      "id": 122,
+      "source_segment_ids": [
+        122
+      ],
+      "start_seconds": 881.72,
+      "end_seconds": 887.36,
+      "kind": "asr",
+      "text": "по бухгалтерскому учету, доходы также включаются. Какие-нибудь возвраты,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3217569361714756,
+        "no_speech_prob": 0.909722626209259
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 123,
+      "source_segment_ids": [
+        123
+      ],
+      "start_seconds": 887.36,
+      "end_seconds": 895.48,
+      "kind": "asr",
+      "text": "какие-нибудь кредиты тоже, они доходную часть пады. Понял, да? О чем я говорю? Да-да, я понял,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3217569361714756,
+        "no_speech_prob": 0.909722626209259
+      }
+    },
+    {
+      "id": 124,
+      "source_segment_ids": [
+        124
+      ],
+      "start_seconds": 895.48,
+      "end_seconds": 900.48,
+      "kind": "asr",
+      "text": "о чём-то говоришь, но здесь мы, наверное, прям вот, ну...",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 125,
+      "source_segment_ids": [
+        125
+      ],
+      "start_seconds": 900.48,
+      "end_seconds": 907.48,
+      "kind": "asr",
+      "text": "Ну, это прям большой вопрос, и я понимаю, что мы как бы хотим",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 126,
+      "source_segment_ids": [
+        126
+      ],
+      "start_seconds": 907.48,
+      "end_seconds": 911.48,
+      "kind": "asr",
+      "text": "упростить, наоборот, для собственника, чтобы, ну, прям,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 127,
+      "source_segment_ids": [
+        127
+      ],
+      "start_seconds": 911.48,
+      "end_seconds": 915.48,
+      "kind": "asr",
+      "text": "не нагружать эту программу, да, а чтобы он как бы схватывал",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 128,
+      "source_segment_ids": [
+        128
+      ],
+      "start_seconds": 915.48,
+      "end_seconds": 919.48,
+      "kind": "asr",
+      "text": "основные принципы, как бы, ну, прям общую картину производства.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 129,
+      "source_segment_ids": [
+        129
+      ],
+      "start_seconds": 919.48,
+      "end_seconds": 923.48,
+      "kind": "asr",
+      "text": "Вот, но при этом, ну, как бы вот такой момент он может быть,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23965933100610484,
+        "no_speech_prob": 0.830805242061615
+      }
+    },
+    {
+      "id": 130,
+      "source_segment_ids": [
+        130
+      ],
+      "start_seconds": 923.48,
+      "end_seconds": 928.12,
+      "kind": "asr",
+      "text": "когда он такой обли, у меня тут все в шоколаде, а бухгалтером.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3290204383376846,
+        "no_speech_prob": 0.7325477600097656
+      }
+    },
+    {
+      "id": 131,
+      "source_segment_ids": [
+        131
+      ],
+      "start_seconds": 928.12,
+      "end_seconds": 933.08,
+      "kind": "asr",
+      "text": "Потом приходит, говорит, [условный собственник], блядь, в злопе сидим.",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3290204383376846,
+        "no_speech_prob": 0.7325477600097656
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 132,
+      "source_segment_ids": [
+        132
+      ],
+      "start_seconds": 933.08,
+      "end_seconds": 941.0,
+      "kind": "asr",
+      "text": "Слушай, ты знаешь, я с тобой согласен, но опять же, я понимаю гоничного клиента,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3290204383376846,
+        "no_speech_prob": 0.7325477600097656
+      }
+    },
+    {
+      "id": 133,
+      "source_segment_ids": [
+        133
+      ],
+      "start_seconds": 941.0,
+      "end_seconds": 945.88,
+      "kind": "asr",
+      "text": "с которым мы сейчас будем взаимодействовать. То, о чем ты говоришь, это может,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3290204383376846,
+        "no_speech_prob": 0.7325477600097656
+      }
+    },
+    {
+      "id": 134,
+      "source_segment_ids": [
+        134
+      ],
+      "start_seconds": 945.88,
+      "end_seconds": 952.2,
+      "kind": "asr",
+      "text": "знаешь, где произойти такая история, она может произойти в какой-нибудь, как сказать,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3290204383376846,
+        "no_speech_prob": 0.7325477600097656
+      }
+    },
+    {
+      "id": 135,
+      "source_segment_ids": [
+        135
+      ],
+      "start_seconds": 952.2,
+      "end_seconds": 960.84,
+      "kind": "asr",
+      "text": "компании, к примеру, дистрибьюторской, то есть какой-нибудь типа, где вот эти торговые",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28687427123387654,
+        "no_speech_prob": 0.7927060723304749
+      }
+    },
+    {
+      "id": 136,
+      "source_segment_ids": [
+        136
+      ],
+      "start_seconds": 960.84,
+      "end_seconds": 968.2,
+      "kind": "asr",
+      "text": "представители, где идет достаточно большое большое количество людей, торговые представители,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28687427123387654,
+        "no_speech_prob": 0.7927060723304749
+      }
+    },
+    {
+      "id": 137,
+      "source_segment_ids": [
+        137
+      ],
+      "start_seconds": 968.2,
+      "end_seconds": 975.76,
+      "kind": "asr",
+      "text": "где вот эта вот продажная история. Там вообще я считаю, когда я работал в такой компании,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.28687427123387654,
+        "no_speech_prob": 0.7927060723304749
+      }
+    },
+    {
+      "id": 138,
+      "source_segment_ids": [
+        138
+      ],
+      "start_seconds": 975.76,
+      "end_seconds": 982.2,
+      "kind": "asr",
+      "text": "там не всегда вообще могут тут чистую прибыль почитать, то есть там это вообще бич, когда очень",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20835514965220395,
+        "no_speech_prob": 0.47974005341529846
+      }
+    },
+    {
+      "id": 139,
+      "source_segment_ids": [
+        139
+      ],
+      "start_seconds": 982.2,
+      "end_seconds": 989.3199999999999,
+      "kind": "asr",
+      "text": "большая такая корпоративная структура, но в контексте данных мероприятий, то здесь как я учитывал",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20835514965220395,
+        "no_speech_prob": 0.47974005341529846
+      }
+    },
+    {
+      "id": 140,
+      "source_segment_ids": [
+        140
+      ],
+      "start_seconds": 989.3199999999999,
+      "end_seconds": 997.38,
+      "kind": "asr",
+      "text": "эту историю с расходами, вот в эти постоянные расходы туда закладываются, например,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20835514965220395,
+        "no_speech_prob": 0.47974005341529846
+      }
+    },
+    {
+      "id": 141,
+      "source_segment_ids": [
+        141
+      ],
+      "start_seconds": 997.38,
+      "end_seconds": 1003.52,
+      "kind": "asr",
+      "text": "оклады, и опять же, когда это будет заводиться условно, эти оклады можно прямо сразу",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20835514965220395,
+        "no_speech_prob": 0.47974005341529846
+      }
+    },
+    {
+      "id": 142,
+      "source_segment_ids": [
+        142
+      ],
+      "start_seconds": 1003.52,
+      "end_seconds": 1008.4,
+      "kind": "asr",
+      "text": "заводить там с учетом налогов, то есть я думаю, бухгалтера и как бы собственная",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3279531292799043,
+        "no_speech_prob": 0.7938598990440369
+      }
+    },
+    {
+      "id": 143,
+      "source_segment_ids": [
+        143
+      ],
+      "start_seconds": 1008.4,
+      "end_seconds": 1012.28,
+      "kind": "asr",
+      "text": "Меньше всего вопросов, на самом деле больше вопросов с переменами",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3279531292799043,
+        "no_speech_prob": 0.7938598990440369
+      }
+    },
+    {
+      "id": 144,
+      "source_segment_ids": [
+        144
+      ],
+      "start_seconds": 1012.28,
+      "end_seconds": 1018.0,
+      "kind": "asr",
+      "text": "А переменные здесь будут идти и так, то есть есть расходы, которые относятся",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3279531292799043,
+        "no_speech_prob": 0.7938598990440369
+      }
+    },
+    {
+      "id": 145,
+      "source_segment_ids": [
+        145
+      ],
+      "start_seconds": 1018.0,
+      "end_seconds": 1022.6,
+      "kind": "asr",
+      "text": "непосредственно к заказу, вот непосредственно к заказу, вот как раз вот",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3279531292799043,
+        "no_speech_prob": 0.7938598990440369
+      }
+    },
+    {
+      "id": 146,
+      "source_segment_ids": [
+        146
+      ],
+      "start_seconds": 1022.6,
+      "end_seconds": 1028.68,
+      "kind": "asr",
+      "text": "про это и мы закладываем, то есть это учтено вот здесь и будет учитываться",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3279531292799043,
+        "no_speech_prob": 0.7938598990440369
+      }
+    },
+    {
+      "id": 147,
+      "source_segment_ids": [
+        147
+      ],
+      "start_seconds": 1028.68,
+      "end_seconds": 1034.8200000000002,
+      "kind": "asr",
+      "text": "обязательно, то есть количество и там для заказчика, так вот, материал и",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2994546496540035,
+        "no_speech_prob": 0.5669787526130676
+      }
+    },
+    {
+      "id": 148,
+      "source_segment_ids": [
+        148
+      ],
+      "start_seconds": 1034.8200000000002,
+      "end_seconds": 1037.3,
+      "kind": "asr",
+      "text": "расход.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2994546496540035,
+        "no_speech_prob": 0.5669787526130676
+      }
+    },
+    {
+      "id": 149,
+      "source_segment_ids": [
+        149
+      ],
+      "start_seconds": 1039.18,
+      "end_seconds": 1045.14,
+      "kind": "asr",
+      "text": "Вот, закупка под заказ, мы сюда добавляем еще там, например, логистика, доставка,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2994546496540035,
+        "no_speech_prob": 0.5669787526130676
+      }
+    },
+    {
+      "id": 150,
+      "source_segment_ids": [
+        150
+      ],
+      "start_seconds": 1045.14,
+      "end_seconds": 1049.6200000000001,
+      "kind": "asr",
+      "text": "то есть вот это ты праздник подметил, я про это не забыл, то есть это, когда",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2994546496540035,
+        "no_speech_prob": 0.5669787526130676
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 151,
+      "source_segment_ids": [
+        151
+      ],
+      "start_seconds": 1049.6200000000001,
+      "end_seconds": 1054.54,
+      "kind": "asr",
+      "text": "будет, я буду еще туда добавлять. И то есть, мы расход даем в конкретный",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2994546496540035,
+        "no_speech_prob": 0.5669787526130676
+      }
+    },
+    {
+      "id": 152,
+      "source_segment_ids": [
+        152
+      ],
+      "start_seconds": 1054.54,
+      "end_seconds": 1061.46,
+      "kind": "asr",
+      "text": "заказ. Ну, то есть вот идет как у нас было, на примере скажу, то есть у меня есть все то,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3043769915466723,
+        "no_speech_prob": 0.4951964020729065
+      }
+    },
+    {
+      "id": 153,
+      "source_segment_ids": [
+        153
+      ],
+      "start_seconds": 1061.46,
+      "end_seconds": 1074.18,
+      "kind": "asr",
+      "text": "что относится к предприятию: электроэнергия, аренда, [неясное название воды], уборка, ещё вот",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3043769915466723,
+        "no_speech_prob": 0.4951964020729065
+      },
+      "edit_types": [
+        "annotated_review"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 154,
+      "source_segment_ids": [
+        154
+      ],
+      "start_seconds": 1074.18,
+      "end_seconds": 1079.86,
+      "kind": "asr",
+      "text": "это все. Это относится к цеховой истории. У меня также есть расход под клиента.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3043769915466723,
+        "no_speech_prob": 0.4951964020729065
+      }
+    },
+    {
+      "id": 155,
+      "source_segment_ids": [
+        155
+      ],
+      "start_seconds": 1079.8600000000001,
+      "end_seconds": 1087.66,
+      "kind": "asr",
+      "text": "например вот я иду у меня заказчик есть и вот там да вот там идет вот эта гибкая история того",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27654488412318406,
+        "no_speech_prob": 0.6476309299468994
+      }
+    },
+    {
+      "id": 156,
+      "source_segment_ids": [
+        156
+      ],
+      "start_seconds": 1087.66,
+      "end_seconds": 1094.5800000000002,
+      "kind": "asr",
+      "text": "то что может быть для него разработали лекала это переменные расходы но тогда это поставили",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27654488412318406,
+        "no_speech_prob": 0.6476309299468994
+      }
+    },
+    {
+      "id": 157,
+      "source_segment_ids": [
+        157
+      ],
+      "start_seconds": 1094.5800000000002,
+      "end_seconds": 1102.6200000000001,
+      "kind": "asr",
+      "text": "к примеру, у меня не было оборудования, пошли сделали на соседнем производстве [неразборчиво], там",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.27654488412318406,
+        "no_speech_prob": 0.6476309299468994
+      },
+      "edit_types": [
+        "annotated_review"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 158,
+      "source_segment_ids": [
+        158
+      ],
+      "start_seconds": 1102.6200000000001,
+      "end_seconds": 1108.22,
+      "kind": "asr",
+      "text": "например пуговицы ну или задействовали субподряд какой-то это тоже относится к этому то есть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.27654488412318406,
+        "no_speech_prob": 0.6476309299468994
+      }
+    },
+    {
+      "id": 159,
+      "source_segment_ids": [
+        159
+      ],
+      "start_seconds": 1108.22,
+      "end_seconds": 1116.58,
+      "kind": "asr",
+      "text": "это еще один переменный расход в контексте заказа. Потом дали логистика. К примеру,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20289861693862796,
+        "no_speech_prob": 0.3221774697303772
+      }
+    },
+    {
+      "id": 160,
+      "source_segment_ids": [
+        160
+      ],
+      "start_seconds": 1116.58,
+      "end_seconds": 1124.5,
+      "kind": "asr",
+      "text": "было принято решение того, что мы могли ждать ткань, например, там две недели, пока там транспортные",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20289861693862796,
+        "no_speech_prob": 0.3221774697303772
+      }
+    },
+    {
+      "id": 161,
+      "source_segment_ids": [
+        161
+      ],
+      "start_seconds": 1124.5,
+      "end_seconds": 1130.98,
+      "kind": "asr",
+      "text": "сработают. Я принял решение того, что транспортные отказали, взяли расход на себя с целью для того,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20289861693862796,
+        "no_speech_prob": 0.3221774697303772
+      }
+    },
+    {
+      "id": 162,
+      "source_segment_ids": [
+        162
+      ],
+      "start_seconds": 1130.98,
+      "end_seconds": 1137.3,
+      "kind": "asr",
+      "text": "чтобы быстрее это сделать. Я понес свои расходы, к примеру, там автобусом отправил, либо там",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.20289861693862796,
+        "no_speech_prob": 0.3221774697303772
+      }
+    },
+    {
+      "id": 163,
+      "source_segment_ids": [
+        163
+      ],
+      "start_seconds": 1137.3,
+      "end_seconds": 1143.1,
+      "kind": "asr",
+      "text": "сам съездил, на ГСМ отправил, то есть я тоже заложил внутрь заказов и соответственно экономика будет",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.22340800841962258,
+        "no_speech_prob": 0.8441054224967957
+      }
+    },
+    {
+      "id": 164,
+      "source_segment_ids": [
+        164
+      ],
+      "start_seconds": 1143.1,
+      "end_seconds": 1149.34,
+      "kind": "asr",
+      "text": "присать именно от заказа то, что туда пошло, и оттуда будет формироваться вот эту как бы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.22340800841962258,
+        "no_speech_prob": 0.8441054224967957
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 165,
+      "source_segment_ids": [
+        165
+      ],
+      "start_seconds": 1149.34,
+      "end_seconds": 1154.78,
+      "kind": "asr",
+      "text": "прибыльность, то есть я потом увижу том, что, к примеру, в контексте этого заказа я там",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.22340800841962258,
+        "no_speech_prob": 0.8441054224967957
+      }
+    },
+    {
+      "id": 166,
+      "source_segment_ids": [
+        166
+      ],
+      "start_seconds": 1154.78,
+      "end_seconds": 1161.6599999999999,
+      "kind": "asr",
+      "text": "перебрал там, например, ниток и иголок, и я мог на нём заработать больше, но заработал меньше,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.22340800841962258,
+        "no_speech_prob": 0.8441054224967957
+      }
+    },
+    {
+      "id": 167,
+      "source_segment_ids": [
+        167
+      ],
+      "start_seconds": 1161.66,
+      "end_seconds": 1169.74,
+      "kind": "asr",
+      "text": "или я пошел на историю того, что вместо своих сил использовал там субподряд,",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3091168380918957,
+        "no_speech_prob": 0.6759873032569885
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 168,
+      "source_segment_ids": [
+        168
+      ],
+      "start_seconds": 1169.74,
+      "end_seconds": 1175.74,
+      "kind": "asr",
+      "text": "у меня снизилась чистая прибыль, но я там сроком дальше сопоставился,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3091168380918957,
+        "no_speech_prob": 0.6759873032569885
+      }
+    },
+    {
+      "id": 169,
+      "source_segment_ids": [
+        169
+      ],
+      "start_seconds": 1175.74,
+      "end_seconds": 1180.0600000000002,
+      "kind": "asr",
+      "text": "потому что я эти моменты мы тоже будем продумывать, потому что есть еще такая штука,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3091168380918957,
+        "no_speech_prob": 0.6759873032569885
+      }
+    },
+    {
+      "id": 170,
+      "source_segment_ids": [
+        170
+      ],
+      "start_seconds": 1180.0600000000002,
+      "end_seconds": 1187.94,
+      "kind": "asr",
+      "text": "как «День Простое». Я там тоже про этот простой писал, и ИИ надо будет подключать,",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.3091168380918957,
+        "no_speech_prob": 0.6759873032569885
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 171,
+      "source_segment_ids": [
+        171
+      ],
+      "start_seconds": 1187.94,
+      "end_seconds": 1194.02,
+      "kind": "asr",
+      "text": "потому что иногда решение использовать там в субподряд какой-то выгоднее",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.2891969758839834,
+        "no_speech_prob": 0.41891223192214966
+      },
+      "edit_types": [
+        "lexical_normalization"
+      ]
+    },
+    {
+      "id": 172,
+      "source_segment_ids": [
+        172
+      ],
+      "start_seconds": 1194.02,
+      "end_seconds": 1200.98,
+      "kind": "asr",
+      "text": "с целью для того, чтобы там время обогнать там или еще, ну короче вот эти вот экваленты я их",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2891969758839834,
+        "no_speech_prob": 0.41891223192214966
+      }
+    },
+    {
+      "id": 173,
+      "source_segment_ids": [
+        173
+      ],
+      "start_seconds": 1200.98,
+      "end_seconds": 1207.54,
+      "kind": "asr",
+      "text": "учитываю, но проще их закладывать именно в заказ, то есть если эти расходы относятся",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2891969758839834,
+        "no_speech_prob": 0.41891223192214966
+      }
+    },
+    {
+      "id": 174,
+      "source_segment_ids": [
+        174
+      ],
+      "start_seconds": 1207.54,
+      "end_seconds": 1217.6599999999999,
+      "kind": "asr",
+      "text": "к услуге конкретно, то мы там и то и храним. Если это относится к производству,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26185081005096433,
+        "no_speech_prob": 0.8647398948669434
+      }
+    },
+    {
+      "id": 175,
+      "source_segment_ids": [
+        175
+      ],
+      "start_seconds": 1217.6599999999999,
+      "end_seconds": 1222.6599999999999,
+      "kind": "asr",
+      "text": "неважно, вышли, не вышли, но жрать оно против, то есть у меня вот когда вы считывал, у меня день",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26185081005096433,
+        "no_speech_prob": 0.8647398948669434
+      }
+    },
+    {
+      "id": 176,
+      "source_segment_ids": [
+        176
+      ],
+      "start_seconds": 1222.6599999999999,
+      "end_seconds": 1231.54,
+      "kind": "asr",
+      "text": "простое, то есть неважно там, он у меня обходился 25 тысяч рублей. То есть вот у меня есть швей,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.26185081005096433,
+        "no_speech_prob": 0.8647398948669434
+      }
+    },
+    {
+      "id": 177,
+      "source_segment_ids": [
+        177
+      ],
+      "start_seconds": 1231.54,
+      "end_seconds": 1243.42,
+      "kind": "asr",
+      "text": "не вышли понятно понятно да она бухать заказчика на полу ляма в ресторане",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2968923649409922,
+        "no_speech_prob": 0.8420693278312683
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 178,
+      "source_segment_ids": [
+        178
+      ],
+      "start_seconds": 1243.42,
+      "end_seconds": 1253.6599999999999,
+      "kind": "asr",
+      "text": "не целевой расход да там понятно я понял по твоей логике короче есть производственные",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2968923649409922,
+        "no_speech_prob": 0.8420693278312683
+      }
+    },
+    {
+      "id": 179,
+      "source_segment_ids": [
+        179
+      ],
+      "start_seconds": 1253.6599999999999,
+      "end_seconds": 1258.74,
+      "kind": "asr",
+      "text": "издержки да ну исключительно которые привязываются к заказу а есть все остальные административные",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2968923649409922,
+        "no_speech_prob": 0.8420693278312683
+      }
+    },
+    {
+      "id": 180,
+      "source_segment_ids": [
+        180
+      ],
+      "start_seconds": 1258.74,
+      "end_seconds": 1269.46,
+      "kind": "asr",
+      "text": "которые вот они вот там вот то есть они за рампами этой программы и тогда как бы я думаю то",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3198002289708068,
+        "no_speech_prob": 0.8036743402481079
+      }
+    },
+    {
+      "id": 181,
+      "source_segment_ids": [
+        181
+      ],
+      "start_seconds": 1269.46,
+      "end_seconds": 1277.6200000000001,
+      "kind": "asr",
+      "text": "что мы придем к тому что это будет ну близко к истине в всяком случае но это лучше чем вообще",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3198002289708068,
+        "no_speech_prob": 0.8036743402481079
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 182,
+      "source_segment_ids": [
+        182
+      ],
+      "start_seconds": 1277.6200000000001,
+      "end_seconds": 1284.58,
+      "kind": "asr",
+      "text": "ничего я понимаю если сюда все вообще пихать можно леве леве афан на такого создать которого",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3198002289708068,
+        "no_speech_prob": 0.8036743402481079
+      }
+    },
+    {
+      "id": 183,
+      "source_segment_ids": [
+        183
+      ],
+      "start_seconds": 1284.58,
+      "end_seconds": 1293.4199999999998,
+      "kind": "asr",
+      "text": "но [неразборчиво] и, ну, по сути придём к той же 1С, которая ни туда ни сюда будет. Ну да, здесь будет",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.4495202371986901,
+        "no_speech_prob": 0.8300561308860779
+      },
+      "edit_types": [
+        "annotated_review"
+      ],
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 184,
+      "source_segment_ids": [
+        184
+      ],
+      "start_seconds": 1293.4199999999998,
+      "end_seconds": 1299.9399999999998,
+      "kind": "asr",
+      "text": "гораздо гибче но мне кажется при этом надо ну аксектировать внимание ну и прямо объяснять да что он видит",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4495202371986901,
+        "no_speech_prob": 0.8300561308860779
+      }
+    },
+    {
+      "id": 185,
+      "source_segment_ids": [
+        185
+      ],
+      "start_seconds": 1299.9399999999998,
+      "end_seconds": 1314.46,
+      "kind": "asr",
+      "text": "ну я понимаю с такой программой к примеру заходить пока что там какой-то",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.4495202371986901,
+        "no_speech_prob": 0.8300561308860779
+      }
+    },
+    {
+      "id": 186,
+      "source_segment_ids": [
+        186
+      ],
+      "start_seconds": 1314.46,
+      "end_seconds": 1322.82,
+      "kind": "asr",
+      "text": "корпоративный сектор. Да нам там и не дадут с такой программы зайти. Ты сам прекрасно понимаешь,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3387202233383336,
+        "no_speech_prob": 0.8636257648468018
+      }
+    },
+    {
+      "id": 187,
+      "source_segment_ids": [
+        187
+      ],
+      "start_seconds": 1322.82,
+      "end_seconds": 1333.74,
+      "kind": "asr",
+      "text": "как там вообще все происходит. Не все знают вообще, сколько там учё зарабатывает. Призи искать,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3387202233383336,
+        "no_speech_prob": 0.8636257648468018
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 188,
+      "source_segment_ids": [
+        188
+      ],
+      "start_seconds": 1333.74,
+      "end_seconds": 1342.74,
+      "kind": "asr",
+      "text": "ну вам ясно сейчас? За это и убить могло. На самом деле по-разному, по-разному. Невтянники,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3387202233383336,
+        "no_speech_prob": 0.8636257648468018
+      }
+    },
+    {
+      "id": 189,
+      "source_segment_ids": [
+        189
+      ],
+      "start_seconds": 1342.74,
+      "end_seconds": 1350.1,
+      "kind": "asr",
+      "text": "например, они очень активно используют такие штуки. Нефтяники, да, но опять же, там",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2757752728958925,
+        "no_speech_prob": 0.7150768041610718
+      }
+    },
+    {
+      "id": 190,
+      "source_segment_ids": [
+        190
+      ],
+      "start_seconds": 1350.1,
+      "end_seconds": 1355.94,
+      "kind": "asr",
+      "text": "с доступами будет история очень такая плотная. Кто-то должен видеть, кто-то не должен видеть. Да,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2757752728958925,
+        "no_speech_prob": 0.7150768041610718
+      }
+    },
+    {
+      "id": 191,
+      "source_segment_ids": [
+        191
+      ],
+      "start_seconds": 1355.94,
+      "end_seconds": 1362.34,
+      "kind": "asr",
+      "text": "мы понимаем, есть целевая аудитория наша, и как бы, ну, я думаю, этого достаточно будет. Ну,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2757752728958925,
+        "no_speech_prob": 0.7150768041610718
+      }
+    },
+    {
+      "id": 192,
+      "source_segment_ids": [
+        192
+      ],
+      "start_seconds": 1362.34,
+      "end_seconds": 1367.34,
+      "kind": "asr",
+      "text": "да, то есть, с учетом того того, что мы, ну, опять же, наш клиент, это вот ребята,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2757752728958925,
+        "no_speech_prob": 0.7150768041610718
+      }
+    },
+    {
+      "id": 193,
+      "source_segment_ids": [
+        193
+      ],
+      "start_seconds": 1367.34,
+      "end_seconds": 1373.1799999999998,
+      "kind": "asr",
+      "text": "которые у меня сейчас солнечные панели занимаются. Сейчас тоже происходит та же самая возняг.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3757350444793701,
+        "no_speech_prob": 0.5558311343193054
+      }
+    },
+    {
+      "id": 194,
+      "source_segment_ids": [
+        194
+      ],
+      "start_seconds": 1373.1799999999998,
+      "end_seconds": 1380.5,
+      "kind": "asr",
+      "text": "Очень много времени тратится сейчас на просчеты. Кранштейны, так что вот это все просчитать и",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.3757350444793701,
+        "no_speech_prob": 0.5558311343193054
+      }
+    },
+    {
+      "id": 195,
+      "source_segment_ids": [
+        195,
+        196,
+        197,
+        198,
+        199,
+        200
+      ],
+      "start_seconds": 1380.5,
+      "end_seconds": 1422.14,
+      "kind": "technical_summary",
+      "text": "[Техническая редакция: пример небольшого предприятия другой отрасли, где трудоёмкие расчёты создают нагрузку и есть интерес к продукту. Финансовые показатели стороннего клиента исключены.]",
+      "review_note": "Показатели сторонней компании и оценочные коммерческие сравнения не публикуются.",
+      "edited": true
+    },
+    {
+      "id": 196,
+      "source_segment_ids": [
+        201
+      ],
+      "start_seconds": 1422.14,
+      "end_seconds": 1432.9,
+      "kind": "asr",
+      "text": "Слушай, а вот у меня вопрос, вот от первоначальной версии, которую мы давно смотрели, это, то есть,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.33366488205625655,
+        "no_speech_prob": 0.6958032846450806
+      }
+    },
+    {
+      "id": 197,
+      "source_segment_ids": [
+        202
+      ],
+      "start_seconds": 1432.9,
+      "end_seconds": 1439.94,
+      "kind": "asr",
+      "text": "это вы уже с [участник] вместе сделали, или это ты доработал? Она же вообще другая совсем стала.",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.33366488205625655,
+        "no_speech_prob": 0.6958032846450806
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 198,
+      "source_segment_ids": [
+        203
+      ],
+      "start_seconds": 1439.94,
+      "end_seconds": 1446.6000000000001,
+      "kind": "asr",
+      "text": "ну это вот я за эти дни делал демки и я это делал демки для [участник] для того чтобы он",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.2874704586832147,
+        "no_speech_prob": 0.805140495300293
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 199,
+      "source_segment_ids": [
+        204
+      ],
+      "start_seconds": 1446.6000000000001,
+      "end_seconds": 1454.06,
+      "kind": "asr",
+      "text": "уже это формировал да ну то есть чтобы это было на базе данных и на все мы все равно то есть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2874704586832147,
+        "no_speech_prob": 0.805140495300293
+      }
+    },
+    {
+      "id": 200,
+      "source_segment_ids": [
+        205
+      ],
+      "start_seconds": 1454.06,
+      "end_seconds": 1463.26,
+      "kind": "asr",
+      "text": "живой продукт вот это я все это же у нас паспорт да и мы как бы формируем цель заказ а потом мы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2874704586832147,
+        "no_speech_prob": 0.805140495300293
+      }
+    },
+    {
+      "id": 201,
+      "source_segment_ids": [
+        206
+      ],
+      "start_seconds": 1463.26,
+      "end_seconds": 1469.94,
+      "kind": "asr",
+      "text": "как раз-таки уже в производство будем уже как раз проваливаться то, что ты показывал.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29716836644543543,
+        "no_speech_prob": 0.7384576201438904
+      }
+    },
+    {
+      "id": 202,
+      "source_segment_ids": [
+        207
+      ],
+      "start_seconds": 1469.94,
+      "end_seconds": 1480.3799999999999,
+      "kind": "asr",
+      "text": "Где у нас уже будут швей, вот эти вот там все бригады. Я просто пересобираю еще. Я тоже",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29716836644543543,
+        "no_speech_prob": 0.7384576201438904
+      }
+    },
+    {
+      "id": 203,
+      "source_segment_ids": [
+        208
+      ],
+      "start_seconds": 1480.3799999999999,
+      "end_seconds": 1488.7,
+      "kind": "asr",
+      "text": "эволюционирую в контексте того, что модули добавляются. Я их пересобираю вообще. Тогда была",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.29716836644543543,
+        "no_speech_prob": 0.7384576201438904
+      }
+    },
+    {
+      "id": 204,
+      "source_segment_ids": [
+        209
+      ],
+      "start_seconds": 1488.7,
+      "end_seconds": 1494.78,
+      "kind": "asr",
+      "text": "первая картинка вообще общая типа вот сейчас более детализировано то есть вот в контексте даже",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2671057339942101,
+        "no_speech_prob": 0.49706515669822693
+      }
+    },
+    {
+      "id": 205,
+      "source_segment_ids": [
+        210
+      ],
+      "start_seconds": 1494.78,
+      "end_seconds": 1501.3,
+      "kind": "asr",
+      "text": "вот этого поборожения да как это должно выглядеть да то есть не просто очень важные вот именно",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2671057339942101,
+        "no_speech_prob": 0.49706515669822693
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 206,
+      "source_segment_ids": [
+        211
+      ],
+      "start_seconds": 1501.3,
+      "end_seconds": 1505.5,
+      "kind": "asr",
+      "text": "интерфейсы которые есть то есть я тоже с [участник] разговаривал то есть я понимаю наш конечный",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.2671057339942101,
+        "no_speech_prob": 0.49706515669822693
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 207,
+      "source_segment_ids": [
+        212
+      ],
+      "start_seconds": 1505.5,
+      "end_seconds": 1512.14,
+      "kind": "asr",
+      "text": "потребитель это собственник те собственники про которых я думаю и вижу это люди которые в",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2671057339942101,
+        "no_speech_prob": 0.49706515669822693
+      }
+    },
+    {
+      "id": 208,
+      "source_segment_ids": [
+        213
+      ],
+      "start_seconds": 1512.14,
+      "end_seconds": 1517.14,
+      "kind": "asr",
+      "text": "в принципе, ездят хороших машинок, которые пользуются хорошими софтами.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 209,
+      "source_segment_ids": [
+        214
+      ],
+      "start_seconds": 1517.14,
+      "end_seconds": 1522.14,
+      "kind": "asr",
+      "text": "И они уже наитивно привыкшие к хорошей картинке.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 210,
+      "source_segment_ids": [
+        215
+      ],
+      "start_seconds": 1524.14,
+      "end_seconds": 1526.14,
+      "kind": "asr",
+      "text": "То есть у них надсмотренность есть.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 211,
+      "source_segment_ids": [
+        216
+      ],
+      "start_seconds": 1526.14,
+      "end_seconds": 1530.14,
+      "kind": "asr",
+      "text": "То есть так как мы продаем это собственникам, в первую очередь,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 212,
+      "source_segment_ids": [
+        217
+      ],
+      "start_seconds": 1530.14,
+      "end_seconds": 1532.14,
+      "kind": "asr",
+      "text": "если мы будем продавать [сторонний продукт],",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 213,
+      "source_segment_ids": [
+        218
+      ],
+      "start_seconds": 1532.14,
+      "end_seconds": 1535.14,
+      "kind": "asr",
+      "text": "у них просто на уровне инстинктов будет на это сопротивление,",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 214,
+      "source_segment_ids": [
+        219
+      ],
+      "start_seconds": 1535.14,
+      "end_seconds": 1537.14,
+      "kind": "asr",
+      "text": "и они не захотят этим пользоваться.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 215,
+      "source_segment_ids": [
+        220
+      ],
+      "start_seconds": 1537.14,
+      "end_seconds": 1539.14,
+      "kind": "asr",
+      "text": "Поэтому продажа идет условно.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23134976868276244,
+        "no_speech_prob": 0.6553037762641907
+      }
+    },
+    {
+      "id": 216,
+      "source_segment_ids": [
+        221
+      ],
+      "start_seconds": 1539.14,
+      "end_seconds": 1548.1000000000001,
+      "kind": "asr",
+      "text": "нам придется продавать это людям, которые, ну, технологами, но с технологами как бы",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23026897910016556,
+        "no_speech_prob": 0.4497319459915161
+      }
+    },
+    {
+      "id": 217,
+      "source_segment_ids": [
+        222
+      ],
+      "start_seconds": 1548.1000000000001,
+      "end_seconds": 1555.46,
+      "kind": "asr",
+      "text": "заниматься продажами с ними это очень долгий вариант, пока не донесут ценности этого собственника и",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23026897910016556,
+        "no_speech_prob": 0.4497319459915161
+      }
+    },
+    {
+      "id": 218,
+      "source_segment_ids": [
+        223
+      ],
+      "start_seconds": 1555.46,
+      "end_seconds": 1559.46,
+      "kind": "asr",
+      "text": "так далее и там подобное. Короче, надо так, чтобы эта собственника была очень приятна этим",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23026897910016556,
+        "no_speech_prob": 0.4497319459915161
+      }
+    },
+    {
+      "id": 219,
+      "source_segment_ids": [
+        224
+      ],
+      "start_seconds": 1559.46,
+      "end_seconds": 1566.1000000000001,
+      "kind": "asr",
+      "text": "пользоваться. Вот задача такая, а они хотят видеть приятные интерфейсы, они хотят видеть",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.23026897910016556,
+        "no_speech_prob": 0.4497319459915161
+      }
+    },
+    {
+      "id": 220,
+      "source_segment_ids": [
+        225
+      ],
+      "start_seconds": 1566.1000000000001,
+      "end_seconds": 1568.9,
+      "kind": "asr",
+      "text": "наитивные, понятные инструменты и так далее.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      }
+    },
+    {
+      "id": 221,
+      "source_segment_ids": [
+        226
+      ],
+      "start_seconds": 1568.9,
+      "end_seconds": 1571.6000000000001,
+      "kind": "asr",
+      "text": "То есть я точно понимаю, что они не будут пользоваться",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      }
+    },
+    {
+      "id": 222,
+      "source_segment_ids": [
+        227
+      ],
+      "start_seconds": 1571.6000000000001,
+      "end_seconds": 1572.6000000000001,
+      "kind": "asr",
+      "text": "[сторонний продукт].",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 223,
+      "source_segment_ids": [
+        228
+      ],
+      "start_seconds": 1572.6000000000001,
+      "end_seconds": 1575.5600000000002,
+      "kind": "asr",
+      "text": "То есть вот сейчас [сторонний продукт] там, она развивается по",
+      "edited": true,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      },
+      "edit_types": [
+        "name_masking"
+      ]
+    },
+    {
+      "id": 224,
+      "source_segment_ids": [
+        229
+      ],
+      "start_seconds": 1575.5600000000002,
+      "end_seconds": 1579.5000000000002,
+      "kind": "asr",
+      "text": "принципу того, что ими пользуется по факту технология.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      }
+    },
+    {
+      "id": 225,
+      "source_segment_ids": [
+        230,
+        231,
+        232
+      ],
+      "start_seconds": 1579.5000000000002,
+      "end_seconds": 1588.7800000000002,
+      "kind": "unclear_speech",
+      "text": "[Речь/звуки не удалось уверенно распознать. Содержательное требование из этого фрагмента не выводится.]",
+      "review_note": "Неясное распознавание, в том числе повторы звуков.",
+      "edited": true
+    },
+    {
+      "id": 226,
+      "source_segment_ids": [
+        233
+      ],
+      "start_seconds": 1588.7800000000002,
+      "end_seconds": 1589.7800000000002,
+      "kind": "asr",
+      "text": "Нам надо так, чтобы…",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      }
+    },
+    {
+      "id": 227,
+      "source_segment_ids": [
+        234
+      ],
+      "start_seconds": 1589.7800000000002,
+      "end_seconds": 1592.18,
+      "kind": "asr",
+      "text": "Да, поэтому и дизайн, и брондирование тут под",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      },
+      "needs_audio_confirmation": true,
+      "review_note": "Возможна ошибка машинной расшифровки; не использовать неясную фразу как единственное основание решения."
+    },
+    {
+      "id": 228,
+      "source_segment_ids": [
+        235
+      ],
+      "start_seconds": 1592.18,
+      "end_seconds": 1594.46,
+      "kind": "asr",
+      "text": "цветом тоже надо было сделать.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.42775404373271353,
+        "no_speech_prob": 0.6792362332344055
+      }
+    },
+    {
+      "id": 229,
+      "source_segment_ids": [
+        236
+      ],
+      "start_seconds": 1594.46,
+      "end_seconds": 1612.46,
+      "kind": "asr",
+      "text": "Да, этому надо уделить очень серьезное внимание, потому что они будут выбирать, они готовы платить деньги не только за результат, но еще и за качество, потому что они должны видеть приятные истории, так чтобы у них вообще напряга не было, потому что результаты-то отсутствие напряга у них, в первую очередь.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2152536648350793,
+        "no_speech_prob": 0.4829353094100952
+      }
+    },
+    {
+      "id": 230,
+      "source_segment_ids": [
+        237
+      ],
+      "start_seconds": 1612.46,
+      "end_seconds": 1617.46,
+      "kind": "asr",
+      "text": "Если они открываются, напрягаются, то уже все нахер не надо, если это не интересует.",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.2152536648350793,
+        "no_speech_prob": 0.4829353094100952
+      }
+    },
+    {
+      "id": 231,
+      "source_segment_ids": [
+        238
+      ],
+      "start_seconds": 1617.46,
+      "end_seconds": 1628.3400000000001,
+      "kind": "asr",
+      "text": "так ну что в целом я думаю как бы это вектор правильный все согласны",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.36004277638026644,
+        "no_speech_prob": 0.7601854205131531
+      }
+    },
+    {
+      "id": 232,
+      "source_segment_ids": [
+        239
+      ],
+      "start_seconds": 1628.3400000000001,
+      "end_seconds": 1640.02,
+      "kind": "asr",
+      "text": "ну все отлично так что вопросы есть какие у меня по моим темам я все что хотел высказал",
+      "edited": false,
+      "asr_metrics": {
+        "avg_logprob": -0.36004277638026644,
+        "no_speech_prob": 0.7601854205131531
+      }
+    },
+    {
+      "id": 233,
+      "source_segment_ids": [
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267
+      ],
+      "start_seconds": 1640.02,
+      "end_seconds": 1931.183,
+      "kind": "redacted_non_project",
+      "text": "[Исключено из публичной технической редакции: внутренние договоры, занятость и персональные финансовые расчёты команды.]",
+      "review_note": "Рассмотрено; не определяет функции или алгоритмы EASY3.",
+      "edited": true
+    }
+  ]
+}
