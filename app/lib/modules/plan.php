@@ -16,7 +16,7 @@ function planAction(string $action,array $input):array{
   }
   [$orders,$tasks]=engineInputs($c);$hash=engineHash($c,$orders,$tasks);
   if($action==='plan_calculate'){
-   $strategy=$input['strategy']??'deadline';if(!in_array($strategy,['deadline','compact'],true))fail('Выберите вариант расчёта');$snapshot=calculatePlan($c,$orders,$tasks,$strategy);$snapshot['input_hash']=$hash;$snapshot['company_revision']=$c['revision'];
+   $strategy=$input['strategy']??'deadline';if(!in_array($strategy,['deadline','compact'],true))fail('Выберите вариант расчёта');$snapshot=calculatePlan($c,$orders,$tasks,$strategy);$snapshot['source_event_count']=(int)one('SELECT COUNT(*) AS n FROM production_events WHERE company_id=?',[$c['id']])['n'];$snapshot['input_hash']=$hash;$snapshot['company_revision']=$c['revision'];
    $row=one('SELECT MAX(version_no) AS n FROM plan_versions WHERE company_id=?',[$c['id']]);$version=(int)($row['n']??0)+1;$id=uid();query('INSERT INTO plan_versions (id,company_id,version_no,snapshot,input_hash,approvals,creator_id) VALUES (?,?,?,?,?,?,?)',[$id,$c['id'],$version,j($snapshot),$hash,'[]',$_SESSION['user_id']]);audit('plan_calculated',['id'=>$id,'version'=>$version,'status'=>$snapshot['status']]);return ['saved'=>true,'id'=>$id,'status'=>$snapshot['status']];
   }
   $p=planRecord(textField($input,'id',32,true),true);if($p['state']==='published')fail('Опубликованный план неизменяем. Рассчитайте новый вариант.');if(!hash_equals($p['input_hash'],$hash))fail('Основа изменилась. Рассчитайте новый вариант и согласуйте его.',409);$snapshot=decode($p['snapshot']);if($snapshot['status']!=='feasible')fail('Сначала устраните замечания и получите допустимое расписание');

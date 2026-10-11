@@ -41,11 +41,11 @@ function permit(array $roles):array{$c=context();if(!in_array($c['role'],$roles,
 function owner():array{return permit(['owner']);}
 function audit(string $action,array $details=[]):void{query('INSERT INTO audit_log (id,company_id,actor_id,action,details) VALUES (?,?,?,?,?)',[uid(),$_SESSION['company_id'],$_SESSION['user_id'],$action,j($details)]);}
 function textField(array $a,string $k,int $max,bool $required=false):string{
- $v=trim((string)($a[$k]??''));if(strlen($v)>$max*4)fail('Слишком длинное значение: '.$k);if($required&&$v==='')fail('Заполните обязательное поле: '.$k);return $v;
+ $raw=$a[$k]??'';if(!is_scalar($raw))fail('Некорректный текст: '.$k);$v=trim((string)$raw);if(strlen($v)>$max*4)fail('Слишком длинное значение: '.$k);if($required&&$v==='')fail('Заполните обязательное поле: '.$k);return $v;
 }
 function numberField(array $a,string $k,int $min=0,int $max=1000000,bool $nullable=false):?int{
  if(!array_key_exists($k,$a)||$a[$k]===''||$a[$k]===null){if($nullable)return null;fail('Укажите число: '.$k);}
- if(filter_var($a[$k],FILTER_VALIDATE_INT)===false)fail('Требуется целое число: '.$k);
+ if(is_bool($a[$k])||!is_scalar($a[$k])||filter_var($a[$k],FILTER_VALIDATE_INT)===false)fail('Требуется целое число: '.$k);
  $v=(int)$a[$k];if($v<$min||$v>$max)fail('Значение вне допустимого диапазона: '.$k);return $v;
 }
 function dateField(array $a,string $k):string{$s=(string)($a[$k]??'');$d=DateTimeImmutable::createFromFormat('!Y-m-d',$s);if(!$d||$d->format('Y-m-d')!==$s)fail('Укажите корректную дату');return $s;}

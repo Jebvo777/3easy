@@ -14,10 +14,11 @@ function companyNew(string $name,string $userId,bool $demo=false):string{
  query('INSERT INTO memberships (user_id,company_id,role) VALUES (?,?,?)',[$userId,$id,'owner']);if($demo)seedCompany(db(),$id);return $id;
 }
 function stateData():array{
- $u=user();$c=context();$economic=$c['role']==='owner';
+ $u=user();$c=context();require_once __DIR__.'/engine.php';$economic=$c['role']==='owner';
  $companies=rows('SELECT c.id,c.name,m.role,c.is_demo FROM companies c JOIN memberships m ON m.company_id=c.id WHERE m.user_id=? ORDER BY c.created_at',[$u['id']]);
+ $economy=[];
  $orders=rows('SELECT * FROM orders WHERE company_id=? ORDER BY created_at,id',[$c['id']]);
- foreach($orders as &$o){$o['route']=decode($o['route']);$o['expenses']=decode($o['expenses']);foreach(['quantity','revision'] as $k)$o[$k]=(int)$o[$k];foreach(['price_cents','target_cents'] as $k)$o[$k]=$o[$k]===null?null:(int)$o[$k];if(!$economic){unset($o['price_cents'],$o['target_cents'],$o['expenses']);}}unset($o);
+ foreach($orders as &$o){$o['route']=decode($o['route']);$o['expenses']=decode($o['expenses']);foreach(['quantity','revision'] as $k)$o[$k]=(int)$o[$k];foreach(['price_cents','target_cents'] as $k)$o[$k]=$o[$k]===null?null:(int)$o[$k];if($economic)$economy[$o['id']]=orderEconomy($o,$c['passport']);if(!$economic){unset($o['price_cents'],$o['target_cents'],$o['expenses']);}}unset($o);
  $plans=rows('SELECT * FROM plan_versions WHERE company_id=? ORDER BY version_no DESC',[$c['id']]);
  foreach($plans as &$p){$p['snapshot']=decode($p['snapshot']);$p['approvals']=decode($p['approvals']);$p['version_no']=(int)$p['version_no'];if(!$economic)unset($p['snapshot']['economy']);}unset($p);
  $tasks=rows('SELECT t.*,o.title AS order_title,o.product FROM tasks t JOIN orders o ON o.id=t.order_id WHERE t.company_id=? AND t.state<>\'cancelled\' ORDER BY planned_start,t.id',[$c['id']]);
@@ -25,10 +26,15 @@ function stateData():array{
  if($c['role']==='worker'){$tasks=array_values(array_filter($tasks,fn($t)=>$t['worker_id']===($_SESSION['worker_resource']??'p-sew-1')));}
  $events=rows('SELECT e.*,t.title AS task_title FROM production_events e JOIN tasks t ON t.id=e.task_id WHERE e.company_id=? ORDER BY e.created_at DESC,e.id DESC LIMIT 60',[$c['id']]);
  if($c['role']==='worker')$events=array_values(array_filter($events,fn($e)=>$e['actor_id']===$u['id']));
+ $count=one('SELECT COUNT(*) AS n FROM production_events WHERE company_id=?',[$c['id']]);$forecastStale=$plans&&((int)$count['n']>(int)($plans[0]['snapshot']['source_event_count']??0));
  $audit=rows('SELECT action,details,created_at FROM audit_log WHERE company_id=? ORDER BY created_at DESC LIMIT 25',[$c['id']]);foreach($audit as &$a)$a['details']=decode($a['details']);unset($a);
  if(!$economic){unset($c['passport']['economy']);$audit=array_values(array_filter($audit,fn($a)=>!in_array($a['action'],['order_saved','passport_saved'],true)));}
+ if($c['role']==='worker'){
+  $workerId=$_SESSION['worker_resource']??'p-sew-1';$orderIds=array_unique(array_column($tasks,'order_id'));$orders=array_values(array_filter($orders,fn($o)=>in_array($o['id'],$orderIds,true)));$c['passport']['people']=array_values(array_filter($c['passport']['people']??[],fn($p)=>$p['id']===$workerId));$c['passport']['resources']=array_values(array_filter($c['passport']['resources']??[],fn($r)=>$r['worker']===$workerId));$c['layout']=['width'=>18,'depth'=>12,'objects'=>[],'links'=>[]];$audit=[];
+  foreach($plans as &$plan){$plan['snapshot']['schedule']=array_values(array_filter($plan['snapshot']['schedule']??[],fn($t)=>$t['worker_id']===$workerId));$plan['snapshot']['routes']=array_intersect_key($plan['snapshot']['routes']??[],array_flip($orderIds));unset($plan['snapshot']['order_revisions'],$plan['snapshot']['order_finishes']);}unset($plan);
+ }
  $demoRoles=[];if(!empty($_SESSION['demo_company'])&&$_SESSION['demo_company']===$c['id'])$demoRoles=rows('SELECT u.id,u.name,m.role FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.company_id=?',[$c['id']]);
- return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic]];
+ return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>$economy,'forecast_stale'=>(bool)$forecastStale];
 }
 function apiRun(string $action,array $input):array{
  global $config;

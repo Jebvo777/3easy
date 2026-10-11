@@ -37,7 +37,7 @@ export function createLoop(container,{hero=false,anomaly=null,onSelect=()=>{}}={
  const gold=new T.MeshPhysicalMaterial({color:0xf4d6a3,metalness:.85,roughness:.28,emissive:0xc48a38,emissiveIntensity:.06});
  const arcs=[],flowMaterials=[],edges=[];const colors=[0xbbeace,0xcfe3e3,0xf3d8b4];
  for(let i=0;i<3;i++){
-  const s=i/3,e=(i+1)/3;const meshData=ribbon(s+.0012,e-.0012);const mesh=new T.Mesh(meshData.geometry,metal);mesh.userData.section=i;group.add(mesh);arcs.push({...meshData,mesh});
+  const s=i/3,e=(i+1)/3;const meshData=ribbon(s+.0012,e-.0012);const mesh=new T.Mesh(meshData.geometry,metal);mesh.userData.section=[1,2,0][i];group.add(mesh);arcs.push({...meshData,mesh});
   for(let lane=0;lane<5;lane++){
    const g=new T.TubeGeometry(new FlowCurve(s+.002,e-.002,lane),230,.006,4,false);
    const material=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,uniforms:{time:{value:0},color:{value:new T.Color(colors[i])},alert:{value:0},phase:{value:lane*.14+i*.333}},vertexShader:'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',fragmentShader:'varying vec2 vUv; uniform float time;uniform vec3 color;uniform float phase;uniform float alert; void main(){float pulse=pow(.5+.5*sin((vUv.x-time*.28+phase)*48.0),10.0);float a=.2+pulse*.8;vec3 c=mix(color,vec3(1.0,.31,.13),alert);gl_FragColor=vec4(c*(1.0+pulse*1.2),a);}' });
@@ -49,7 +49,8 @@ export function createLoop(container,{hero=false,anomaly=null,onSelect=()=>{}}={
  const glowLight=new T.PointLight(0xffa05b,0,3);group.add(glowLight);
  const controls=new T.OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=true;controls.dampingFactor=.07;controls.minAzimuthAngle=-.55;controls.maxAzimuthAngle=.55;controls.minPolarAngle=Math.PI*.35;controls.maxPolarAngle=Math.PI*.62;controls.target.set(0,0,0);controls.autoRotate=hero;controls.autoRotateSpeed=.3;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');if(reduced.matches)controls.autoRotate=false;
- let active=anomaly?.section??-1,gap=0,targetGap=active<0?0:.018,disposed=false,raf=0,frameNo=0;let visible=true;
+ const arcFor=section=>section==null?-1:[2,0,1][section];
+ let active=arcFor(anomaly?.section),gap=0,targetGap=active<0?0:.018,disposed=false,raf=0,frameNo=0;let visible=true;
  function resize(){const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.position.z=w/h<1.3?19:14.9;camera.updateProjectionMatrix();}
  const resizeObs=new ResizeObserver(resize);resizeObs.observe(container);resize();
  const observer=new IntersectionObserver(es=>{visible=es[0].isIntersecting;});observer.observe(container);
@@ -65,5 +66,5 @@ export function createLoop(container,{hero=false,anomaly=null,onSelect=()=>{}}={
   if(!reduced.matches)group.position.y=.05+Math.sin(time*.65)*.04;controls.update();renderer.render(scene,camera);
  }
  raf=requestAnimationFrame(render);
- return {setAnomaly(a){active=a?.section??-1;targetGap=active<0?0:.018;},dispose(){disposed=true;cancelAnimationFrame(raf);resizeObs.disconnect();observer.disconnect();controls.dispose();scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material&&obj.material!==metal&&obj.material!==gold){const materials=Array.isArray(obj.material)?obj.material:[obj.material];materials.forEach(m=>m.dispose());}});metal.dispose();gold.dispose();tex.dispose();envTarget.dispose();pmrem.dispose();renderer.dispose();renderer.domElement.remove();}};
+ return {setAnomaly(a){active=arcFor(a?.section);targetGap=active<0?0:.018;},dispose(){disposed=true;cancelAnimationFrame(raf);resizeObs.disconnect();observer.disconnect();controls.dispose();scene.traverse(obj=>{obj.geometry?.dispose();if(obj.material&&obj.material!==metal&&obj.material!==gold){const materials=Array.isArray(obj.material)?obj.material:[obj.material];materials.forEach(m=>m.dispose());}});metal.dispose();gold.dispose();tex.dispose();envTarget.dispose();pmrem.dispose();renderer.dispose();renderer.domElement.remove();}};
 }

@@ -32,13 +32,6 @@ export async function submit(form,fn){const error=form.querySelector('.error-box
 export function orderPicker(){return `<select id="order-picker" aria-label="Выбрать заказ" style="width:270px;max-width:100%">${S.data.orders.filter(o=>o.status!=='archived').map(o=>`<option value="${e(o.id)}" ${o.id===S.selectedOrder?'selected':''}>${e(o.title)}</option>`).join('')}</select>`;}
 export function economic(o){
  if(!S.data?.permissions.economy||!o)return null;
- const econ=S.data.company.passport.economy||{};const route=o.route||[];let seconds=0,unknown=[];
- if(!route.length)unknown.push('Технология ещё не собрана');for(const op of route){if(op.seconds===null||op.seconds===undefined)unknown.push(`Нет нормы: ${op.name}`);else seconds+=Number(op.seconds)*o.quantity+Number(op.setup_minutes||0)*60;}
- const labor=econ.labor_hour_cents==null?null:Math.round(seconds/3600*econ.labor_hour_cents);
- const common=econ.monthly_common_cents==null||!econ.monthly_hours?null:Math.round(seconds/3600/econ.monthly_hours*econ.monthly_common_cents);
- const direct=(o.expenses||[]).reduce((s,x)=>s+Number(x.cents||0),0);
- if(labor===null)unknown.push('Ставка труда неизвестна');if(common===null)unknown.push('Общие расходы не заданы');unknown.push(...(econ.unknown||[]));
- const cost=labor===null||common===null||!route.length||route.some(x=>x.seconds==null)?null:direct+labor+common;
- const revenue=o.mode==='CONTRACT'&&o.price_cents!=null?(o.price_basis==='total'?o.price_cents:o.price_cents*o.quantity):null;
- return {labor,common,direct,cost,unit:cost===null?null:Math.round(cost/o.quantity),revenue,result:cost===null||revenue===null?null:revenue-cost,unknown,excluded:econ.excluded||[],seconds};
+ const x=S.data.economy?.[o.id];if(!x)return null;
+ return {labor:x.labor_cents,common:x.common_cents,direct:x.direct_cents,cost:x.cost_cents,unit:x.unit_cents,revenue:x.value_cents,result:x.result_cents,unknown:x.unknown,excluded:x.excluded,seconds:x.norm_seconds};
 }
