@@ -6,11 +6,12 @@ function availableInput(array $t):int{
 }
 function productionAction(string $action,array $input):array{
  permit(['owner','foreman','chief','worker','qc']);return command($action,$input,function(array $c)use($input){
- $t=taskRecord(textField($input,'task_id',32,true),true);checkRevision((int)$t['revision'],$input);$kind=textField($input,'kind',30,true);$details=[];$qty=null;
+ $t=taskRecord(textField($input,'task_id',32,true),true);$kind=textField($input,'kind',30,true);$details=[];$qty=null;
  $quality=in_array($kind,['quality','rework_quality'],true);if($quality){if(!in_array($c['role'],['owner','qc'],true))fail('Качество подтверждает ОТК',403);}else{
   if($c['role']==='qc')fail('Эта роль подтверждает качество',403);
   if($c['role']==='worker'&&$t['worker_id']!==($_SESSION['worker_resource']??'p-sew-1'))fail('Это задание другого исполнителя',403);
  }
+ checkRevision((int)$t['revision'],$input);
  $state=$t['state'];$released=(int)$t['released'];$transferred=(int)$t['transferred'];$accepted=(int)$t['accepted'];$rework=(int)$t['rework'];$reworkReady=(int)$t['rework_ready'];$scrap=(int)$t['scrap'];$total=(int)$t['quantity'];
  if($kind==='start'){
   if(!in_array($state,['ready','paused'],true))fail('Задание уже начато или завершено');if(availableInput($t)<=0)fail('Сначала нужна передача партии из предыдущей операции');

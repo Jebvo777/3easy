@@ -1,4 +1,4 @@
 /config.local.php
 /storage/*
 !/storage/.htaccess
-/node_modules/
+**/node_modules/

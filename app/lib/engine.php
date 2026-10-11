@@ -16,7 +16,7 @@ function dayWindows(DateTimeImmutable $day,array $shift):array{
  $out=[];if($break>$start)$out[]=[$midnight+$start*60,$midnight+min($break,$end)*60];if($breakEnd<$end)$out[]=[$midnight+max($breakEnd,$start)*60,$midnight+$end*60];return $out;
 }
 function fitWork(int $after,int $seconds,array $shift,array $busy,string $timezone):array|null{
- $zone=new DateTimeZone($timezone);$day=(new DateTimeImmutable('@'.$after))->setTimezone($zone)->setTime(0,0);$slots=[];$remaining=$seconds;
+ $zone=new DateTimeZone($timezone);$day=(new DateTimeImmutable('@'.$after))->setTimezone($zone)->setTime(0,0)->modify('-1 day');$slots=[];$remaining=$seconds;
  usort($busy,fn($a,$b)=>$a[0]<=>$b[0]);
  for($i=0;$i<370&&$remaining>0;$i++,$day=$day->modify('+1 day')){
   foreach(dayWindows($day,$shift) as [$s,$end]){
@@ -35,15 +35,25 @@ function engineInputs(array $c):array{
  $orders=rows("SELECT * FROM orders WHERE company_id=? AND status<>'archived' ORDER BY deadline,id",[$c['id']]);foreach($orders as &$o){$o['route']=decode($o['route']);$o['expenses']=decode($o['expenses']);}unset($o);
  $tasks=rows("SELECT * FROM tasks WHERE company_id=? AND state<>'cancelled' ORDER BY id",[$c['id']]);return [$orders,$tasks];
 }
+// Exact integer cents, rounded half up; no floating-point money arithmetic.
+const DEMO_MONEY_LIMIT=1000000000000;
+function gcdInt(int $a,int $b):int{while($b){[$a,$b]=[$b,$a%$b];}return max(1,$a);}
+function roundedRatio(int $a,int $b,int $denominator):?int{
+ if($denominator<=0||$a<0||$b<0)return null;if($a===0||$b===0)return 0;
+ $g=gcdInt($a,$denominator);$a=intdiv($a,$g);$denominator=intdiv($denominator,$g);
+ $g=gcdInt($b,$denominator);$b=intdiv($b,$g);$denominator=intdiv($denominator,$g);
+ if($a>intdiv(PHP_INT_MAX,$b))return null;$product=$a*$b;$q=intdiv($product,$denominator);$r=$product%$denominator;
+ if($r>=intdiv($denominator,2)+$denominator%2)$q++;return $q>DEMO_MONEY_LIMIT?null:$q;
+}
 function orderEconomy(array $order,array $passport):array{
  $ec=$passport['economy']??[];$seconds=0;$missing=[];foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];else $seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
- $labor=isset($ec['labor_hour_cents'])?(int)round($seconds*$ec['labor_hour_cents']/3600):null;
- $common=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?(int)round($seconds*$ec['monthly_common_cents']/(3600*$ec['monthly_hours'])):null;
+ $labor=isset($ec['labor_hour_cents'])?roundedRatio($seconds,(int)$ec['labor_hour_cents'],3600):null;
+ $common=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?roundedRatio($seconds,(int)$ec['monthly_common_cents'],3600*(int)$ec['monthly_hours']):null;
  $direct=array_sum(array_column($order['expenses'],'cents'));
- $cost=$labor===null||$common===null||$missing||!$order['route']?null:$labor+$common+$direct;
- if($labor===null)$missing[]='Неизвестна ставка труда';if($common===null)$missing[]='Неизвестны общие расходы';$missing=array_merge($missing,$ec['unknown']??[]);
+ $cost=$labor===null||$common===null||$missing||!$order['route']?null:$labor+$common+$direct;if($cost!==null&&$cost>DEMO_MONEY_LIMIT){$cost=null;$missing[]='Масштаб суммы превышает границу демо';}
+ if($labor===null)$missing[]=isset($ec['labor_hour_cents'])?'Масштаб труда превышает границу демо':'Неизвестна ставка труда';if($common===null)$missing[]=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?'Масштаб общих расходов превышает границу демо':'Неизвестны общие расходы';$missing=array_merge($missing,$ec['unknown']??[]);
  $price=$order['price_cents'];$value=$order['mode']==='CONTRACT'&&$price!==null?(int)$price*($order['price_basis']==='total'?1:(int)$order['quantity']):null;
- return ['norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:(int)round($cost/(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'method'=>'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
+ return ['norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:roundedRatio($cost,1,(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'method'=>'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
 }
 function calculatePlan(array $c,array $orders,array $tasks,string $strategy='deadline'):array{
  $p=$c['passport'];$zone=$p['timezone']??'Europe/Moscow';$tz=new DateTimeZone($zone);$shift=$p['shift']??[];$now=time();$errors=[];$warnings=[];$schedule=[];$busy=[];$done=[];
@@ -67,7 +77,7 @@ function calculatePlan(array $c,array $orders,array $tasks,string $strategy='dea
  }
  $late=0;$ends=[];foreach($orders as $o){$matches=array_filter($schedule,fn($x)=>$x['order_id']===$o['id']);$end=$matches?max(array_column($matches,'end')):null;if($end){$ends[$o['id']]=$end;if(substr($end,0,10)>$o['deadline']){$late++;$warnings[]=$o['title'].': прогноз позже коммерческого срока';}}}
  $economy=[];foreach($orders as $o)$economy[$o['id']]=orderEconomy($o,$p);
- return ['engine'=>ENGINE_VERSION,'status'=>$errors?'incomplete':'feasible','errors'=>$errors,'warnings'=>$warnings,'schedule'=>$schedule,'strategy'=>$strategy,'calculated_at'=>date('c'),'timezone'=>$zone,'order_finishes'=>$ends,'late_orders'=>$late,'finish'=>$schedule?max(array_column($schedule,'end')):null,'economy'=>$economy,'order_revisions'=>array_column($orders,'revision','id'),'routes'=>array_column($orders,'route','id'),'assumptions'=>['Учебные нормы, указанные в операциях','Эвристика списка работ; оптимальность не доказана','Операция планируется целым объёмом с разрывом на смены','Параллельные ветви допустимы; количественные коэффициенты узлов 1:1','Материалы предполагаются готовыми; склад и поступления не моделируются','Начатые задания сохраняют факты и назначения. Просроченный начатый интервал получает допущение +1 час']];
+ return ['engine'=>ENGINE_VERSION,'status'=>$errors?'incomplete':'feasible','errors'=>$errors,'warnings'=>$warnings,'schedule'=>$schedule,'strategy'=>$strategy,'calculated_at'=>date('c'),'timezone'=>$zone,'order_finishes'=>$ends,'late_orders'=>$late,'finish'=>$schedule?max(array_column($schedule,'end')):null,'economy'=>$economy,'layout'=>$c['layout'],'resource_snapshot'=>$p['resources']??[],'people_snapshot'=>$p['people']??[],'shift_snapshot'=>$shift,'order_revisions'=>array_column($orders,'revision','id'),'routes'=>array_column($orders,'route','id'),'assumptions'=>['Учебные нормы, указанные в операциях','Эвристика списка работ; оптимальность не доказана','Операция планируется целым объёмом с разрывом на смены','Параллельные ветви допустимы; количественные коэффициенты узлов 1:1','Материалы предполагаются готовыми; склад и поступления не моделируются','Начатые задания сохраняют факты и назначения. Просроченный начатый интервал получает допущение +1 час']];
 }
 function publishSchedule(array $c,array $plan):void{
  $snapshot=decode($plan['snapshot']);$entries=$snapshot['schedule'];
