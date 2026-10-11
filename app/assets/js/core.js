@@ -10,7 +10,7 @@ export async function api(action,input=null){
  const options=input===null?{credentials:'same-origin'}:{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':S.csrf},credentials:'same-origin',body:JSON.stringify(input)};
  let response;try{response=await fetch(`index.php?api=${encodeURIComponent(action)}`,options);}catch{throw Error('Нет соединения. Ввод сохранён в этом окне; повторите отправку.');}
  let result;try{result=await response.json();}catch{throw Error('Сервер не ответил. Повторите позже.');}
- if(!result.ok)throw Error(result.error||'Не удалось выполнить действие');
+ if(!result.ok){const error=Error(result.error||'Не удалось выполнить действие');error.status=response.status;throw error;}
  if(result.data.csrf)S.csrf=result.data.csrf;return result.data;
 }
 export function toast(message,error=false){const el=document.createElement('div');el.className='toast'+(error?' error':'');el.textContent=message;document.querySelector('#toasts').append(el);setTimeout(()=>el.remove(),error?6500:3800);}

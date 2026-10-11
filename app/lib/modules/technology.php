@@ -9,7 +9,7 @@ function technologyAction(string $action,array $input):array{
   $existing=one('SELECT *,TIMESTAMPDIFF(SECOND,created_at,CURRENT_TIMESTAMP) age_seconds FROM ai_generations WHERE company_id=? AND actor_id=? AND request_key=?'.lockSuffix(),[$c['id'],$_SESSION['user_id'],$requestKey]);
   if($existing){
    if(!hash_equals($existing['request_hash'],$hash))fail('Ключ генерации уже использован с другим описанием',409);
-   if(in_array($existing['state'],['ready','applied'],true)){$cached=decode($existing['response_json']);$db->commit();return $cached+['replayed'=>true];}
+   if(in_array($existing['state'],['ready','applied'],true)){$cached=decode($existing['response_json']);$db->commit();return array_replace($cached,['replayed'=>true]);}
    if($existing['state']==='pending'&&(int)$existing['age_seconds']<90)fail('AI ещё готовит эту последовательность. Повторите запрос чуть позже.',409);fail('Предыдущая генерация не завершена. Запустите новую попытку.',409);
   }
   checkRevision((int)$o['revision'],$input);if($o['status']==='archived')fail('Выберите активную цель');if(one("SELECT id FROM tasks WHERE company_id=? AND order_id=? AND state<>'cancelled' LIMIT 1",[$c['id'],$o['id']]))fail('Технология уже опубликована. Генерация доступна для новой цели.');
