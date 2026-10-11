@@ -11,3 +11,15 @@ export function calendarSegments(task,start,days){
 }
 
 export function calendarDate(value){const d=new Date(value);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
+
+// One operation remains one object. Inner intervals show actual work; the envelope includes pauses.
+export function calendarOperation(task,start,days){
+ const segments=calendarSegments(task,start,days);if(!segments.length)return null;
+ const left=Math.min(...segments.map(s=>s.left)),right=Math.max(...segments.map(s=>s.left+s.width)),width=right-left;
+ return {left,width,segments:segments.map(s=>({left:(s.left-left)/width*100,width:s.width/width*100}))};
+}
+export function calendarLanes(tasks,start,days){
+ const ends=[],items=[];
+ for(const task of [...tasks].sort((a,b)=>stamp(a.start)-stamp(b.start))){const bar=calendarOperation(task,start,days);if(!bar)continue;let lane=ends.findIndex(end=>end<=bar.left+.000001);if(lane<0)lane=ends.length;ends[lane]=bar.left+bar.width;items.push({task,bar,lane});}
+ return {items,lanes:Math.max(1,ends.length)};
+}
