@@ -64,9 +64,15 @@ function seedInitialPlan(PDO $db,string $companyId,string $ownerId):void{
  $approvals=[];foreach(['foreman','technologist','chief'] as $stage)$approvals[]=['stage'=>$stage,'actor_id'=>$ownerId,'at'=>date('c'),'input_hash'=>$hash,'source'=>'Учебный план'];
  query('INSERT INTO plan_versions (id,company_id,version_no,state,snapshot,input_hash,approvals,creator_id) VALUES (?,?,?,?,?,?,?,?)',[$id,$companyId,1,'approved',j($snapshot),$hash,j($approvals),$ownerId]);
  publishSchedule($c,['id'=>$id,'snapshot'=>j($snapshot)]);
- $first=$orders[0];$all=rows('SELECT * FROM tasks WHERE company_id=? AND order_id=? ORDER BY planned_start',[$companyId,$first['id']]);
+ $first=array_values(array_filter($orders,fn($o)=>$o['mode']==='CONTRACT'))[0];$all=rows('SELECT * FROM tasks WHERE company_id=? AND order_id=? ORDER BY planned_start',[$companyId,$first['id']]);
  foreach($all as $t){if(!$t['is_final']){query("UPDATE tasks SET released=quantity,transferred=quantity,state='completed',revision=2 WHERE id=?",[$t['id']]);}
  else{query("UPDATE tasks SET released=20,transferred=20,accepted=18,rework=2,state='paused',revision=2 WHERE id=?",[$t['id']]);
  query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'quality',20,j(['accepted'=>18,'rework'=>2,'scrap'=>0,'reason'=>'Учебный пример: неровная строчка','source'=>'Тестовые данные'])]);
  query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'pause',null,j(['reason'=>'Учебный пример: следующая партия ещё в работе','source'=>'Тестовые данные'])]);}}
+ seedFinance($db,$companyId,$first['id'],$ownerId,((int)$first['price_cents'])*18);
+}
+
+function seedFinance(PDO $db,string $companyId,string $orderId,string $ownerId,int $recognized):void{
+ require_once __DIR__.'/finance.php';if(!financeAvailable())return;
+ query('INSERT INTO economy_observations (id,company_id,order_id,actor_id,revision,accepted_quantity,recognized_cents,direct_cents,labor_cents,common_cents,source) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[uid(),$companyId,$orderId,$ownerId,1,18,$recognized,380000,700000,130000,'Учебный факт: вымышленные подтверждённые затраты 18 принятых изделий.']);
 }

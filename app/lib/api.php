@@ -28,13 +28,14 @@ function stateData():array{
  if($c['role']==='worker')$events=array_values(array_filter($events,fn($e)=>$e['actor_id']===$u['id']));
  $count=one('SELECT COUNT(*) AS n FROM production_events WHERE company_id=?',[$c['id']]);$forecastStale=$plans&&((int)$count['n']>(int)($plans[0]['snapshot']['source_event_count']??0));
  $audit=rows('SELECT action,details,created_at FROM audit_log WHERE company_id=? ORDER BY created_at DESC LIMIT 25',[$c['id']]);foreach($audit as &$a)$a['details']=decode($a['details']);unset($a);
- if(!$economic){unset($c['passport']['economy']);$audit=array_values(array_filter($audit,fn($a)=>!in_array($a['action'],['order_saved','passport_saved'],true)));}
+ if(!$economic){unset($c['passport']['economy']);$audit=array_values(array_filter($audit,fn($a)=>!in_array($a['action'],['order_saved','passport_saved','economy_observed'],true)));}
  if($c['role']==='worker'){
   $workerId=$_SESSION['worker_resource']??'p-sew-1';$orderIds=array_unique(array_column($tasks,'order_id'));$orders=array_values(array_filter($orders,fn($o)=>in_array($o['id'],$orderIds,true)));$c['passport']['people']=array_values(array_filter($c['passport']['people']??[],fn($p)=>$p['id']===$workerId));$c['passport']['resources']=array_values(array_filter($c['passport']['resources']??[],fn($r)=>$r['worker']===$workerId));$c['layout']=['width'=>18,'depth'=>12,'objects'=>[],'links'=>[]];$audit=[];
   foreach($plans as &$plan){$plan['snapshot']['schedule']=array_values(array_filter($plan['snapshot']['schedule']??[],fn($t)=>$t['worker_id']===$workerId));$plan['snapshot']['resource_snapshot']=array_values(array_filter($plan['snapshot']['resource_snapshot']??[],fn($r)=>$r['worker']===$workerId));$plan['snapshot']['people_snapshot']=array_values(array_filter($plan['snapshot']['people_snapshot']??[],fn($p)=>$p['id']===$workerId));$plan['snapshot']['layout']=['objects'=>[],'links'=>[]];$plan['snapshot']['routes']=array_intersect_key($plan['snapshot']['routes']??[],array_flip($orderIds));unset($plan['snapshot']['order_revisions'],$plan['snapshot']['order_finishes']);}unset($plan);
  }
+ $finance=null;if($economic){require_once __DIR__.'/finance.php';$finance=financeState($orders,$plans,$tasks,$economy,$c['id']);}
  $demoRoles=[];if(!empty($_SESSION['demo_company'])&&$_SESSION['demo_company']===$c['id'])$demoRoles=rows('SELECT u.id,u.name,m.role FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.company_id=?',[$c['id']]);
- return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale];
+ return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale,...($economic?['finance'=>$finance]:[])];
 }
 function apiRun(string $action,array $input):array{
  global $config;
@@ -71,7 +72,7 @@ function apiRun(string $action,array $input):array{
   $c=context();if(empty($_SESSION['demo_company'])||$_SESSION['demo_company']!==$c['id']||!$c['is_demo'])fail('Переключение доступно только в собственном демо-сеансе',403);
   $m=one('SELECT user_id FROM memberships WHERE company_id=? AND role=?',[$c['id'],$input['role']??'']);if(!$m)fail('Роль недоступна',403);establish($m['user_id'],$c['id']);return stateData();
  }
- $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event']];
+ $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event'],'finance'=>['economy_observe']];
  foreach($moduleActions as $module=>$actions)if(in_array($action,$actions,true)){$file=__DIR__.'/modules/'.$module.'.php';if(!is_file($file))fail('Модуль подключается',503);require_once $file;$handler=$module.'Action';return $handler($action,$input);}
  if($action==='ai_request')fail('В разработке. Продолжите вручную.',501);
  fail('Действие не найдено',404);
