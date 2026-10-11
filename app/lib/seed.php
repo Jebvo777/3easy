@@ -4,11 +4,15 @@ function demoPassport(): array {
  return [
  'industry'=>'Швейное производство','city'=>'Санкт-Петербург','area'=>216,'timezone'=>'Europe/Moscow',
  'description'=>'Небольшая фабрика трикотажных изделий. Тестовые данные EASY3.',
+ 'structure'=>['workshops'=>[['id'=>'w-main','name'=>'Швейный цех']],'brigades'=>[['id'=>'b-sew','name'=>'Бригада пошива','workshop'=>'w-main','lead'=>'p-foreman']]],
  'people'=>[
+ ['id'=>'p-chief','name'=>'Начальник производства','role'=>'Начальник производства','roles'=>['chief'],'workshop'=>'w-main','brigade'=>'','skills'=>[],'active'=>true],
+ ['id'=>'p-tech','name'=>'Технолог','role'=>'Технолог','roles'=>['technologist'],'workshop'=>'w-main','brigade'=>'','skills'=>[],'active'=>true],
+ ['id'=>'p-foreman','name'=>'Бригадир','role'=>'Бригадир','roles'=>['foreman'],'workshop'=>'w-main','brigade'=>'b-sew','skills'=>[],'active'=>true],
  ['id'=>'p-cut','name'=>'Раскройщик 01','role'=>'Раскройщик','skills'=>['cut'],'active'=>true],
- ['id'=>'p-sew-1','name'=>'Швея 01','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
- ['id'=>'p-sew-2','name'=>'Швея 02','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
- ['id'=>'p-sew-3','name'=>'Швея 03','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
+ ['id'=>'p-sew-1','roles'=>['worker'],'workshop'=>'w-main','brigade'=>'b-sew','name'=>'Швея 01','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
+ ['id'=>'p-sew-2','roles'=>['worker'],'workshop'=>'w-main','brigade'=>'b-sew','name'=>'Швея 02','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
+ ['id'=>'p-sew-3','roles'=>['worker'],'workshop'=>'w-main','brigade'=>'b-sew','name'=>'Швея 03','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
  ['id'=>'p-iron','name'=>'Оператор ВТО','role'=>'ВТО','skills'=>['iron'],'active'=>true],
  ['id'=>'p-qc','name'=>'Контролёр ОТК','role'=>'ОТК','skills'=>['qc','pack'],'active'=>true]],
  'shift'=>['start'=>'09:00','end'=>'18:00','break_start'=>'13:00','break_minutes'=>60,'days'=>[1,2,3,4,5]],
