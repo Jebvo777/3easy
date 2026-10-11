@@ -1,0 +1,6 @@
+Options -Indexes
+<IfModule mod_headers.c>
+ <FilesMatch "^(app\.[a-f0-9]{16}\.js|ui\.[a-f0-9]{16}\.css)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+ </FilesMatch>
+</IfModule>
