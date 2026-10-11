@@ -1,0 +1,34 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/../../lib/finance.php';
+$checks=[];
+function verify(string $name,bool $value):void{global $checks;if(!$value)throw new RuntimeException($name);$checks[]=$name;echo "OK $name\n";}
+$orders=[['id'=>'a','title'=>'A','status'=>'active','mode'=>'CONTRACT','quantity'=>100],['id'=>'own','title'=>'OWN','status'=>'active','mode'=>'OWN','quantity'=>100]];
+$ec=['value_cents'=>100000,'cost_cents'=>60000,'result_cents'=>40000];
+$plans=[['id'=>'p','state'=>'published','version_no'=>1,'snapshot'=>['economy'=>['a'=>$ec],'schedule'=>[['order_id'=>'a','quantity'=>100]]]]];
+$tasks=[['order_id'=>'a','is_final'=>true,'state'=>'completed','accepted'=>20,'quantity'=>100,'plan_id'=>'p']];
+$obs=[['order_id'=>'a','revision'=>1,'accepted_quantity'=>20,'recognized_cents'=>20000,'direct_cents'=>5000,'labor_cents'=>4000,'common_cents'=>1000]];
+$current=['a'=>$ec,'own'=>$ec];
+$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Факт считается по принятой и подтверждённой части',$r['actual_cents']===10000&&$r['covered']===20);
+verify('Прогноз замещает оценку подтверждёнными затратами',$r['forecast_cents']===42000&&$r['deviation_cents']===2000);
+verify('OWN исключён из результата продажи',$r['own_count']===1&&count($r['rows'])===1);
+verify('Сравниваются одинаковые объёмы',$r['expected_cents']===40000&&$r['expected_part_cents']===8000);
+$current['a']=['value_cents'=>200000,'cost_cents'=>60000,'result_cents'=>140000];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Изменение цены не переписывает принятую стоимость и ожидание',$r['actual_cents']===10000&&$r['expected_cents']===40000&&$r['forecast_cents']===122000);
+$obs[0]['labor_cents']=null;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Неизвестные затраты не подменяются нулём',$r['actual_cents']===null&&$r['covered']===0);
+$obs[0]['direct_cents']=$obs[0]['labor_cents']=$obs[0]['common_cents']=0;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Явный ноль отличается от неизвестного',$r['actual_cents']===20000&&$r['covered']===20);
+$tasks[0]['accepted']=25;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Новый выпуск требует подтверждения затрат, частичный факт остаётся виден',$r['actual_cents']===null&&$r['known_actual_cents']===20000);
+$obs[]=['order_id'=>'a','revision'=>2,'accepted_quantity'=>25,'recognized_cents'=>25000,'direct_cents'=>30000,'labor_cents'=>10000,'common_cents'=>5000];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Уточнения не суммируют прежние затраты повторно',$r['actual_cents']===-20000&&$r['covered']===25);
+$plans[]=['id'=>'p2','state'=>'published','version_no'=>2,'snapshot'=>['economy'=>['a'=>$current['a']],'schedule'=>[['order_id'=>'a','quantity'=>100]]]];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Первый опубликованный план остаётся базой',$r['expected_cents']===40000);
+$orders[0]['quantity']=120;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Несопоставимый объём явно лишает отклонение базы',$r['expected_cents']===null&&$r['deviation_cents']===null);
+$orders[0]['status']='archived';$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+verify('Архивные цели не включаются в активный портфель',count($r['rows'])===0);
+verify('Денежные доли округляются целочисленно',moneyShare(-101,1,2)===-51&&moneySum([0,null])===null);
+echo json_encode(['passed'=>count($checks),'checks'=>$checks],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT)."\n";

@@ -24,7 +24,7 @@ async function archive(o){const m=modal('Убрать цель в архив?',`
 function wizard(old=null){
  const now=new Date(),deadline=new Date(now);deadline.setDate(deadline.getDate()+14);
  const d=old?structuredClone(old):{mode:'CONTRACT',title:'',product:'',customer:'',quantity:300,start_date:now.toISOString().slice(0,10),deadline:deadline.toISOString().slice(0,10),price_cents:null,target_cents:null,price_basis:'unit',material_owner:'customer',expenses:[]};
- let step=0;const labels=['Основание','Изделие и объём','Цена и срок','Прямые расходы','Всё готово'];const m=modal(old?'Условия цели':'Новая цель','<div id="goal-wizard"></div>',{large:true});
+ let step=0,requestKey=key(),requestSignature='';const labels=['Основание','Изделие и объём','Цена и срок','Прямые расходы','Всё готово'];const m=modal(old?'Условия цели':'Новая цель','<div id="goal-wizard"></div>',{large:true});
  const root=m.el.querySelector('#goal-wizard');
  function capture(){const f=root.querySelector('form');if(!f)return true;if(!f.reportValidity())return false;const x=formData(f);
   if(step===1)Object.assign(d,{title:x.title,product:x.product,customer:x.customer,quantity:Number(x.quantity)});
@@ -33,7 +33,7 @@ function wizard(old=null){
  }
  function draw(){root.innerHTML=`<div class="wizard-steps">${labels.map((l,i)=>`<div class="${i===step?'active':i<step?'done':''}"><span>${i<step?icon('check'):i+1}</span><small>${l}</small></div>`).join('')}</div><div class="wizard-content"><form id="wizard-form">${content()}</form></div><div class="error-box" id="wizard-error" role="alert"></div><div class="modal-actions">${step?button('Назад','','','id="wizard-prev"'):''}${button(step===4?'Сохранить цель':'Продолжить',step===4?'check':'arrow','primary','id="wizard-next"')}</div>`;
   root.querySelector('#wizard-form').onsubmit=ev=>ev.preventDefault();root.querySelectorAll('[data-basis]').forEach(b=>b.onclick=()=>{d.mode=b.dataset.basis;draw();});
-  root.querySelector('#wizard-prev')?.addEventListener('click',()=>{capture();step--;draw();});root.querySelector('#wizard-next').onclick=async ev=>{const control=ev.currentTarget;try{if(!capture())return;if(step<4){step++;draw();}else{control.disabled=true;const response=await api('order_save',{...d,key:key(),id:old?.id||'',revision:old?.revision});await refresh();S.selectedOrder=response.id;m.close();paint();toast('Цель сохранена. Можно перейти к плану.');}}catch(err){root.querySelector('#wizard-error').textContent=err.message;toast(err.message,true);control.disabled=false;}};
+  root.querySelector('#wizard-prev')?.addEventListener('click',()=>{capture();step--;draw();});root.querySelector('#wizard-next').onclick=async ev=>{const control=ev.currentTarget;try{if(!capture())return;if(step<4){step++;draw();}else{control.disabled=true;const body={...d,id:old?.id||'',revision:old?.revision},signature=JSON.stringify(body);if(signature!==requestSignature){requestSignature=signature;requestKey=key();}const response=await api('order_save',{...body,key:requestKey});await refresh();S.selectedOrder=response.id;m.close();paint();toast('Цель сохранена. Можно перейти к плану.');}}catch(err){root.querySelector('#wizard-error').textContent=err.message;toast(err.message,true);control.disabled=false;}};
   root.querySelector('#expense-add')?.addEventListener('click',()=>{if(!capture())return;d.expenses.push({id:'e-'+key(),name:'',cents:0,kind:'direct'});draw();});root.querySelectorAll('[data-expense-delete]').forEach(b=>b.onclick=()=>{capture();d.expenses.splice(+b.dataset.expenseDelete,1);draw();});
  }
  function content(){
