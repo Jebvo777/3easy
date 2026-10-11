@@ -1,11 +1,13 @@
-import {app,S,e,api,setData,refresh,modal,button,toast,formData,submit} from './core.js';
+import {app,S,e,api,setData,refresh,modal,button,toast,formData,submit,tabletClose} from './core.js';
 import {icon} from './icons.js';
 const routes={desktop:['Рабочий стол','desktop'],goal:['Цель','goal'],plan:['План','plan'],production:['Производство','production'],builder:['Предприятие','builder'],passport:['Паспорт','passport']};
 let renderTicket=0;
 const roles={owner:'Собственник',foreman:'Мастер',technologist:'Технолог',chief:'Начальник производства',worker:'Работник',qc:'ОТК'};
 function navigate(route){if(S.route===route)renderWorkspace();else location.hash=route;}
 export async function renderWorkspace(){
- if(!S.data)return;document.body.classList.add('workspace-mode');const ticket=++renderTicket;S.cleanup?.();S.cleanup=null;
+ if(!S.data)return;document.body.classList.add('workspace-mode');const ticket=++renderTicket;
+ const next=location.hash.slice(1)||'desktop';if(S.route!==next)await tabletClose(app.querySelector('.app-window'));
+ if(ticket!==renderTicket)return;S.cleanup?.();S.cleanup=null;
  const route=location.hash.slice(1)||'desktop';S.route=routes[route]?route:'desktop';const c=S.data.company,u=S.data.user;
  app.innerHTML=`<header class="topbar"><div class="topbar-left"><button data-nav="desktop" aria-label="Рабочий стол"><img class="logo" src="assets/media/logo.png" alt="EASY3"></button><button class="company-menu" id="company-menu">${e(c.name)}${icon('down')}</button><span class="demo-tag">${c.is_demo?'ДЕМО':'КОМПАНИЯ'}</span></div><div class="topbar-right"><button class="icon-btn" id="search-command" aria-label="Найти в пространстве">${icon('search')}</button><button class="icon-btn" id="notifications" aria-label="События">${icon('bell')}</button><button class="row" id="account-menu"><span class="user-name">${e(roles[c.role]||c.role)}</span><span class="avatar">${e(u.name.slice(0,2).toUpperCase())}</span></button><time id="menubar-clock" class="mono"></time></div></header><main class="workspace" id="workspace"></main><nav class="dock" aria-label="Модули">${Object.entries(routes).map(([id,[label,ico]])=>`<button class="dock-btn ${S.route===id?'active':''}" data-nav="${id}" aria-current="${S.route===id?'page':'false'}"><span class="dock-tile">${icon(ico)}</span><span>${label}</span></button>`).join('')}</nav>`;
  app.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));

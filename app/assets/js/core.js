@@ -21,9 +21,14 @@ export const badge=(label,type='',ico='')=>`<span class="badge ${type}">${ico?ic
 export const button=(label,ico='',cls='',attrs='')=>`<button class="btn ${cls}" ${attrs}>${ico?icon(ico):''}${e(label)}</button>`;
 export function aiNotice(text='Нейросети и импорт Excel — в разработке. Сейчас можно заполнить данные вручную.'){return `<div class="notice ai">${icon('sparkle')}<div><strong>В разработке</strong><br>${e(text)}</div></div>`;}
 export function empty(text,action=''){return `<div class="empty">${icon('grid')}<p>${e(text)}</p>${action?`<div style="margin-top:20px">${action}</div>`:''}</div>`;}
+export function tabletClose(el){
+ if(!el||matchMedia('(prefers-reduced-motion: reduce)').matches)return Promise.resolve();
+ el.classList.add('tablet-closing');el.setAttribute('aria-busy','true');
+ return new Promise(resolve=>setTimeout(resolve,280));
+}
 export function modal(title,content,{large=false,onClose}={}){
  const previous=document.activeElement;const layer=document.createElement('div');layer.className='modal-layer';layer.innerHTML=`<section class="modal ${large?'large':''}" role="dialog" aria-modal="true" aria-label="${e(title)}"><div class="modal-head"><div class="window-controls"><button data-close aria-label="Закрыть окно"></button><button data-close aria-label="Закрыть окно"></button><button data-close aria-label="Закрыть окно"></button></div><h2>${e(title)}</h2></div>${content}</section>`;document.body.append(layer);
- let closed=false;function close(){if(closed)return;closed=true;layer.remove();document.removeEventListener('keydown',keys);previous?.focus();onClose?.();}
+ let closed=false;async function close(){if(closed)return;closed=true;document.removeEventListener('keydown',keys);layer.classList.add('closing');await tabletClose(layer.querySelector('.modal'));layer.remove();if(previous?.isConnected)previous.focus();onClose?.();}
  function keys(ev){if(document.querySelector('.modal-layer:last-of-type')!==layer)return;if(ev.key==='Escape')close();if(ev.key==='Tab'){const f=[...layer.querySelectorAll('button,input,select,textarea,a[href]')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!f.length)return;const first=f[0],last=f.at(-1);if(ev.shiftKey&&document.activeElement===first){last.focus();ev.preventDefault();}else if(!ev.shiftKey&&document.activeElement===last){first.focus();ev.preventDefault();}}}
  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=close);layer.addEventListener('click',ev=>{if(ev.target===layer)close();});document.addEventListener('keydown',keys);setTimeout(()=>layer.querySelector('input,select,textarea,button')?.focus(),80);return {el:layer,close};
 }
