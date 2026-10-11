@@ -12,6 +12,11 @@ function builderAction(string $action,array $input):array{
  if(!is_array($new)||count($new)>30)fail('Слишком много новых центров');if($new&&$c['role']!=='owner')fail('Создание оборудования доступно собственнику',403);
  $ids=array_column($resources,'id');$people=array_column($passport['people']??[],'id');
  foreach($new as $r){$id=textField($r,'id',60,true);if(!preg_match('/^[a-zA-Z0-9_-]+$/',$id)||in_array($id,$ids,true))fail('Рабочий центр уже существует');$type=textField($r,'type',20,true);if(!in_array($type,['cut','sew','overlock','iron','qc','pack'],true))fail('Некорректный тип центра');$worker=textField($r,'worker',60);if($worker&&!in_array($worker,$people,true))fail('Исполнитель отсутствует');$resources[]=['id'=>$id,'name'=>textField($r,'name',100,true),'type'=>$type,'worker'=>$worker,'active'=>true];$ids[]=$id;}
+ $assignments=$input['assignments']??[];if(!is_array($assignments)||count($assignments)>80)fail('Слишком много назначений');
+ $peopleById=array_column($passport['people']??[],null,'id');
+ foreach($assignments as $rid=>$worker){if(!is_string($rid)||!in_array($rid,$ids,true)||!is_string($worker)||strlen($worker)>60)fail('Некорректное назначение');
+  foreach($resources as &$resource)if($resource['id']===$rid){if($worker&&(!isset($peopleById[$worker])||!$peopleById[$worker]['active']||!in_array($resource['type'],$peopleById[$worker]['skills'],true)))fail('Исполнитель не имеет активного навыка для центра');$resource['worker']=$worker;}unset($resource);
+ }
  $byId=array_column($resources,null,'id');$objects=$l['objects']??[];if(!is_array($objects)||count($objects)>80)fail('Слишком много объектов');$seen=[];$used=[];
  foreach($objects as $obj){$id=textField($obj,'id',60,true);if(!preg_match('/^[a-zA-Z0-9_-]+$/',$id)||isset($seen[$id]))fail('Объект имеет повторяющийся код');$seen[$id]=1;$type=textField($obj,'type',20,true);if(!in_array($type,['cut','sew','overlock','iron','qc','pack','storage'],true))fail('Неизвестный тип объекта');$rid=textField($obj,'resource',60);
  if($type!=='storage'&&!$rid)fail('Свяжите рабочий центр с ресурсом');if($rid){if(!isset($byId[$rid])||$byId[$rid]['type']!==$type)fail('Ресурс не соответствует рабочему центру');if(isset($used[$rid]))fail('Один ресурс не может создавать два рабочих центра');$used[$rid]=1;}
