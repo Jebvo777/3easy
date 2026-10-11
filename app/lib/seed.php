@@ -57,3 +57,16 @@ function seedCompany(PDO $db,string $companyId): void {
  if($o[3]==='OWN')$expenses[]=['id'=>'e-3','name'=>'Материал для партии','kind'=>'direct','cents'=>4200000];
  $q->execute([uid(),$companyId,$o[0],$o[1],$o[2],$o[3],$o[4],$today->modify('+'.$o[8].' days')->format('Y-m-d'),$today->format('Y-m-d'),$o[5],$o[6],$o[7],j($expenses),j(demoRoute($o[10])),'draft',$o[9]]);}
 }
+function seedInitialPlan(PDO $db,string $companyId,string $ownerId):void{
+ $c=one('SELECT * FROM companies WHERE id=?',[$companyId]);$c['passport']=decode($c['passport']);$c['layout']=decode($c['layout']);
+ [$orders,$tasks]=engineInputs($c);$snapshot=calculatePlan($c,$orders,$tasks);if($snapshot['status']!=='feasible')return;
+ $id=uid();$hash=engineHash($c,$orders,$tasks);$snapshot['input_hash']=$hash;$snapshot['company_revision']=(int)$c['revision'];$snapshot['source_event_count']=0;
+ $approvals=[];foreach(['foreman','technologist','chief'] as $stage)$approvals[]=['stage'=>$stage,'actor_id'=>$ownerId,'at'=>date('c'),'input_hash'=>$hash,'source'=>'Учебный план'];
+ query('INSERT INTO plan_versions (id,company_id,version_no,state,snapshot,input_hash,approvals,creator_id) VALUES (?,?,?,?,?,?,?,?)',[$id,$companyId,1,'approved',j($snapshot),$hash,j($approvals),$ownerId]);
+ publishSchedule($c,['id'=>$id,'snapshot'=>j($snapshot)]);
+ $first=$orders[0];$all=rows('SELECT * FROM tasks WHERE company_id=? AND order_id=? ORDER BY planned_start',[$companyId,$first['id']]);
+ foreach($all as $t){if(!$t['is_final']){query("UPDATE tasks SET released=quantity,transferred=quantity,state='completed',revision=2 WHERE id=?",[$t['id']]);}
+ else{query("UPDATE tasks SET released=20,transferred=20,accepted=18,rework=2,state='paused',revision=2 WHERE id=?",[$t['id']]);
+ query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'quality',20,j(['accepted'=>18,'rework'=>2,'scrap'=>0,'reason'=>'Учебный пример: неровная строчка','source'=>'Тестовые данные'])]);
+ query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'pause',null,j(['reason'=>'Учебный пример: следующая партия ещё в работе','source'=>'Тестовые данные'])]);}}
+}

@@ -20,8 +20,8 @@ function stateData():array{
  foreach($orders as &$o){$o['route']=decode($o['route']);$o['expenses']=decode($o['expenses']);foreach(['quantity','revision'] as $k)$o[$k]=(int)$o[$k];foreach(['price_cents','target_cents'] as $k)$o[$k]=$o[$k]===null?null:(int)$o[$k];if(!$economic){unset($o['price_cents'],$o['target_cents'],$o['expenses']);}}unset($o);
  $plans=rows('SELECT * FROM plan_versions WHERE company_id=? ORDER BY version_no DESC',[$c['id']]);
  foreach($plans as &$p){$p['snapshot']=decode($p['snapshot']);$p['approvals']=decode($p['approvals']);$p['version_no']=(int)$p['version_no'];if(!$economic)unset($p['snapshot']['economy']);}unset($p);
- $tasks=rows('SELECT t.*,o.title AS order_title,o.product FROM tasks t JOIN orders o ON o.id=t.order_id WHERE t.company_id=? ORDER BY planned_start,t.id',[$c['id']]);
- foreach($tasks as &$t){foreach(['quantity','released','transferred','accepted','rework','scrap','revision','is_final'] as $k)$t[$k]=(int)$t[$k];$t['dependencies']=decode($t['dependencies']);}unset($t);
+ $tasks=rows('SELECT t.*,o.title AS order_title,o.product FROM tasks t JOIN orders o ON o.id=t.order_id WHERE t.company_id=? AND t.state<>\'cancelled\' ORDER BY planned_start,t.id',[$c['id']]);
+ foreach($tasks as &$t){foreach(['quantity','released','transferred','accepted','rework','rework_ready','scrap','revision','is_final'] as $k)$t[$k]=(int)$t[$k];$t['dependencies']=decode($t['dependencies']);}unset($t);
  if($c['role']==='worker'){$tasks=array_values(array_filter($tasks,fn($t)=>$t['worker_id']===($_SESSION['worker_resource']??'p-sew-1')));}
  $events=rows('SELECT e.*,t.title AS task_title FROM production_events e JOIN tasks t ON t.id=e.task_id WHERE e.company_id=? ORDER BY e.created_at DESC,e.id DESC LIMIT 60',[$c['id']]);
  if($c['role']==='worker')$events=array_values(array_filter($events,fn($e)=>$e['actor_id']===$u['id']));
@@ -53,6 +53,7 @@ function apiRun(string $action,array $input):array{
   if(empty($config['demo_enabled']))fail('Демо-сеанс отключён',403);$bucket=authLimit('demo-session');query('UPDATE auth_limits SET failures=failures+1 WHERE bucket=?',[$bucket]);
   db()->beginTransaction();try{$id=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$id,'session-'.$id.'@demo.easy3.local','Собственник',password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);$cid=companyNew('Ателье Север',$id,true);
    foreach(['foreman'=>'Мастер','technologist'=>'Технолог','chief'=>'Начальник производства','worker'=>'Швея 01','qc'=>'Контролёр ОТК'] as $role=>$name){$rid=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$rid,$role.'-'.$rid.'@demo.easy3.local',$name,password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);query('INSERT INTO memberships (user_id,company_id,role) VALUES (?,?,?)',[$rid,$cid,$role]);}
+   require_once __DIR__.'/engine.php'; seedInitialPlan(db(),$cid,$id);
    db()->commit();establish($id,$cid);$_SESSION['demo_company']=$cid;$_SESSION['worker_resource']='p-sew-1';return stateData();
   }catch(Throwable $e){if(db()->inTransaction())db()->rollBack();throw $e;}
  }
