@@ -9,3 +9,10 @@
 ## Окружение петли
 
 `lakes_1k.hdr` — реальная HDR-панорама **Lakes**, Sergej Majboroda, Poly Haven, CC0. Источник: https://polyhaven.com/a/lakes . Файл получен с официального сервера Poly Haven. HDR служит освещением и отражениями металлической геометрии, не заменяет петлю картинкой. Карты албедо, шероховатости и нормалей металла создаются детерминированно в коде (2048×512), без запечённого освещения. Все ресурсы на хостинге локальные.
+
+
+## Металл v3
+
+`brushed-titanium-v3.webp` — отдельная растровая albedo-текстура, созданная ImageGen 11 октября 2026 для нанесения на настоящую замкнутую геометрию петли. Источник: `generated_images/exec-b51aced8-bbf1-4ed7-ab73-bb2f171eec72.png` в рабочем сеансе. Текстура не является изображением петли. Нормали/шероховатость дополняются процедурными микробороздками; окружение и свет формируются рендерером.
+
+Промпт: square edge-to-edge extreme macro photographic texture of premium brushed titanium / stainless steel; flat orthographic, neutral diffuse illumination, graphite-silver tone, dense fine horizontal machining grain, microscopic pores, sparse hairline scratches, luxury aerospace finish; uniform brightness, no objects, text, directional glare, broad bands or perspective; continuous tile suitable for a rounded infinity ribbon.
