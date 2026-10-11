@@ -65,3 +65,9 @@
  @media(max-height:740px) and (min-width:701px){.desktop{gap:9px}.desktop-head{min-height:62px}.desktop-head h2{font-size:25px}.desktop-head .eyebrow{display:none}.desktop-top-actions{margin-top:6px}.clock-big{font-size:43px}.desktop-widget{padding:10px 14px}.desktop-widget .number{font-size:26px}.desktop-widget .eyebrow{margin-bottom:5px}.desktop-widget .hint{font-size:10px}.loop-label{min-height:50px;padding:8px 15px}.desktop-widget.alert h3{font-size:14px}.desktop-widget.alert .symbol{display:none}.loop-caption{display:none}.workspace{padding-bottom:94px}}
  @media(prefers-reduced-motion:reduce){.wallpaper{animation:none;will-change:auto}.loop-label,.btn,.dock-btn{transition:none}}
 }
+
+@layer refinement {
+ .loop-hotspot{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;z-index:6;border-radius:50%;background:#7e142fe8;color:#fff;border:1px solid #ff8898;box-shadow:0 0 0 6px #ff214729,0 4px 18px #72001750;display:grid;place-items:center;cursor:pointer}.loop-hotspot .icon{width:17px;height:17px}.loop-hotspot:focus-visible{outline:2px solid #ffdce2;outline-offset:6px}
+ .loop-tooltip{position:absolute;z-index:8;width:280px;padding:14px 16px;border:1px solid #ff7e92a0;border-radius:18px;background:#481425ec;backdrop-filter:blur(20px);color:#fff;box-shadow:0 12px 45px #20051860;pointer-events:none;animation:fadeIn .16s}.loop-tooltip .eyebrow{font-size:8px;letter-spacing:.13em;color:#ffb6c0;display:block;margin-bottom:7px}.loop-tooltip strong{font-size:13px;display:block;font-weight:600}.loop-tooltip p{font-size:11px;line-height:1.45;color:#ffe6e9;margin:6px 0}.loop-tooltip small{font-size:9px;color:#f3b1bf}
+ [hidden]{display:none!important}
+}
