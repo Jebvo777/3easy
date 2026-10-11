@@ -21,3 +21,9 @@ function validateOrganization(array $passport):void{
  foreach($brigades as $b){$p=$people[$b['lead']]??null;if(!$p||!in_array('foreman',$p['roles'],true)||$p['workshop']!==$b['workshop']||$p['brigade']!==$b['id'])fail('Бригаде нужен бригадир с соответствующей ролью в этом цехе');}
  foreach($passport['resources'] as $r){if(!$r['worker'])continue;$p=$people[$r['worker']];if($p['workshop']!==$r['workshop'])fail('Исполнитель и центр должны относиться к одному цеху. Переназначьте центр.');if(!in_array($r['type'],$p['skills'],true))fail('У исполнителя нет навыка для назначенного центра');}
 }
+
+function validateLayoutOrganization(array $company,array $passport):void{
+ $new=array_column($passport['resources'],null,'id');$oldStructure=organizationStructure($company['passport']);$first=$oldStructure['workshops'][0]['id'];
+ $maps=$company['layout']['workshops']??[$first=>$company['layout']];
+ foreach($maps as $wid=>$layout)foreach($layout['objects']??[] as $object){$rid=$object['resource']??'';if(!$rid)continue;if(!isset($new[$rid])||$new[$rid]['workshop']!==$wid)fail('Сначала уберите перемещаемый или удаляемый центр с карты его цеха');}
+}

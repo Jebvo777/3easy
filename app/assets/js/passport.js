@@ -8,7 +8,7 @@ let current='company',draft=null,companyName='',dirty=false,teamCleanup=null;
 const clone=v=>structuredClone(v);
 function cents(v){if(v===''||v==null)return null;const n=Number(String(v).replace(',','.'));if(!Number.isFinite(n)||n<0)throw Error('Укажите положительную сумму');return Math.round(n*100);}
 export async function render(main){
- draft=organizationPassport(S.data.company.passport);companyName=S.data.company.name;dirty=false;
+ if(S.passportSection){current=sections.some(x=>x[0]===S.passportSection)?S.passportSection:'company';delete S.passportSection;}draft=organizationPassport(S.data.company.passport);companyName=S.data.company.name;dirty=false;
  if(!S.data.permissions.economy&&current==='economy')current='company';paint(main);return()=>{teamCleanup?.();teamCleanup=null;main.classList.remove('passport-team-mode');};
 }
 function complete(){return [!!companyName,draft.people?.length>0,!!draft.shift?.days?.length,draft.resources?.length>0,draft.economy?.labor_hour_cents!=null];}
