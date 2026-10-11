@@ -35,7 +35,8 @@ function stateData():array{
  }
  $finance=null;if($economic){require_once __DIR__.'/finance.php';$finance=financeState($orders,$plans,$tasks,$economy,$c['id']);}
  $demoRoles=[];if(!empty($_SESSION['demo_company'])&&$_SESSION['demo_company']===$c['id'])$demoRoles=rows('SELECT u.id,u.name,m.role FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.company_id=?',[$c['id']]);
- return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale,...($economic?['finance'=>$finance]:[])];
+ require_once __DIR__.'/ai/gateway.php';
+ return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale,'ai'=>aiCapability(),...($economic?['finance'=>$finance]:[])];
 }
 function apiRun(string $action,array $input):array{
  global $config;
@@ -72,7 +73,7 @@ function apiRun(string $action,array $input):array{
   $c=context();if(empty($_SESSION['demo_company'])||$_SESSION['demo_company']!==$c['id']||!$c['is_demo'])fail('Переключение доступно только в собственном демо-сеансе',403);
   $m=one('SELECT user_id FROM memberships WHERE company_id=? AND role=?',[$c['id'],$input['role']??'']);if(!$m)fail('Роль недоступна',403);establish($m['user_id'],$c['id']);return stateData();
  }
- $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event'],'finance'=>['economy_observe']];
+ $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event'],'finance'=>['economy_observe'],'technology'=>['technology_generate']];
  foreach($moduleActions as $module=>$actions)if(in_array($action,$actions,true)){$file=__DIR__.'/modules/'.$module.'.php';if(!is_file($file))fail('Модуль подключается',503);require_once $file;$handler=$module.'Action';return $handler($action,$input);}
  if($action==='ai_request')fail('В разработке. Продолжите вручную.',501);
  fail('Действие не найдено',404);

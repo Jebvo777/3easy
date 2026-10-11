@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/../engine.php';require_once __DIR__.'/goal.php';
+require_once __DIR__.'/../engine.php';require_once __DIR__.'/goal.php';require_once __DIR__.'/../ai/route.php';
 function planRecord(string $id,bool $lock=false):array{$c=context();$p=one('SELECT * FROM plan_versions WHERE id=? AND company_id=?'.($lock?lockSuffix():''),[$id,$c['id']]);if(!$p)fail('Вариант не найден',404);return $p;}
 function planAction(string $action,array $input):array{
  if($action==='route_save')permit(['owner','technologist']);elseif($action==='plan_publish')permit(['owner','chief']);else permit(['owner','foreman','technologist','chief']);
@@ -8,11 +8,11 @@ function planAction(string $action,array $input):array{
   if($action==='route_save'){
    $o=orderRecord(textField($input,'order_id',32,true),true);checkRevision((int)$o['revision'],$input);
    if(one("SELECT id FROM tasks WHERE company_id=? AND order_id=? AND state<>'cancelled' LIMIT 1",[$c['id'],$o['id']]))fail('Технология опубликована. В демо она закреплена за заданиями; новую технологию создайте для новой цели.');
-   $route=$input['route']??[];if(!is_array($route)||count($route)>40)fail('Демо поддерживает до 40 операций');$clean=[];
-   foreach($route as $op){$id=textField($op,'id',60,true);if(!preg_match('/^[a-zA-Z0-9_-]+$/',$id))fail('Некорректный код операции');$type=textField($op,'type',20,true);if(!in_array($type,['cut','sew','overlock','iron','qc','pack'],true))fail('Неизвестное требование к ресурсу');$dep=$op['dependencies']??[];if(!is_array($dep)||count($dep)>10)fail('Некорректные зависимости');foreach($dep as $d)if(!is_string($d)||strlen($d)>60)fail('Некорректная связь');$clean[]=['id'=>$id,'name'=>textField($op,'name',180,true),'type'=>$type,'seconds'=>numberField($op,'seconds',1,36000,true),'setup_minutes'=>numberField($op,'setup_minutes',0,480),'dependencies'=>array_values(array_unique($dep)),'source'=>textField($op,'source',300),'batch'=>numberField($op,'batch',1,100000)];}
+   $route=$input['route']??[];if(!is_array($route)||!array_is_list($route)||count($route)>50)fail('Поддерживается до 50 операций');$clean=[];
+   foreach($route as $op){if(!is_array($op))fail('Некорректная операция');$id=textField($op,'id',60,true);if(!preg_match('/^[a-zA-Z0-9_-]+$/',$id))fail('Некорректный код операции');$type=textField($op,'type',20,true);if(!in_array($type,['cut','sew','overlock','iron','qc','pack'],true))fail('Неизвестное требование к ресурсу');$dep=$op['dependencies']??[];if(!is_array($dep)||count($dep)>10)fail('Некорректные зависимости');foreach($dep as $d)if(!is_string($d)||strlen($d)>60)fail('Некорректная связь');$clean[]=['id'=>$id,'name'=>textField($op,'name',180,true),'type'=>$type,'seconds'=>numberField($op,'seconds',1,36000,true),'setup_minutes'=>numberField($op,'setup_minutes',0,480),'dependencies'=>array_values(array_unique($dep)),'source'=>textField($op,'source',300),'batch'=>numberField($op,'batch',1,100000)]+technologyMetadata($op,$c,$o);}
    // Incomplete norms can be saved; structural cycles and broken links cannot.
-   foreach(routeCheck($clean) as $err)if(!str_starts_with($err,'Нет нормы')&&!str_starts_with($err,'Нет источника')&&!str_starts_with($err,'Технология ещё'))fail($err);
-   query('UPDATE orders SET route=?,revision=revision+1 WHERE id=? AND company_id=?',[j($clean),$o['id'],$c['id']]);audit('route_saved',['order_id'=>$o['id'],'operations'=>count($clean)]);return ['saved'=>true];
+   foreach(routeCheck($clean) as $err)if(!str_starts_with($err,'Нет нормы')&&!str_starts_with($err,'Нет источника')&&!str_starts_with($err,'Нет подтверждения')&&!str_starts_with($err,'Технология ещё'))fail($err);
+   query('UPDATE orders SET route=?,revision=revision+1 WHERE id=? AND company_id=?',[j($clean),$o['id'],$c['id']]);$generations=[];foreach($clean as $op)if(isset($op['ai_origin']))$generations[]=$op['ai_origin']['generation_id'];foreach(array_unique($generations) as $generation)query("UPDATE ai_generations SET state='applied' WHERE id=? AND company_id=? AND order_id=?",[$generation,$c['id'],$o['id']]);audit('route_saved',['order_id'=>$o['id'],'operations'=>count($clean),'ai_generations'=>array_values(array_unique($generations))]);return ['saved'=>true];
   }
   [$orders,$tasks]=engineInputs($c);$hash=engineHash($c,$orders,$tasks);
   if($action==='plan_calculate'){

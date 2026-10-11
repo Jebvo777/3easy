@@ -3,7 +3,7 @@ declare(strict_types=1);
 const ENGINE_VERSION='easy3-calendar-list/1.0';
 function routeCheck(array $route):array{
  if(!$route)return ['Технология ещё не собрана'];$errors=[];$ids=array_column($route,'id');$map=array_column($route,null,'id');if(count(array_unique($ids))!==count($ids))$errors[]='Повторяется код операции';
- foreach($route as $op){if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];foreach($op['dependencies']??[] as $dep)if(!isset($map[$dep])||$dep===$op['id'])$errors[]='Некорректная зависимость: '.$op['name'];}
+ foreach($route as $op){if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if(!empty($op['ai_origin'])&&empty($op['norm_reviewed']))$errors[]='Нет подтверждения нормы AI: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];foreach($op['dependencies']??[] as $dep)if(!isset($map[$dep])||$dep===$op['id'])$errors[]='Некорректная зависимость: '.$op['name'];}
  $visited=[];$visiting=[];$visit=function(string $id)use(&$visit,&$visited,&$visiting,$map,&$errors){if(isset($visited[$id]))return;if(isset($visiting[$id])){$errors[]='В технологии обнаружен цикл';return;}$visiting[$id]=true;foreach($map[$id]['dependencies']??[] as $d)if(isset($map[$d]))$visit($d);unset($visiting[$id]);$visited[$id]=true;};foreach($ids as $id)$visit($id);
  $sinks=array_filter($route,fn($op)=>!array_filter($route,fn($n)=>in_array($op['id'],$n['dependencies']??[],true)));if(count($sinks)!==1)$errors[]='Нужна одна конечная операция выпуска';return array_values(array_unique($errors));
 }
