@@ -9,7 +9,7 @@ export function mountOrganization(host,{company,passport,onPerson=()=>{},onWorks
  function paint(){world.style.transform=`translate(${pan.x}px,${pan.y}px) scale(${scale})`;}
  function center(){pan={x:Math.max(20,(viewport.clientWidth-graph.width*scale)/2),y:14};paint();}
  const observer=new ResizeObserver(()=>{if(!disposed)center();});observer.observe(viewport);center();
- host.querySelectorAll('[data-node]').forEach(b=>b.onclick=()=>{const n=byId[b.dataset.node];if(n.person)onPerson(n.person);if(n.workshop)onWorkshop(n.workshop);if(n.brigade)onBrigade(n.brigade);});
+ host.querySelectorAll('[data-node]').forEach(b=>b.onclick=()=>{const n=byId[b.dataset.node];if(n.brigade)onBrigade(n.brigade);else if(n.person)onPerson(n.person);else if(n.workshop)onWorkshop(n.workshop);});
  const zoom=delta=>{const next=Math.max(.65,Math.min(1.5,scale+delta));pan.x=viewport.clientWidth/2-(viewport.clientWidth/2-pan.x)*next/scale;pan.y=viewport.clientHeight/2-(viewport.clientHeight/2-pan.y)*next/scale;scale=next;paint();};
  host.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>zoom(Number(b.dataset.zoom)*.1));host.querySelector('[data-center]').onclick=()=>{scale=1;center();};
  viewport.onpointerdown=ev=>{if(ev.target.closest('button')||ev.button!==0)return;drag={x:ev.clientX,y:ev.clientY,pan:{...pan}};viewport.setPointerCapture(ev.pointerId);viewport.classList.add('panning');};viewport.onpointermove=ev=>{if(!drag)return;pan={x:drag.pan.x+ev.clientX-drag.x,y:drag.pan.y+ev.clientY-drag.y};paint();};const stop=ev=>{if(viewport.hasPointerCapture(ev.pointerId))viewport.releasePointerCapture(ev.pointerId);drag=null;viewport.classList.remove('panning');};viewport.onpointerup=viewport.onpointercancel=stop;

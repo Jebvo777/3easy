@@ -15,21 +15,28 @@ export function distributeBrigades(input){
  return changes;
 }
 export function organizationGraph(company,input){
- const p=organizationPassport(input),nodes=[],links=[],seen=new Set(),workshops=p.structure.workshops,leaders=p.people.filter(person=>person.roles.some(r=>['owner','chief','technologist'].includes(r))),W=210,H=82,G=24;
- const columns=workshops.map(w=>{const brigades=p.structure.brigades.filter(b=>b.workshop===w.id),workers=p.people.filter(person=>person.workshop===w.id&&!leaders.includes(person));return {w,brigades,workers,width:Math.max(300,(Math.max(1,brigades.length)+(workers.some(person=>!person.brigade&&!brigades.some(b=>b.lead===person.id))?1:0))*250)};});
+ const p=organizationPassport(input),nodes=[],links=[],seen=new Set(),W=210,H=74,G=18;
+ const leaders=p.people.filter(person=>person.roles.some(r=>['owner','chief','technologist'].includes(r)));
+ const columns=p.structure.workshops.map(w=>{
+  const members=p.people.filter(person=>person.workshop===w.id&&!leaders.includes(person));
+  const groups=p.structure.brigades.filter(b=>b.workshop===w.id).map(b=>({brigade:b,lead:members.find(person=>person.id===b.lead),people:members.filter(person=>person.brigade===b.id&&person.id!==b.lead)}));
+  const free=members.filter(person=>!groups.some(group=>group.lead?.id===person.id||group.people.includes(person)));if(free.length)groups.push({brigade:null,lead:null,people:free});
+  groups.forEach(group=>group.width=Math.max(250,Math.min(3,Math.max(1,group.people.length))*(W+G)-G+30));
+  return {w,members,groups,width:Math.max(280,groups.reduce((sum,group)=>sum+group.width,0)+G*Math.max(0,groups.length-1))};
+ });
  const width=Math.max(840,columns.reduce((sum,c)=>sum+c.width,0)+G*(columns.length+1),leaders.length*(W+G)+G);
- const add=(node)=>{nodes.push({...node,width:node.width||W,height:node.height||H});return node.id;};
- add({id:'company',kind:'company',name:company,subtitle:'Предприятие',x:(width-260)/2,y:24,width:260});
- leaders.forEach((person,i)=>{add({id:'person:'+person.id,kind:'person',person,name:person.name,subtitle:person.roles.map(r=>structureRoles[r]).join(' · '),x:(width-leaders.length*(W+G)+G)/2+i*(W+G),y:142});seen.add(person.id);links.push(['company','person:'+person.id]);});
- const workY=leaders.length?278:156;let left=G,maxY=workY+H;
- for(const c of columns){const wid='workshop:'+c.w.id,x=left+(c.width-240)/2;add({id:wid,kind:'workshop',workshop:c.w,name:c.w.name,subtitle:`${c.workers.length} участников · ${p.resources.filter(r=>r.workshop===c.w.id).length} центров`,x,y:workY,width:240});
-  const chiefs=leaders.filter(person=>person.roles.includes('chief'));if(chiefs.length)chiefs.forEach(person=>links.push(['person:'+person.id,wid]));else links.push(['company',wid]);leaders.filter(person=>person.roles.includes('technologist')).forEach(person=>{if(!chiefs.includes(person))links.push(['person:'+person.id,wid,'technical']);});
-  const columnsHere=[...c.brigades.map(b=>({b,people:c.workers.filter(person=>person.brigade===b.id||person.id===b.lead)})),...(c.workers.some(person=>!person.brigade&&!c.brigades.some(b=>b.lead===person.id))?[{b:null,people:c.workers.filter(person=>!person.brigade&&!c.brigades.some(b=>b.lead===person.id))}]:[])];
-  columnsHere.forEach((group,i)=>{const gx=left+(c.width-columnsHere.length*250)/2+i*250+20;let parent=wid,y=workY+126;
-   if(group.b){parent=add({id:'brigade:'+group.b.id,kind:'brigade',brigade:group.b,name:group.b.name,subtitle:'Бригада',x:gx,y,height:64});links.push([wid,parent]);y+=96;}
-   const people=[...group.people].sort((a,b)=>Number(b.id===group.b?.lead)-Number(a.id===group.b?.lead));
-   for(const person of people){if(seen.has(person.id))continue;const id=add({id:'person:'+person.id,kind:'person',person,name:person.name,subtitle:person.roles.map(r=>structureRoles[r]).join(' · '),x:gx,y});links.push([parent,id]);if(person.id===group.b?.lead)parent=id;seen.add(person.id);y+=H+24;maxY=Math.max(maxY,y);}
-  });left+=c.width+G;
+ const add=node=>{nodes.push({...node,width:node.width||W,height:node.height||H});return node.id;};
+ const personNode=(person,x,y,extra={})=>{seen.add(person.id);return add({id:'person:'+person.id,kind:'person',person,name:person.name,subtitle:person.roles.map(r=>structureRoles[r]).join(' · '),x,y,...extra});};
+ add({id:'company',kind:'company',name:company,subtitle:'Предприятие',x:(width-260)/2,y:18,width:260});
+ leaders.forEach((person,i)=>{const id=personNode(person,(width-leaders.length*(W+G)+G)/2+i*(W+G),122);links.push(['company',id]);});
+ const workY=leaders.length?234:122;let left=G,maxY=workY+H+24;
+ for(const c of columns){const wid=add({id:'workshop:'+c.w.id,kind:'workshop',workshop:c.w,name:c.w.name,subtitle:`${c.members.length} участников · ${p.resources.filter(r=>r.workshop===c.w.id).length} центров`,x:left+(c.width-250)/2,y:workY,width:250});
+  const chiefs=leaders.filter(person=>person.roles.includes('chief'));if(chiefs.length)chiefs.forEach(person=>links.push(['person:'+person.id,wid]));else links.push(['company',wid]);leaders.filter(person=>person.roles.includes('technologist')&&!chiefs.includes(person)).forEach(person=>links.push(['person:'+person.id,wid,'technical']));
+  let gx=left;for(const group of c.groups){let parent=wid,y=workY+110;
+   if(group.brigade){if(group.lead&&!seen.has(group.lead.id))parent=personNode(group.lead,gx+(group.width-250)/2,y,{kind:'brigade',brigade:group.brigade,name:group.brigade.name,subtitle:'Бригадир · '+group.lead.name,width:250});else parent=add({id:'brigade:'+group.brigade.id,kind:'brigade',brigade:group.brigade,name:group.brigade.name,subtitle:'Бригада',x:gx+(group.width-250)/2,y,width:250});links.push([wid,parent]);y+=110;}
+   const count=Math.min(3,Math.max(1,group.people.length)),rowWidth=count*(W+G)-G;
+   group.people.forEach((person,i)=>{if(seen.has(person.id))return;const id=personNode(person,gx+(group.width-rowWidth)/2+(i%count)*(W+G),y+Math.floor(i/count)*(H+G));links.push([parent,id]);maxY=Math.max(maxY,y+Math.floor(i/count)*(H+G)+H+24);});gx+=group.width+G;
+  }left+=c.width+G;
  }
- return {nodes,links,width,height:maxY+30,passport:p};
+ return {nodes,links,width,height:maxY,passport:p};
 }

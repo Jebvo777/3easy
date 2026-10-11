@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {organizationPassport,organizationGraph,distributeBrigades} from '../../assets/js/organization-model.js';
+import {calendarOperation,calendarLanes,calendarBounds} from '../../assets/js/calendar-model.js';
+let checks=[];function ok(label,value){assert.ok(value,label);checks.push(label);console.log('OK',label);}
+const seed=JSON.parse(fs.readFileSync(process.argv[2]||'tools/qa/output/state.json','utf8')),p=organizationPassport(seed.company.passport),g=organizationGraph(seed.company.name,p);
+ok('Каждый человек представлен один раз',g.nodes.filter(n=>n.person).length===p.people.length&&new Set(g.nodes.filter(n=>n.person).map(n=>n.person.id)).size===p.people.length);
+ok('Демо-структура помещается в компактную высоту без мелкого шрифта',g.height<650&&g.nodes.every(n=>n.height>=74));
+ok('Организационные карточки не накладываются',g.nodes.every((a,i)=>g.nodes.slice(0,i).every(b=>a.x+a.width<=b.x||b.x+b.width<=a.x||a.y+a.height<=b.y||b.y+b.height<=a.y)));
+ok('Автосвязи указывают существующие узлы',g.links.every(([a,b])=>g.nodes.some(n=>n.id===a)&&g.nodes.some(n=>n.id===b)&&a!==b));
+const both=structuredClone(p);both.people[0].roles=['chief','technologist'];const combined=organizationGraph('QA',both);ok('Совмещение руководящих ролей не создаёт второго человека',combined.nodes.filter(n=>n.person?.id===both.people[0].id).length===1);
+const legacy=organizationPassport({people:[{id:'p',name:'QA',skills:['sew'],active:true}],resources:[{id:'r',type:'sew',worker:'p'}]});ok('Старая структура не выдумывает руководителя',legacy.people[0].roles.join(',')==='worker'&&legacy.resources[0].workshop==='w-main');
+const d={structure:{workshops:[{id:'w',name:'QA'}],brigades:[{id:'b1',name:'B1',workshop:'w',lead:'lead'},{id:'b2',name:'B2',workshop:'w',lead:'lead2'}]},people:[{id:'p1',name:'P1',roles:['worker'],skills:[],active:true,workshop:'w',brigade:''},{id:'p2',name:'P2',roles:['worker'],skills:[],active:true,workshop:'w',brigade:''},{id:'off',name:'Off',roles:['worker'],skills:[],active:false,workshop:'w',brigade:''}]};
+const assignments=distributeBrigades(d);ok('Распределение бригад балансирует свободных активных исполнителей',assignments.p1!==assignments.p2&&!assignments.off);
+const task={start:'2026-10-12 09:00:00',end:'2026-10-12 18:00:00',slots:[['2026-10-12 09:00:00','2026-10-12 13:00:00'],['2026-10-12 14:00:00','2026-10-12 18:00:00']]},start=calendarBounds([task]).start,bar=calendarOperation(task,start,1);
+ok('Операция имеет одну оболочку и настоящую паузу внутри',bar.segments.length===2&&bar.segments[0].left+bar.segments[0].width<bar.segments[1].left);
+const overlap={start:'2026-10-12 13:00:00',end:'2026-10-12 14:00:00',slots:[['2026-10-12 13:00:00','2026-10-12 14:00:00']]},lanes=calendarLanes([task,overlap],start,1);ok('Пересекающиеся оболочки не накладываются на одной дорожке',lanes.lanes===2&&lanes.items[0].lane!==lanes.items[1].lane);
+ok('Бары и заливки обрезаны границами периода',calendarLanes([task],start,1).items.every(({bar})=>bar.left>=0&&bar.left+bar.width<=100.00001&&bar.segments.every(s=>s.left>=0&&s.left+s.width<=100.00001)));
+const out=path.resolve(process.argv[3]||'tools/qa/output');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'organization-model.json'),JSON.stringify({passed:checks.length,checks},null,2));console.log({passed:checks.length});

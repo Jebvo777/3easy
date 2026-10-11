@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 function demoPassport(): array {
- return [
+ $passport=[
  'industry'=>'Швейное производство','city'=>'Санкт-Петербург','area'=>216,'timezone'=>'Europe/Moscow',
  'description'=>'Небольшая фабрика трикотажных изделий. Тестовые данные EASY3.',
  'structure'=>['workshops'=>[['id'=>'w-main','name'=>'Швейный цех']],'brigades'=>[['id'=>'b-sew','name'=>'Бригада пошива','workshop'=>'w-main','lead'=>'p-foreman']]],
@@ -28,6 +28,9 @@ function demoPassport(): array {
  'excluded'=>['Продажи бренда','Налоги компании','Кредитные платежи','Непроизводственная администрация'],
  'unknown'=>['Расходы на обслуживание оборудования'],'currency'=>'RUB']
  ];
+ foreach($passport['people'] as &$person){$person['roles']??=['worker'];$person['workshop']??='w-main';$person['brigade']??='';}unset($person);
+ foreach($passport['resources'] as &$r)$r['workshop']??='w-main';unset($r);
+ return $passport;
 }
 function demoLayout(): array {
  return ['width'=>18,'depth'=>12,'objects'=>[

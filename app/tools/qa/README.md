@@ -9,10 +9,14 @@ php tools/qa/engine_checks.php
 php tools/qa/finance_checks.php
 python -m pip install requests
 python tools/qa/integration.py http://127.0.0.1:8099
+python tools/qa/organization_checks.py http://127.0.0.1:8099 tools/qa/output
+python tools/qa/cache_checks.py http://127.0.0.1:8099 tools/qa/output
 cd tools/qa
 npm install
 cd ../..
 node tools/qa/ui_checks.mjs tools/qa/output/state.json
+node tools/qa/team_ui_checks.mjs tools/qa/output/state.json
+node tools/qa/organization_model_checks.mjs tools/qa/output/state.json
 node tools/qa/model_checks.mjs
 TZ=Europe/Moscow node tools/qa/refinement_checks.mjs
 ```
@@ -22,5 +26,7 @@ PHP-приложение должно быть запущено отдельно
 DOM-harness проверяет действия, формы, переходы и отсутствие WebGL, но не растеризацию, освещение, типографику и реальную работу перетаскивания в браузере. Проверка геометрии проверяет вершины, индексы, UV, замкнутость и реальное изменение геометрии при разрыве. Она не заменяет GPU-проверку изображения.
 
 Результат поставки: [QA_REPORT.md](../../QA_REPORT.md).
+
+`install_checks.php` создаёт временную БД только на локальном QA-сервере и удаляет её после проверки. Пример: `EASY3_QA_DSN='mysql:host=127.0.0.1;port=3307;charset=utf8mb4' EASY3_QA_USER=root php tools/qa/install_checks.php`. Сценарий не читает частную конфигурацию приложения. `organization_checks.py` проверяет отдельные цеха, связи структуры, сохранность истории и права; `cache_checks.py` проверяет HTTP-заголовки, содержимое сборки и локальные ресурсы. Карта команды проверяется через DOM и отдельную модель, а не графическую растеризацию.
 
 Новая проверка финансового охвата проверяет неизменность базы, неизвестные затраты и сопоставимость объёмов. Проверка доработки проверяет расстановку, навыки, автосвязи, календарные интервалы и отдельные карты материала. Для SQL-обновления импортировать миграцию дважды в копию БД предыдущей версии и сравнить количества старых сущностей; новая таблица должна остаться пустой. Полный `install.sql` проверять отдельно на новой учебной БД.
