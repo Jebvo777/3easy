@@ -19,7 +19,7 @@ export async function refresh(){setData(await api('state'));return S.data;}
 export function selected(){return S.data?.orders.find(o=>o.id===S.selectedOrder)||S.data?.orders[0];}
 export const badge=(label,type='',ico='')=>`<span class="badge ${type}">${ico?icon(ico):'<i class="dot"></i>'}${e(label)}</span>`;
 export const button=(label,ico='',cls='',attrs='')=>`<button class="btn ${cls}" ${attrs}>${ico?icon(ico):''}${e(label)}</button>`;
-export function aiNotice(text='Нейросети и импорт Excel — в разработке. Сейчас можно заполнить данные вручную.'){return `<div class="notice ai">${icon('sparkle')}<div><strong>В разработке</strong><br>${e(text)}</div></div>`;}
+export function aiNotice(text='Импорт произвольных файлов и автоматическое конструирование — в разработке. Данные можно заполнить вручную.'){return `<div class="notice ai">${icon('sparkle')}<div><strong>В разработке</strong><br>${e(text)}</div></div>`;}
 export function empty(text,action=''){return `<div class="empty">${icon('grid')}<p>${e(text)}</p>${action?`<div style="margin-top:20px">${action}</div>`:''}</div>`;}
 export function tabletClose(el){
  if(!el||matchMedia('(prefers-reduced-motion: reduce)').matches)return Promise.resolve();

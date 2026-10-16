@@ -3,7 +3,9 @@ from pathlib import Path
 import argparse, re, zipfile, shutil, hashlib
 p=argparse.ArgumentParser();p.add_argument('--output',required=True);p.add_argument('--db-config',required=True);p.add_argument('--ai-instruction',required=True);p.add_argument('--commit',required=True);a=p.parse_args()
 root=Path(__file__).resolve().parents[1];out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
-stage=out/'hosting';stage.mkdir(exist_ok=True)
+stage=out/'hosting'
+if stage.exists(): shutil.rmtree(stage)
+stage.mkdir()
 for f in (root/'app').rglob('*'):
     if not f.is_file():continue
     rel=f.relative_to(root/'app')

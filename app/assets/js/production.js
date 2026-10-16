@@ -6,7 +6,7 @@ const names={ready:'Готово к началу',running:'В работе',paus
 const eventNames={start:'Работа начата',pause:'Пауза',release:'Выпуск',transfer:'Передано дальше',quality:'Проверено ОТК',rework_release:'Доработка выполнена',rework_quality:'Повторная проверка'};
 const eventIcons={start:'play',pause:'pause',release:'shirt',transfer:'arrow',quality:'shield',rework_release:'check',rework_quality:'shield'};
 function pending(t){return Math.max(0,t.transferred-t.accepted-t.rework-t.scrap);}
-function available(t){let max=t.quantity-t.released;for(const id of t.dependencies){const dep=S.data.tasks.find(x=>x.id===id);if(dep)max=Math.min(max,dep.transferred-t.released);else if(S.data.company.role!=='worker')max=0;}return Math.max(0,max);}
+function available(t){let max=t.quantity-t.released;for(const id of t.dependencies){const dep=S.data.tasks.find(x=>x.id===id);if(dep){if(dep.planning_meta?.cutting&&dep.transferred<dep.quantity)return 0;max=Math.min(max,dep.transferred-t.released);}else if(S.data.company.role!=='worker')max=0;}return Math.max(0,max);}
 function canWork(t){return ['owner','foreman','chief','worker'].includes(S.data.company.role);}
 function canQC(){return ['owner','qc'].includes(S.data.company.role);}
 export async function render(el){main=el;if(S.data.company.role==='qc')tab='quality';if(!activeId||!S.data.tasks.some(t=>t.id===activeId)){activeId=S.data.tasks.find(t=>t.rework>0)?.id||S.data.tasks.find(t=>t.state==='running')?.id||S.data.tasks.find(t=>t.state!=='completed')?.id||S.data.tasks[0]?.id;}paint();return()=>{};}

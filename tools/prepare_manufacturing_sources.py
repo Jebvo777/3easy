@@ -29,7 +29,12 @@ for p in sorted(Path(sys.argv[2]).iterdir()):
     else:
         book=xlrd.open_workbook(str(p),encoding_override='cp1251',logfile=open('/dev/null','w'))
         sheets=[(s.name,[s.row_values(i) for i in range(s.nrows)]) for s in book.sheets()]
-    preferred=next((s for s in sheets if s[0]=='последовательность'),sheets[0])
+    def canonical_score(sheet):
+        count=0
+        for row in sheet[1]:
+            if len(row)>1 and isinstance(row[0],(int,float)) and row[0]>=1 and int(row[0])==row[0] and isinstance(row[1],str) and len(row[1])>9 and re.search('[а-яА-Я]',row[1]): count+=1
+        return count
+    preferred=next((s for s in sheets if s[0]=='последовательность' and canonical_score(s)>0),max(sheets,key=canonical_score))
     ops=[];seen=set();node='Подготовка';node_n=1
     for row in preferred[1]:
         found=False
