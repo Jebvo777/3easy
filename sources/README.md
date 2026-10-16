@@ -32,7 +32,7 @@
 | S25 | Девять примеров последовательностей | [Техническая коллекция](../app/data/examples.json) | — | technical-public-edition |
 | S26 | EASY3-Plan-checked-2026-10-13.zip | [Полная демка](../demos/plan-20261013/EASY3.html) | [Распакованные файлы](../demos/plan-20261013/) | extracted-demo |
 | S27 | Исследование пошива 12 октября | [HTML](../demos/sewing-research-20261012.html) | — | original |
-| S28 | Исходная фоновая анимация | [Подготовленный MP4](../app/assets/media/workspace-loop-20261016.mp4) | [Происхождение](../app/assets/media/README.md) | processed-animation |
+| S28 | Исходная фоновая анимация | [Подготовленный MP4](../app/assets/media/workspace-loop-20261016-fixed.mp4) | [Происхождение](../app/assets/media/README.md) | processed-animation |
 | S29 | Технические вопросы EASY3 | [Текст](original/S29-technical-questions.txt) | — | original |
 | S30 | Инструкция AI-провайдера | [Техническая редакция](text/S30-ai-provider-instructions.txt) | — | technical-public-edition |
 | S31 | Документация платёжного API | [Сводка](text/S31-payment-api-summary.md) | — | technical-summary |

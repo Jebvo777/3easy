@@ -478,12 +478,12 @@
     "original_name": "magnific_create-a-subtle-seamless-looping-animation-soft-cl_minimax_768p_16-9_24fps_83856.mp4",
     "original_bytes": 8283623,
     "original_sha256": "708e6afef23833da0278915f58a5786c729171f40fbcb49209ca01a309a436d2",
-    "archive_path": "app/assets/media/workspace-loop-20261016.mp4",
+    "archive_path": "app/assets/media/workspace-loop-20261016-fixed.mp4",
     "edition": "processed-animation",
-    "stored_bytes": 786444,
-    "stored_sha256": "5680c412aa0c7c032ab7185cb37ae60d8825e578aa4353966c345bd469ad7046",
+    "stored_bytes": 1151667,
+    "stored_sha256": "1164c6c453e147d2f1100f1e2142321346a4c4a662830b374fd8d41cbda472f6",
     "derived_paths": [
-      "app/assets/media/workspace-loop-20261016.mp4"
+      "app/assets/media/workspace-loop-20261016-fixed.mp4"
     ],
     "notes": "Опубликован подготовленный H.264-ролик без звука с переходом начала и конца; размер и SHA исходного MP4 сохранены отдельно. Это не запись разговора.",
     "original_in_repository": false

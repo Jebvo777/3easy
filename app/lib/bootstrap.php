@@ -24,7 +24,8 @@ function db():PDO{
  static $db=null;global $config;if($db)return $db;
  if(!empty($config['sqlite_path'])){$db=new PDO('sqlite:'.$config['sqlite_path']);$db->exec('PRAGMA foreign_keys=ON');}
  else{$dsn='mysql:host='.$config['host'].';port='.($config['port']??3306).';dbname='.$config['database'].';charset=utf8mb4';$db=new PDO($dsn,$config['username'],$config['password'],[PDO::ATTR_EMULATE_PREPARES=>false]);}
- $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);return $db;
+ $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
+ require_once __DIR__.'/schema.php';easy3EnsureOptionalColumns($db);return $db;
 }
 function query(string $sql,array $params=[]):PDOStatement{$q=db()->prepare($sql);$q->execute($params);return $q;}
 function one(string $sql,array $params=[]):array|null{$r=query($sql,$params)->fetch();return $r?:null;}

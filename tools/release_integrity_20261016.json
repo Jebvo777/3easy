@@ -1,0 +1,47 @@
+{
+  "release": "20261016.6",
+  "files": [
+    {
+      "path": "app/assets/manifest.json",
+      "bytes": 146,
+      "sha256": "69a2c790e106aab56ef41ba124ab4d58d592fdc5581eaa3de55f34897fff5e8c",
+      "git_blob": "f37b1aba389221793f38c716afe4cae95291e7ea"
+    },
+    {
+      "path": "app/assets/runtime/app.e829e98f38139423.js",
+      "bytes": 937973,
+      "sha256": "e829e98f381394232a5815fea591088b2242c6020644848d68e73519f11c914a",
+      "git_blob": "5390238b02a45937c74aa102caf8948928df2ab3"
+    },
+    {
+      "path": "app/assets/media/workspace-loop-20261016-fixed.mp4",
+      "bytes": 1151667,
+      "sha256": "1164c6c453e147d2f1100f1e2142321346a4c4a662830b374fd8d41cbda472f6",
+      "git_blob": "b9d2bf1fe128e1a99e35cb83f9792e04c378b919"
+    },
+    {
+      "path": "app/data/operations.json",
+      "bytes": 2707064,
+      "sha256": "5bc87109f5e12ec495a1891bc615462e48c1fb73873b4c5866525310e13fa6ba",
+      "git_blob": "1b044c93d592fb0949eeefb4dfed64f896d87f01"
+    },
+    {
+      "path": "demos/plan-20261013/assets/92f3fd90175c4bdf.png",
+      "bytes": 1944036,
+      "sha256": "92f3fd90175c4bdffea249f8f449d5c8b660cf63391d7c7fbf717880aa7a2ae2",
+      "git_blob": "491b44853f92580a8bb93d93d54c005082fc9fbd"
+    },
+    {
+      "path": "demos/plan-20261013/assets/a752fffe3f310f5d.png",
+      "bytes": 2735838,
+      "sha256": "a752fffe3f310f5d8497dfe803c9a9fc13ca0199a1d31cabba306d23cc4a1b09",
+      "git_blob": "bede30dc16c086b75eb95554c6f023897fc50a5d"
+    },
+    {
+      "path": "demos/plan-20261013/assets/ce275be624e0ccb8.png",
+      "bytes": 2161867,
+      "sha256": "ce275be624e0ccb8da9af799da6963794e4815ed65d88b91c0d13654677303ac",
+      "git_blob": "dc5fa7e8f0646bbdac7cede2e9fd210edd1a8c56"
+    }
+  ]
+}

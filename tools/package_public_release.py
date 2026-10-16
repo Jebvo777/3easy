@@ -5,6 +5,7 @@ import hashlib
 import json
 import shutil
 import zipfile
+import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", required=True)
@@ -41,6 +42,8 @@ for source in (root / "app").rglob("*"):
     "   Если AI-конфигурации ещё нет, скопируйте config.ai.example.php в\n"
     "   config.ai.local.php и укажите свой прежний ключ Artemox.\n"
     "5. Фоновое видео находится в assets/media. Сборка на хостинге не требуется.\n\n"
+    "6. Недостающие поля старых таблиц добавляются приложением автоматически\n"
+    "   при первом обращении к БД; данные не удаляются. Используйте SQL с этим архивом.\n\n"
     "Базовые проверки кода пройдены. Живой AI из среды разработки получил\n"
     "HTTP 403 / Cloudflare 1010; доступ провайдера с целевого хостинга не подтверждён.\n",
     encoding="utf-8")
@@ -49,19 +52,19 @@ for source in (root / "app").rglob("*"):
 for name in ["RELEASE_20261016.md", "PLAN_IMPLEMENTATION_20261016.md",
              "AI_TECHNOLOGY.md", "DESKTOP_20261016.md"]:
     shutil.copyfile(root / "docs" / name, stage / "docs" / name)
-archive = out / "EASY3_v5_20261016.zip"
+archive = out / "EASY3_v5_fixed_20261016.zip"
 with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as handle:
     for source in sorted(stage.rglob("*")):
         if source.is_file():
             handle.write(source, source.relative_to(stage).as_posix())
-sql = out / "EASY3_update_20261016.sql"
+sql = out / "EASY3_update_fixed_20261016.sql"
 shutil.copyfile(root / "app" / "database" / "update_20261016.sql", sql)
 with zipfile.ZipFile(archive) as handle:
     names = set(handle.namelist())
     manifest = json.loads(handle.read("assets/manifest.json"))
     required = {
         "index.php", "database/update_20261016.sql", "START-HERE.txt",
-        "assets/media/workspace-loop-20261016.mp4",
+        "assets/media/workspace-loop-20261016-fixed.mp4",
         "data/operations.json", "data/examples.json",
         manifest["js"], manifest["css"],
     }
@@ -69,9 +72,18 @@ with zipfile.ZipFile(archive) as handle:
     assert not {"config.local.php", "config.ai.local.php"} & names
     assert handle.read("database/update_20261016.sql") == sql.read_bytes()
     assert handle.testzip() is None, "ZIP CRC failure"
+    javascript = handle.read(manifest["js"])
+    javascript.decode("utf-8", errors="strict")
+    expected_js = manifest["js"].rsplit("/", 1)[-1].split(".")[1]
+    assert hashlib.sha256(javascript).hexdigest().startswith(expected_js), "JS filename/hash mismatch"
+    result = subprocess.run(["node", "--check", "--input-type=module"], input=javascript, capture_output=True)
+    if result.returncode:
+        raise RuntimeError("Packaged JS does not parse: " + result.stderr.decode(errors="replace")[:500])
+    for name in ["data/operations.json", "data/examples.json"]:
+        json.loads(handle.read(name))
 notes = (
     "Установочный архив приложения с фоновым видео; index.php находится в корне ZIP.\n\n"
-    "Сначала импортируйте EASY3_update_20261016.sql в текущую БД, затем загрузите файлы. "
+    "Сначала импортируйте EASY3_update_fixed_20261016.sql в текущую БД, затем загрузите файлы. "
     "Сохраните текущие config.local.php и config.ai.local.php: частные ключи в публичный ZIP не включены. "
     "При отсутствии AI-конфигурации используйте config.ai.example.php и прежний ключ Artemox.\n\n"
     "Код, расшифровка и новая демка сохранены в репозитории. Базовые проверки кода пройдены. "
