@@ -1,0 +1,35 @@
+name: Package hosting release
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/package-hosting.yml'
+      - 'tools/package_public_release.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: hosting-package
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout published source
+        shell: bash
+        run: |
+          git init
+          git remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+          git fetch --depth=1 origin "$GITHUB_SHA"
+          git checkout --detach FETCH_HEAD
+      - name: Package application and migration
+        shell: bash
+        run: python3 tools/package_public_release.py --output dist --commit "$GITHUB_SHA"
+      - name: Publish downloadable files
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="hosting-20261016-${GITHUB_SHA:0:7}"
+          gh release create "$tag" dist/EASY3_v5_20261016.zip dist/EASY3_update_20261016.sql --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "EASY3 v5 — 16.10.2026" --notes-file dist/RELEASE.txt --prerelease
