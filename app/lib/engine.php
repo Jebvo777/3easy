@@ -45,17 +45,17 @@ function roundedRatio(int $a,int $b,int $denominator):?int{
  if($a>intdiv(PHP_INT_MAX,$b))return null;$product=$a*$b;$q=intdiv($product,$denominator);$r=$product%$denominator;
  if($r>=intdiv($denominator,2)+$denominator%2)$q++;return $q>DEMO_MONEY_LIMIT?null:$q;
 }
-function orderEconomy(array $order,array $passport):array{
- $ec=$passport['economy']??[];$seconds=0;$missing=[];foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];else $seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
+function orderEconomy(array $order,array $passport,?int $plannedSeconds=null):array{
+ $ec=$passport['economy']??[];$seconds=$plannedSeconds??0;$missing=[];foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];elseif($plannedSeconds===null)$seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
  $labor=isset($ec['labor_hour_cents'])?roundedRatio($seconds,(int)$ec['labor_hour_cents'],3600):null;
  $common=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?roundedRatio($seconds,(int)$ec['monthly_common_cents'],3600*(int)$ec['monthly_hours']):null;
  $direct=array_sum(array_column($order['expenses'],'cents'));
  $cost=$labor===null||$common===null||$missing||!$order['route']?null:$labor+$common+$direct;if($cost!==null&&$cost>DEMO_MONEY_LIMIT){$cost=null;$missing[]='Масштаб суммы превышает границу демо';}
  if($labor===null)$missing[]=isset($ec['labor_hour_cents'])?'Масштаб труда превышает границу демо':'Неизвестна ставка труда';if($common===null)$missing[]=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?'Масштаб общих расходов превышает границу демо':'Неизвестны общие расходы';$missing=array_merge($missing,$ec['unknown']??[]);
  $price=$order['price_cents'];$value=$order['mode']==='CONTRACT'&&$price!==null?(int)$price*($order['price_basis']==='total'?1:(int)$order['quantity']):null;
- return ['norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:roundedRatio($cost,1,(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'method'=>'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
+ return ['quantity'=>(int)$order['quantity'],'norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:roundedRatio($cost,1,(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'method'=>'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
 }
-function calculatePlan(array $c,array $orders,array $tasks,string $strategy='deadline'):array{
+function calculateLegacyPlan(array $c,array $orders,array $tasks,string $strategy='deadline'):array{
  $p=$c['passport'];$zone=$p['timezone']??'Europe/Moscow';$tz=new DateTimeZone($zone);$shift=$p['shift']??[];$now=time();$errors=[];$warnings=[];$schedule=[];$busy=[];$done=[];
  if(!$orders)$errors[]='Создайте хотя бы одну цель';if(empty($shift['days']))$errors[]='Не заданы рабочие дни';
  $resources=array_values(array_filter($p['resources']??[],fn($r)=>$r['active']??false));$people=array_column($p['people']??[],null,'id');
@@ -80,11 +80,15 @@ function calculatePlan(array $c,array $orders,array $tasks,string $strategy='dea
  return ['engine'=>ENGINE_VERSION,'status'=>$errors?'incomplete':'feasible','errors'=>$errors,'warnings'=>$warnings,'schedule'=>$schedule,'strategy'=>$strategy,'calculated_at'=>date('c'),'timezone'=>$zone,'order_finishes'=>$ends,'late_orders'=>$late,'finish'=>$schedule?max(array_column($schedule,'end')):null,'economy'=>$economy,'layout'=>$c['layout'],'resource_snapshot'=>$p['resources']??[],'structure_snapshot'=>$p['structure']??null,'people_snapshot'=>$p['people']??[],'shift_snapshot'=>$shift,'order_revisions'=>array_column($orders,'revision','id'),'routes'=>array_column($orders,'route','id'),'assumptions'=>['Учебные нормы, указанные в операциях','Эвристика списка работ; оптимальность не доказана','Операция планируется целым объёмом с разрывом на смены','Параллельные ветви допустимы; количественные коэффициенты узлов 1:1','Материалы предполагаются готовыми; склад и поступления не моделируются','Начатые задания сохраняют факты и назначения. Просроченный начатый интервал получает допущение +1 час']];
 }
 function publishSchedule(array $c,array $plan):void{
- $snapshot=decode($plan['snapshot']);$entries=$snapshot['schedule'];
- // Replace only untouched tasks. Published plan snapshots and existing facts stay immutable.
- query("UPDATE tasks SET state='cancelled',revision=revision+1 WHERE company_id=? AND state='ready' AND released=0",[$c['id']]);
- $ids=[];foreach($entries as $t)$ids[$t['order_id'].'/'.$t['operation_id']]=$t['pinned']?$t['task_id']:uid();
- foreach($entries as $t){if($t['pinned'])continue;$dependencies=array_map(fn($dep)=>$ids[$t['order_id'].'/'.$dep],$t['dependencies']);query('INSERT INTO tasks (id,company_id,order_id,plan_id,operation_id,title,resource_id,worker_id,quantity,is_final,dependencies,planned_start,planned_end) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',[$ids[$t['order_id'].'/'.$t['operation_id']],$c['id'],$t['order_id'],$plan['id'],$t['operation_id'],$t['title'],$t['resource_id'],$t['worker_id'],$t['quantity'],$t['is_final']?1:0,j($dependencies),$t['start'],$t['end']]);}
- query("UPDATE plan_versions SET state='published',published_at=CURRENT_TIMESTAMP WHERE id=? AND company_id=?",[$plan['id'],$c['id']]);
- foreach(array_keys($snapshot['order_revisions']) as $orderId)query("UPDATE orders SET status='active' WHERE id=? AND company_id=?",[$orderId,$c['id']]);
+ $snapshot=decode($plan['snapshot']);$entries=$snapshot['schedule'];$modern=isset($snapshot['workspace_snapshot']);$ids=[];$retained=[];
+ foreach($entries as $t){$key=$modern?$t['job_key']:$t['order_id'].'/'.$t['operation_id'];$ids[$key]=!empty($t['task_id'])?$t['task_id']:uid();if(!empty($t['retained'])||!empty($t['pinned']))$retained[$ids[$key]]=true;}
+ foreach(rows("SELECT id FROM tasks WHERE company_id=? AND state='ready' AND released=0",[$c['id']]) as $t)if(!isset($retained[$t['id']]))query("UPDATE tasks SET state='cancelled',revision=revision+1 WHERE id=? AND company_id=?",[$t['id'],$c['id']]);
+ foreach($entries as $t){if(!empty($t['pinned']))continue;$key=$modern?$t['job_key']:$t['order_id'].'/'.$t['operation_id'];$dependencies=array_map(fn($dep)=>$ids[$modern?$dep:$t['order_id'].'/'.$dep],$t['dependencies']);$meta=$t['meta']??[];$meta['slots']=$t['slots'];$meta['workspace_revision']=$snapshot['workspace_snapshot'][$t['order_id']]['revision']??null;
+  if(!empty($t['retained'])){query('UPDATE tasks SET plan_id=?,resource_id=?,worker_id=?,dependencies=?,planned_start=?,planned_end=?,planning_meta=?,revision=revision+1 WHERE id=? AND company_id=?',[$plan['id'],$t['resource_id'],$t['worker_id'],j($dependencies),$t['start'],$t['end'],j($meta),$ids[$key],$c['id']]);continue;}
+  if($modern)query('INSERT INTO tasks (id,company_id,order_id,plan_id,operation_id,title,resource_id,worker_id,quantity,is_final,dependencies,planned_start,planned_end,planning_meta) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$ids[$key],$c['id'],$t['order_id'],$plan['id'],$t['operation_id'],$t['title'],$t['resource_id'],$t['worker_id'],$t['quantity'],$t['is_final']?1:0,j($dependencies),$t['start'],$t['end'],j($meta)]);
+  else query('INSERT INTO tasks (id,company_id,order_id,plan_id,operation_id,title,resource_id,worker_id,quantity,is_final,dependencies,planned_start,planned_end) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',[$ids[$key],$c['id'],$t['order_id'],$plan['id'],$t['operation_id'],$t['title'],$t['resource_id'],$t['worker_id'],$t['quantity'],$t['is_final']?1:0,j($dependencies),$t['start'],$t['end']]);
+ }
+ query("UPDATE plan_versions SET state='published',published_at=CURRENT_TIMESTAMP WHERE id=? AND company_id=?",[$plan['id'],$c['id']]);foreach(array_keys($snapshot['order_revisions']) as $orderId)query("UPDATE orders SET status='active' WHERE id=? AND company_id=?",[$orderId,$c['id']]);
 }
+
+require_once __DIR__.'/planning.php';

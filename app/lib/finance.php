@@ -9,7 +9,7 @@ function moneySum(array $values):?int{
 }
 function recognizedValue(string $orderId,array $tasks,array $plans):?int{
  $byId=array_column($plans,null,'id');$values=[];
- foreach($tasks as $t)if($t['order_id']===$orderId&&!empty($t['is_final'])&&$t['state']!=='cancelled'&&(int)$t['accepted']>0){$p=$byId[$t['plan_id']]??null;$ec=$p['snapshot']['economy'][$orderId]??null;$quantity=(int)$t['quantity'];$values[]=moneyShare($ec['value_cents']??null,(int)$t['accepted'],$quantity);}
+ foreach($tasks as $t)if($t['order_id']===$orderId&&!empty($t['is_final'])&&$t['state']!=='cancelled'&&(int)$t['accepted']>0){$p=$byId[$t['plan_id']]??null;$ec=$p['snapshot']['economy'][$orderId]??null;$quantity=(int)($p['snapshot']['order_quantities'][$orderId]??$ec['quantity']??$t['quantity']);$values[]=moneyShare($ec['value_cents']??null,(int)$t['accepted'],$quantity);}
  return moneySum($values);
 }
 function financeRollup(array $orders,array $plans,array $tasks,array $observations,array $current):array{
@@ -19,7 +19,7 @@ function financeRollup(array $orders,array $plans,array $tasks,array $observatio
   $id=$o['id'];$quantity=(int)$o['quantity'];$accepted=0;foreach($tasks as $t)if($t['order_id']===$id&&!empty($t['is_final'])&&$t['state']!=='cancelled')$accepted+=(int)$t['accepted'];
   $accepted=min($quantity,$accepted);$now=$current[$id];$baseline=$now;$version=null;$basis='Текущая оценка цели';
   foreach($plans as $p)if($p['state']==='published'&&isset($p['snapshot']['economy'][$id])){$baseline=$p['snapshot']['economy'][$id];$version=(int)$p['version_no'];$basis='Первый опубликованный план v'.$version;
-   foreach($p['snapshot']['schedule']??[] as $t)if($t['order_id']===$id&&(int)$t['quantity']!==$quantity){$baseline['result_cents']=null;$basis='Объём изменился: база несопоставима';break;}break;
+   $plannedQuantity=0;foreach($p['snapshot']['schedule']??[] as $t)if($t['order_id']===$id&&!empty($t['is_final']))$plannedQuantity+=(int)$t['quantity'];if($plannedQuantity!==$quantity){$baseline['result_cents']=null;$basis='Объём изменился: база несопоставима';}break;
   }
   $observation=$latest[$id]??null;$cost=null;$covered=0;
   if($observation){$cost=moneySum([$observation['direct_cents'],$observation['labor_cents'],$observation['common_cents']]);if($cost!==null&&(int)$observation['accepted_quantity']<=$accepted)$covered=(int)$observation['accepted_quantity'];else $cost=null;}

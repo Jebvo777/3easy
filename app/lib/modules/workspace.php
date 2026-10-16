@@ -1,0 +1,11 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/../engine.php';require_once __DIR__.'/goal.php';
+function workspaceAction(string $action,array $input):array{
+ $c=permit(['owner','foreman','technologist','chief']);if(!workspaceStorageAvailable())fail('Импортируйте SQL обновления 16 октября для нового ПЛАНА.',503);$o=orderRecord(textField($input,'order_id',32,true));$o['route']=decode($o['route']);
+ if($action==='workspace_open'){$r=workspaceRecord($c,$o);return ['workspace'=>$r??['id'=>null,'revision'=>0,'state'=>workspaceDefault($o)],'order_revision'=>(int)$o['revision']];}
+ if($action==='workspace_preview'){$s=workspaceNormalize($input['state']??[],$c,$o);[$orders,$tasks]=engineInputs($c);$result=calculateWorkspacePlan($c,$orders,$tasks,'deadline',[$o['id']=>$s]);if($c['role']!=='owner')unset($result['economy']);return ['result'=>$result];}
+ return command($action,$input,function(array $c)use($input){$o=orderRecord(textField($input,'order_id',32,true),true);$o['route']=decode($o['route']);$r=workspaceRecord($c,$o);checkRevision($r['revision']??0,$input);if((int)($input['order_revision']??-1)!==(int)$o['revision'])fail('Технология или условия заказа изменились. Обновите ПЛАН перед сохранением.',409);$s=workspaceNormalize($input['state']??[],$c,$o);$id=$r['id']??uid();$revision=($r['revision']??0)+1;
+  if($r)query('UPDATE plan_workspaces SET state_json=?,revision=?,actor_id=? WHERE id=? AND company_id=?',[j($s),$revision,$_SESSION['user_id'],$id,$c['id']]);else query('INSERT INTO plan_workspaces (id,company_id,order_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[$id,$c['id'],$o['id'],$revision,j($s),$_SESSION['user_id']]);query('INSERT INTO plan_workspace_revisions (id,workspace_id,company_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[uid(),$id,$c['id'],$revision,j($s),$_SESSION['user_id']]);query('UPDATE orders SET revision=revision+1 WHERE id=? AND company_id=?',[$o['id'],$c['id']]);audit('workspace_saved',['order_id'=>$o['id'],'revision'=>$revision,'mode'=>$s['mode']]);return ['saved'=>true,'revision'=>$revision,'order_revision'=>(int)$o['revision']+1,'id'=>$id];
+ });
+}

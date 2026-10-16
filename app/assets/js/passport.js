@@ -3,7 +3,7 @@ import {organizationPassport} from './organization-model.js';
 import {mountTeam} from './team-editor.js';
 import {icon} from './icons.js';
 const sections=[['company','Компания','passport'],['people','Команда','people'],['shift','Ритм работы','clock'],['resources','Ресурсы','machine'],['economy','Экономика','money']];
-export const typeNames={cut:'Раскрой',sew:'Прямострочная',overlock:'Оверлок',iron:'ВТО',qc:'Контроль качества',pack:'Упаковка',storage:'Хранение'};
+export const typeNames={cut:'Раскрой',sew:'Прямострочная',overlock:'Оверлок',iron:'ВТО',hand:'Ручная работа',qc:'Контроль качества',pack:'Упаковка',storage:'Хранение'};
 let current='company',draft=null,companyName='',dirty=false,teamCleanup=null;
 const clone=v=>structuredClone(v);
 function cents(v){if(v===''||v==null)return null;const n=Number(String(v).replace(',','.'));if(!Number.isFinite(n)||n<0)throw Error('Укажите положительную сумму');return Math.round(n*100);}
