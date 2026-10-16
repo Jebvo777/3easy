@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/package-hosting.yml'
       - 'tools/package_public_release.py'
+      - 'app/QA_REPORT.md'
+      - 'app/UPGRADE.md'
   workflow_dispatch:
 permissions:
   contents: write
