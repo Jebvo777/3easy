@@ -1,9 +1,9 @@
 {
   "status": "passed",
-  "provided_sources": 22,
-  "preserved_originals": 17,
-  "technical_editions": 5,
-  "authored_relative_links_checked": 171,
+  "provided_sources": 32,
+  "preserved_originals": 20,
+  "technical_editions": 12,
+  "authored_relative_links_checked": 219,
   "sql": {
     "tables": 61,
     "columns": 502,
