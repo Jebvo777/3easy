@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-16",
+  "scope": "Вложения текущей рабочей области; без обращения к другим беседам",
+  "attachments": [
+    {
+      "original_name": "Copy Old project(1)(1).zip",
+      "original_bytes": 52414998,
+      "original_sha256": "dd698661b104f28834afb6847f5b0467c4925d01b64ffa11a2c84a9da8170dd7",
+      "source_ids": [],
+      "publication": "private-container-not-published",
+      "note": "Сырой контейнер с рабочими данными, доступами или посторонним проектом не публикуется. Текущее приложение находится в app/, рабочая БД обновляется миграцией."
+    },
+    {
+      "original_name": "EASY3_php_demo_v2(1).zip",
+      "original_bytes": 1907431,
+      "original_sha256": "080a6bd6e4fa9da5a18b24b60895fafe038a46e5478b621820075bf0ed7918f0",
+      "source_ids": [],
+      "publication": "private-container-not-published",
+      "note": "Сырой контейнер с рабочими данными, доступами или посторонним проектом не публикуется. Текущее приложение находится в app/, рабочая БД обновляется миграцией."
+    },
+    {
+      "original_name": "eventarium_main(3)(1).sql",
+      "original_bytes": 39143295,
+      "original_sha256": "b2aeee808b874c5e67d4b1839ca77bd6c1948e4b61ad73d3d1371e53ad7ab3d0",
+      "source_ids": [],
+      "publication": "private-container-not-published",
+      "note": "Сырой контейнер с рабочими данными, доступами или посторонним проектом не публикуется. Текущее приложение находится в app/, рабочая БД обновляется миграцией."
+    },
+    {
+      "original_name": "system404_easy3.sql.zip",
+      "original_bytes": 69967,
+      "original_sha256": "627c9a451e684336a96f9f81b7672da0da52161d800b8b00599cd68a13c2d585",
+      "source_ids": [],
+      "publication": "private-container-not-published",
+      "note": "Сырой контейнер с рабочими данными, доступами или посторонним проектом не публикуется. Текущее приложение находится в app/, рабочая БД обновляется миграцией."
+    },
+    {
+      "original_name": "Демки и пояснения от клиента и новая демка план.zip",
+      "original_bytes": 16686302,
+      "original_sha256": "b76e7db71a6d5126d679afcbd55a0a8459d081c268d9434a89d62cabe7058029",
+      "source_ids": [
+        "S11",
+        "S12",
+        "S13",
+        "S14",
+        "S18",
+        "S26",
+        "S27",
+        "S29"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Документы.zip",
+      "original_bytes": 6125540,
+      "original_sha256": "3ad3a0caf22c8cd9d17db4098208f533759426a5c341e799f0ad1851e4aa3e4b",
+      "source_ids": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S15",
+        "S16",
+        "S17"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Номенклатура-операций.xlsx",
+      "original_bytes": 770999,
+      "original_sha256": "3b6d5844e6ade29b20b82b6355ccf151ac25c85571d079037f2c7700e3f537b2",
+      "source_ids": [
+        "S24"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Последовательности примеры.zip",
+      "original_bytes": 763921,
+      "original_sha256": "e63d7a4550c6a1260ff42e1019a6ad2d4c8a0960bf19d960ee7bd34955cb2b12",
+      "source_ids": [
+        "S25"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Правки которые сделать были последние и видео.zip",
+      "original_bytes": 8522105,
+      "original_sha256": "5b3f11c27e8264071f4d47f0c966cd160595a9b7b2f326b284576c10940e6380",
+      "source_ids": [
+        "S28",
+        "S30",
+        "S31",
+        "S32"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Проектирование_сервиса_диаграммы(1).zip",
+      "original_bytes": 2623757,
+      "original_sha256": "1db8bdad014cc9cf7047de2c9508608d4b065cf4cf824752b33ced13ffeca863",
+      "source_ids": [
+        "S09"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Расшифровка_видео.txt",
+      "original_bytes": 59159,
+      "original_sha256": "074781729570474c048c028d8c97e276152a0f482d4e699d83ef46de601d9b63",
+      "source_ids": [
+        "S23"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Схема базы данных(1).zip",
+      "original_bytes": 4991,
+      "original_sha256": "ffa566e34071a6b4390f52e4cedb7f2284592e3792427cbf97d99ca6f73b159f",
+      "source_ids": [
+        "S10"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    },
+    {
+      "original_name": "Чаты и звонки.zip",
+      "original_bytes": 178883,
+      "original_sha256": "9e538db0b618a3bd126c5d350137a1eb77b2f1594d48824ce01cc3dcff8ac314",
+      "source_ids": [
+        "S19",
+        "S20",
+        "S21",
+        "S22"
+      ],
+      "publication": "registered-source-or-technical-edition",
+      "note": "Точные публичные пути, редакции и хеши находятся в source_manifest.json. Внешние записи без загруженного оригинала не объявляются опубликованным видео."
+    }
+  ]
+}

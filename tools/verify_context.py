@@ -20,9 +20,9 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 manifest = json.loads((ROOT / 'sources/source_manifest.json').read_text())
-check(len(manifest) == 22, 'Expected 22 provided sources')
-check({x['id'] for x in manifest} == {f'S{n:02d}' for n in range(1,23)},
-      'Source register must cover S01 through S22 exactly once')
+check(len(manifest) == 32, 'Expected 32 registered sources')
+check({x['id'] for x in manifest} == {f'S{n:02d}' for n in range(1,33)},
+      'Source register must cover S01 through S32 exactly once')
 for item in manifest:
     path = ROOT / item['archive_path']
     check(path.is_file(), f'Missing source: {path}')

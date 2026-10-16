@@ -1,0 +1,23 @@
+[
+  {
+    "original_name": "4faff2c7-f76f-43b0-9770-4d4e45dd94ec.png",
+    "archive_path": "sources/design/20261016/login-button.png",
+    "bytes": 13610,
+    "sha256": "f6ddd91710a2d871e691fee0cd287395ddbd08c0d842ec2430620f4665128489",
+    "edition": "original"
+  },
+  {
+    "original_name": "905957b2-7d43-4662-8a4a-747aaa0dd7ad.png",
+    "archive_path": "sources/design/20261016/window-controls.png",
+    "bytes": 1656,
+    "sha256": "48b4faf0bf718dc78bb7dd383dfa98401d70305f93c87a5829cc8611c3e390cd",
+    "edition": "original"
+  },
+  {
+    "original_name": "d638ee9b-e06b-48f2-9f42-92576594762c.png",
+    "archive_path": "sources/design/20261016/home-button.png",
+    "bytes": 108259,
+    "sha256": "a97ba75559dad60859b7ef78f75450d877a2299dd9c12b93080a17b8d3afd15d",
+    "edition": "original"
+  }
+]

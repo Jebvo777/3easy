@@ -329,5 +329,237 @@
     "asr_segment_count": 164,
     "public_segment_count": 104,
     "notes": "Original MP4 is identified by size and SHA-256; only technical transcript and selected cropped UI frames are archived. No speaker diarization. Private/non-project passages explicitly marked."
+  },
+  {
+    "id": "S23",
+    "original_name": "Расшифровка_видео.txt",
+    "original_bytes": 59159,
+    "original_sha256": "074781729570474c048c028d8c97e276152a0f482d4e699d83ef46de601d9b63",
+    "archive_path": "sources/recordings/S23-transcript.md",
+    "edition": "technical-public-edition",
+    "stored_bytes": 58064,
+    "stored_sha256": "6e13bd9f1d9ad0ec8faca6a59d3e4eea0167737084596fc380419935b2bc54b4",
+    "duration_seconds": 2489,
+    "original_in_repository": false,
+    "video_url": "https://drive.google.com/file/d/1XzDDpd-BkwGZHJ5w-apsbORkNfMgXl9M/view",
+    "video_original_bytes": 464257948,
+    "notes": "Расшифровка предоставлена владельцем; имена заменены. Видео превысило лимит загрузки, повторного распознавания не было.",
+    "derived_paths": [
+      "docs/PLAN_RECORDING_20261013.md"
+    ]
+  },
+  {
+    "id": "S24",
+    "original_name": "Номенклатура-операций.xlsx",
+    "original_bytes": 770999,
+    "original_sha256": "3b6d5844e6ade29b20b82b6355ccf151ac25c85571d079037f2c7700e3f537b2",
+    "archive_path": "sources/original/S24-operation-catalog.xlsx",
+    "edition": "original",
+    "stored_bytes": 770999,
+    "stored_sha256": "3b6d5844e6ade29b20b82b6355ccf151ac25c85571d079037f2c7700e3f537b2",
+    "derived_paths": [
+      "app/data/operations.json"
+    ],
+    "notes": "В приложение и AI передаётся только техническая проекция; расценки и персональные сведения исключены из проекции."
+  },
+  {
+    "id": "S25",
+    "original_name": "Последовательности примеры.zip",
+    "original_bytes": 763921,
+    "original_sha256": "e63d7a4550c6a1260ff42e1019a6ad2d4c8a0960bf19d960ee7bd34955cb2b12",
+    "archive_path": "app/data/examples.json",
+    "edition": "technical-public-edition",
+    "stored_bytes": 449058,
+    "stored_sha256": "c088fc68116a121e38c0ba68e16a225f4d073c1e7430807f571db64191013828",
+    "original_in_repository": false,
+    "input_files": [
+      {
+        "original_name": "Брюки вельвет (1).xlsx",
+        "original_bytes": 86663,
+        "original_sha256": "bcdf99ccb2448582c36ba28c35a50bf794703e40ac66dd46f2c54cdf18960fff",
+        "selected_sheet": "брюки",
+        "operation_count": 75
+      },
+      {
+        "original_name": "Жакет Сорбона 25035-1 (1).xlsx",
+        "original_bytes": 54321,
+        "original_sha256": "ac15fa02be2a36f3ab6e535fced2db116f5d0e6f5632c0388cb108c69573bd46",
+        "selected_sheet": "последовательность",
+        "operation_count": 100
+      },
+      {
+        "original_name": "Лианн (1).xlsx",
+        "original_bytes": 112866,
+        "original_sha256": "0bf5e885cd9f227886fcc67457dc0c6bab397a56b2f8996e53c588862e86e6b3",
+        "selected_sheet": "Лист 1",
+        "operation_count": 124
+      },
+      {
+        "original_name": "Платье Аврора (2).xlsx",
+        "original_bytes": 2729753,
+        "original_sha256": "89763a60eba1b3d9d36664bc452afb954d8d74e3cd1fa9f054d94daa624f4bcf",
+        "selected_sheet": "Sheet1 (3)",
+        "operation_count": 111
+      },
+      {
+        "original_name": "Технологическая последоват.xls",
+        "original_bytes": 454656,
+        "original_sha256": "e1118128dc1968ac327a7c8b2c4af8f5dc2f2b235a66827386580e6640e73886",
+        "selected_sheet": "Sheet1",
+        "operation_count": 151
+      },
+      {
+        "original_name": "Технологическая.xls",
+        "original_bytes": 395264,
+        "original_sha256": "48c6529fe82380cba25cc6ea6875b49439720707782cae8e63b15cb047027c50",
+        "selected_sheet": "Sheet1",
+        "operation_count": 45
+      },
+      {
+        "original_name": "жакет Хоуп.xlsx",
+        "original_bytes": 42478,
+        "original_sha256": "f93ce3fb34b6479ea31db067d3358a6e0f6f4770570baef60f70bd19eefa4d17",
+        "selected_sheet": "последовательность",
+        "operation_count": 74
+      },
+      {
+        "original_name": "комбинезон Тео (1).xlsx",
+        "original_bytes": 52828,
+        "original_sha256": "0d385bc2c71c043e98b099f5b81103d91cdbaf40fd9e4563cb872e908af00011",
+        "selected_sheet": "Лист1",
+        "operation_count": 113
+      },
+      {
+        "original_name": "юбка вельвет (2).xlsx",
+        "original_bytes": 52991,
+        "original_sha256": "717aa83a9e9fd94b32fe1478bce54dd754562d4490375c430253dffcd3dc8532",
+        "selected_sheet": "юбка",
+        "operation_count": 52
+      }
+    ],
+    "notes": "Все девять примеров сохранены в технической редакции. Назначения людям, расценки и выплаты исключены; нормы требуют проверки человеком."
+  },
+  {
+    "id": "S26",
+    "original_name": "EASY3-Plan-checked-2026-10-13.zip",
+    "original_bytes": 7396051,
+    "original_sha256": "8f979e870cb120b38539e656673bc1e6505b4696809b6cf6dbac006b8c749abc",
+    "archive_path": "demos/plan-20261013/Plan.html",
+    "edition": "extracted-demo",
+    "stored_bytes": 125780,
+    "stored_sha256": "cd67266047dd2c441d8cfd55e954226274037b90294aad89b26b56a0ec9dd1cc",
+    "derived_paths": [
+      "demos/plan-20261013/Action.html",
+      "demos/plan-20261013/EASY3.html",
+      "demos/plan-20261013/Goal.html",
+      "demos/plan-20261013/Plan.html",
+      "demos/plan-20261013/assets/92f3fd90175c4bdf.png",
+      "demos/plan-20261013/assets/a752fffe3f310f5d.png",
+      "demos/plan-20261013/assets/ce275be624e0ccb8.png",
+      "demos/plan-20261013/assets/fd35f6255ddb0a0f.png",
+      "demos/plan-20261013/Как открыть.txt",
+      "demos/plan-20261013/Разбор новой UX-гипотезы.md"
+    ],
+    "notes": "Исходный ZIP представлен полным набором распакованных файлов demos/plan-20261013, без дублирования контейнера. Хеш ZIP сохранён для происхождения.",
+    "original_in_repository": false
+  },
+  {
+    "id": "S27",
+    "original_name": "EASY3-Sewing-Research-2026-10-12.html",
+    "original_bytes": 348112,
+    "original_sha256": "69a9e7bb98e24e5720d3cef22da2ddaf723847a415d21d498874ca1abc3689c8",
+    "archive_path": "demos/sewing-research-20261012.html",
+    "edition": "original",
+    "stored_bytes": 348112,
+    "stored_sha256": "69a9e7bb98e24e5720d3cef22da2ddaf723847a415d21d498874ca1abc3689c8"
+  },
+  {
+    "id": "S28",
+    "original_name": "magnific_create-a-subtle-seamless-looping-animation-soft-cl_minimax_768p_16-9_24fps_83856.mp4",
+    "original_bytes": 8283623,
+    "original_sha256": "708e6afef23833da0278915f58a5786c729171f40fbcb49209ca01a309a436d2",
+    "archive_path": "app/assets/media/workspace-loop-20261016.mp4",
+    "edition": "processed-animation",
+    "stored_bytes": 786444,
+    "stored_sha256": "5680c412aa0c7c032ab7185cb37ae60d8825e578aa4353966c345bd469ad7046",
+    "derived_paths": [
+      "app/assets/media/workspace-loop-20261016.mp4"
+    ],
+    "notes": "Опубликован подготовленный H.264-ролик без звука с переходом начала и конца; размер и SHA исходного MP4 сохранены отдельно. Это не запись разговора.",
+    "original_in_repository": false
+  },
+  {
+    "id": "S29",
+    "original_name": "Технические вопросы EASY3.txt",
+    "original_bytes": 8727,
+    "original_sha256": "6adaf7295fbe8a5398776e8752629046fd8df1d9eaca0696dd94160f563c87ba",
+    "archive_path": "sources/original/S29-technical-questions.txt",
+    "edition": "original",
+    "stored_bytes": 8727,
+    "stored_sha256": "6adaf7295fbe8a5398776e8752629046fd8df1d9eaca0696dd94160f563c87ba",
+    "notes": "Перечень вопросов для уточнения пилота; наличие вопроса не означает согласованную интеграцию или реализованный функционал."
+  },
+  {
+    "id": "S30",
+    "original_name": "Инструкция (3).docx",
+    "original_bytes": 17158,
+    "original_sha256": "7ff6c07f5e1239ecdc1c5736c4c058de2c8c8182ee24932eb96b3d77d3dde938",
+    "archive_path": "sources/text/S30-ai-provider-instructions.txt",
+    "edition": "technical-public-edition",
+    "stored_bytes": 3075,
+    "stored_sha256": "fea178037cc25ca52c043252f1df8cc03ca90837965e6b328fa784610230430e",
+    "original_in_repository": false,
+    "notes": "Извлечённый технический текст; API-ключ, логин и пароль кабинета удалены."
+  },
+  {
+    "id": "S31",
+    "original_name": "Документация по API (3).docx",
+    "original_bytes": 117294,
+    "original_sha256": "99dfeb68fa36589cdc5e882d3f9d0a918fe37c4734b89ff8128310dd8a67fa8a",
+    "archive_path": "sources/text/S31-payment-api-summary.md",
+    "edition": "technical-summary",
+    "stored_bytes": 1135,
+    "stored_sha256": "eb206a14851e00cbea79140a2035ab24df9f633da142daeeb24ad986198c2910",
+    "original_in_repository": false,
+    "notes": "Сводка смежного платёжного API. Реквизиты не публикуются; это не источник контракта AI."
+  },
+  {
+    "id": "S32",
+    "original_name": "Правки которые сделать были последние и видео.zip",
+    "original_bytes": 8522105,
+    "original_sha256": "5b3f11c27e8264071f4d47f0c966cd160595a9b7b2f326b284576c10940e6380",
+    "archive_path": "sources/design/20261016/index.json",
+    "edition": "original-assets-index",
+    "stored_bytes": 803,
+    "stored_sha256": "e4a4680fae54b92209c26343d09169a467059157aa7a608417a1e5e226b96068",
+    "input_files": [
+      {
+        "original_name": "4faff2c7-f76f-43b0-9770-4d4e45dd94ec.png",
+        "archive_path": "sources/design/20261016/login-button.png",
+        "bytes": 13610,
+        "sha256": "f6ddd91710a2d871e691fee0cd287395ddbd08c0d842ec2430620f4665128489",
+        "edition": "original"
+      },
+      {
+        "original_name": "905957b2-7d43-4662-8a4a-747aaa0dd7ad.png",
+        "archive_path": "sources/design/20261016/window-controls.png",
+        "bytes": 1656,
+        "sha256": "48b4faf0bf718dc78bb7dd383dfa98401d70305f93c87a5829cc8611c3e390cd",
+        "edition": "original"
+      },
+      {
+        "original_name": "d638ee9b-e06b-48f2-9f42-92576594762c.png",
+        "archive_path": "sources/design/20261016/home-button.png",
+        "bytes": 108259,
+        "sha256": "a97ba75559dad60859b7ef78f75450d877a2299dd9c12b93080a17b8d3afd15d",
+        "edition": "original"
+      }
+    ],
+    "derived_paths": [
+      "sources/design/20261016/login-button.png",
+      "sources/design/20261016/window-controls.png",
+      "sources/design/20261016/home-button.png"
+    ],
+    "notes": "Индекс трёх исходных изображений замечаний. Каждый PNG сохранён побайтно; весь архив с доступами не публикуется."
   }
 ]
