@@ -14,6 +14,8 @@ function demoPassport(): array {
  ['id'=>'p-sew-2','roles'=>['worker'],'workshop'=>'w-main','brigade'=>'b-sew','name'=>'Швея 02','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
  ['id'=>'p-sew-3','roles'=>['worker'],'workshop'=>'w-main','brigade'=>'b-sew','name'=>'Швея 03','role'=>'Швея','skills'=>['sew','overlock'],'active'=>true],
  ['id'=>'p-iron','name'=>'Оператор ВТО','role'=>'ВТО','skills'=>['iron'],'active'=>true],
+ ['id'=>'p-universal-1','name'=>'Универсальный исполнитель 01','role'=>'Учебный универсальный исполнитель','skills'=>['cut','sew','overlock','iron','hand','qc','pack'],'active'=>true],
+ ['id'=>'p-universal-2','name'=>'Универсальный исполнитель 02','role'=>'Учебный универсальный исполнитель','skills'=>['cut','sew','overlock','iron','hand','qc','pack'],'active'=>true],
  ['id'=>'p-qc','name'=>'Контролёр ОТК','role'=>'ОТК','skills'=>['qc','pack'],'active'=>true]],
  'shift'=>['start'=>'09:00','end'=>'18:00','break_start'=>'13:00','break_minutes'=>60,'days'=>[1,2,3,4,5]],
  'resources'=>[
@@ -23,6 +25,7 @@ function demoPassport(): array {
  ['id'=>'over-1','name'=>'Оверлок 01','type'=>'overlock','worker'=>'p-sew-3','active'=>true],
  ['id'=>'iron-1','name'=>'Стол ВТО','type'=>'iron','worker'=>'p-iron','active'=>true],
  ['id'=>'qc-1','name'=>'Стол ОТК','type'=>'qc','worker'=>'p-qc','active'=>true],
+ ['id'=>'hand-1','name'=>'Ручное место 01','type'=>'hand','worker'=>'p-universal-1','active'=>true],
  ['id'=>'pack-1','name'=>'Упаковка','type'=>'pack','worker'=>'p-qc','active'=>true]],
  'economy'=>['labor_hour_cents'=>45000,'monthly_common_cents'=>28500000,'monthly_hours'=>960,
  'excluded'=>['Продажи бренда','Налоги компании','Кредитные платежи','Непроизводственная администрация'],
@@ -41,6 +44,7 @@ function demoLayout(): array {
  ['id'=>'f-iron','resource'=>'iron-1','type'=>'iron','x'=>4.8,'z'=>1.7,'rotation'=>0,'zone'=>'Финиш'],
  ['id'=>'f-qc','resource'=>'qc-1','type'=>'qc','x'=>1.4,'z'=>1.7,'rotation'=>0,'zone'=>'Финиш'],
  ['id'=>'f-pack','resource'=>'pack-1','type'=>'pack','x'=>-1.9,'z'=>1.7,'rotation'=>0,'zone'=>'Финиш'],
+ ['id'=>'f-hand','resource'=>'hand-1','type'=>'hand','x'=>-5,'z'=>-.4,'rotation'=>0,'zone'=>'Ручная работа'],
  ['id'=>'f-stock','resource'=>'','type'=>'storage','x'=>-6,'z'=>2.2,'rotation'=>0,'zone'=>'Склад']],
  'links'=>[['f-cut','f-s1'],['f-s1','f-o1'],['f-o1','f-iron'],['f-iron','f-qc'],['f-qc','f-pack']]];
 }
