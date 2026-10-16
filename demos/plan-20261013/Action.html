@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EASY3 · Действие</title><style>:root{--ink:#f4f3ef;--muted:#c4c9d0;--dim:#aeb6c1;--line:#ffffff24;--warm:#ecd1b6;--surface:#282f3b9c;--ease:cubic-bezier(.22,.7,.25,1);font-family:'Segoe UI Variable','Segoe UI',sans-serif;color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-width:360px;color:var(--ink);background:#212a38}button,input,select,textarea{font:inherit}button,a{color:inherit}button{cursor:pointer;border:0;background:none}a{text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--warm);outline-offset:5px}button:disabled{opacity:.4;cursor:default}h1,h2,h3,p{margin:0}h1,h2,h3{font-weight:350}p{line-height:1.65}small{font-size:12px;color:var(--muted)}.landscape,.veil{position:fixed;inset:0;pointer-events:none;z-index:-2}.landscape{background:url("assets/ce275be624e0ccb8.png") center/cover no-repeat;transition:filter .7s,transform .7s;transform:scale(1.015)}.veil{z-index:-1;background:linear-gradient(90deg,#15223590,#1b243542 58%,#1621300a),linear-gradient(0deg,#131e30a1,transparent 75%);transition:background .5s}body[data-depth='orders'] .landscape{filter:blur(3px) saturate(.7);transform:scale(1.04)}body[data-depth='detail'] .landscape{filter:blur(9px) saturate(.6);transform:scale(1.06)}body[data-depth='create'] .landscape{filter:blur(20px) saturate(.3);transform:scale(1.09)}body[data-depth='detail'] .veil{background:#1f283da8}body[data-depth='create'] .veil{background:#242c3ae8}header{height:100px;padding:24px 48px;display:flex;align-items:center;gap:27px}.brand{width:98px;height:42px;display:block}.brand svg{width:100%;height:100%}.company{border-left:1px solid var(--line);padding-left:25px;font-size:12px;color:#e8e7e8}.lens{display:flex;gap:26px;margin:auto;align-items:center;font-size:12px}.lens .active{color:var(--warm);border-bottom:1px solid var(--warm);padding-bottom:8px}.lens button{color:var(--muted)}.account{font-size:11px;display:flex;gap:10px;align-items:center}.account select{background:transparent;border:0;max-width:155px;font-size:11px}.avatar{border:1px solid var(--line);border-radius:50%;width:32px;height:32px;display:grid;place-items:center}.workspace{max-width:1280px;width:calc(100% - 96px);margin:0 auto;min-height:calc(100svh - 160px)}.toolbar{display:flex;align-items:center;justify-content:space-between;height:50px;gap:20px}.breadcrumbs{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--muted)}.breadcrumbs button:hover{color:#fff}.breadcrumbs b{font-weight:400;color:#fff}.actions{display:flex;gap:25px;align-items:center}.new-order{font-size:12px;padding:10px 16px;border:1px solid #ffffff38;border-radius:24px;background:#ffffff08}.periods{display:flex;padding:4px;border:1px solid #ffffff25;border-radius:25px;gap:2px;background:#27314466}.periods button{font-size:11px;padding:8px 17px;border-radius:20px;color:var(--muted)}.periods button.active{background:#e8e7e1;color:#303743}.screen{animation:arrive .48s var(--ease)}@keyframes arrive{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.economy{padding-top:30px}.economy h1{font-size:40px;letter-spacing:-1.3px;line-height:1.18;margin:13px 0 14px;max-width:700px}.lede{font-size:14px;color:#d5d9df;max-width:660px}.trajectory{max-width:910px;position:relative;margin-top:25px;background:linear-gradient(115deg,#c8ced512,#8994a51c 60%,#f5dcbd16);border:1px solid #ffffff2b;border-radius:22px;backdrop-filter:blur(20px);box-shadow:0 35px 90px #0a111922;overflow:hidden}.numbers{display:flex;justify-content:space-between;align-items:end;padding:24px 40px 15px;position:relative;z-index:1;gap:20px}.numbers .now{padding-bottom:7px}.numbers small{display:block;font-size:12px;margin-bottom:11px}.numbers .amount{font-size:42px;font-weight:300;letter-spacing:-1.5px;line-height:1.15}.numbers .forecast{text-align:right}.numbers .forecast .amount{font-size:65px;color:#fae8d2;letter-spacing:-2px}.numbers .unit{font-size:.48em;color:var(--muted)}.numbers .sub{font-size:11px;color:#d0d3da;margin-top:10px}.trajectory svg{width:100%;height:100px;display:block;overflow:visible}.trajectory .baseline{stroke:#ffffff20;stroke-dasharray:3 7}.trajectory .motion-path{stroke:#f3dac0;stroke-width:2;fill:none;stroke-linecap:round}.trajectory .hintline{font-size:10px;fill:#c7cdd7}.trajectory .explanation{border-top:1px solid #ffffff22;padding:17px 39px;display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:12px;background:#18223115}.explanation button{display:flex;gap:22px;align-items:center;color:var(--warm);text-align:left}.arrow{font-size:20px;font-weight:300}.quiet-button{font-size:12px;border-bottom:1px solid #ffffff35;padding:4px 0}.facts-strip{display:flex;gap:45px;padding:24px 8px 28px;max-width:910px;align-items:center}.fact{font-size:12px;color:var(--muted)}.fact b{display:block;color:#fff;font-size:17px;font-weight:400;margin-top:7px}.fact button{text-align:left;padding:0}.fact span{font-size:11px}.load-track{width:150px;height:2px;background:#ffffff30;display:block;margin-top:10px}.load-track i{height:2px;background:#ccd8df;display:block}.dive{display:flex;justify-content:space-between;align-items:center;max-width:910px;padding:21px 6px;border-top:1px solid #ffffff38;gap:30px;text-align:left;width:100%}.dive strong{font-size:19px;font-weight:350;display:block;margin-bottom:6px}.dive .circle{width:45px;height:45px;border:1px solid #ffffff55;border-radius:50%;display:grid;place-items:center;transition:transform .25s}.dive:hover .circle{transform:translateX(6px);background:#ffffff12}.foot{display:flex;justify-content:space-between;gap:20px;padding:22px 48px 18px;font-size:10px;color:#bec5cf}.foot button{font-size:10px;color:var(--muted)}.page-heading{display:flex;align-items:end;justify-content:space-between;gap:30px;margin:25px 0 28px}.page-heading h1{font-size:39px;margin:10px 0;letter-spacing:-1px}.context-result{text-align:right;font-size:12px;color:var(--muted)}.context-result b{display:block;font-weight:350;font-size:25px;color:var(--warm);margin-top:8px}.order-stream{background:linear-gradient(100deg,#313b4b9c,#30374462);backdrop-filter:blur(25px);border-radius:20px;border:1px solid #ffffff25;padding:3px 28px}.order-object{width:100%;display:grid;grid-template-columns:32px minmax(230px,1.1fr) minmax(210px,1fr) 190px 20px;gap:24px;text-align:left;align-items:center;padding:25px 8px;border-bottom:1px solid var(--line);transition:background .3s,transform .3s}.order-object:last-child{border-bottom:0}.order-object:hover{background:#ffffff09;transform:translateX(4px)}.order-index{font-size:11px;color:#99a6b6}.order-state{font-size:10px;letter-spacing:.035em;color:var(--warm);display:block;margin-bottom:8px}.order-object h2{font-size:23px;letter-spacing:-.4px;margin-bottom:8px}.order-object p{font-size:11px;color:var(--muted)}.progress{height:3px;background:#dce2eb24;position:relative;margin:12px 0 8px}.progress i{display:block;background:#d8e0e8;height:3px}.progress .time-mark{position:absolute;top:-4px;height:11px;width:1px;background:#f5d5b0}.progress-caption{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.order-result{text-align:right}.order-result b{font-size:23px;font-weight:350;display:block;margin:7px 0}.order-result small{font-size:10px}.draft-row{margin:17px 0;padding:18px 24px;border:1px dashed #ffffff38;border-radius:12px;display:flex;justify-content:space-between;text-align:left;width:100%;background:#ffffff06}.detail-layout{display:grid;grid-template-columns:1.45fr 1fr;gap:35px;max-width:1170px}.detail-main{padding:30px 36px;background:linear-gradient(120deg,#8996a629,#2631409e);backdrop-filter:blur(18px);border:1px solid #ffffff30;border-radius:20px}.detail-main h2{font-size:29px;margin:10px 0 24px}.detail-number{font-size:64px;font-weight:300;letter-spacing:-2px}.detail-number span{font-size:25px}.meter-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:20px}.meter{height:3px;background:#ffffff18;margin:11px 0 23px}.meter i{height:3px;background:#e9d8c4;display:block;max-width:100%}.main-note{border-top:1px solid var(--line);padding-top:21px;margin-top:28px;display:flex;align-items:center;justify-content:space-between;gap:25px}.main-note p{font-size:13px;max-width:350px}.forecast-column{padding:22px 0}.forecast-column .row{margin-top:26px;padding-bottom:24px;border-bottom:1px solid var(--line)}.forecast-column .row:last-child{border:0}.row small{display:block;margin-bottom:10px}.row strong{font-size:27px;font-weight:350;display:block}.row .comparison{font-size:12px;color:var(--muted);margin-top:8px}.detail-bottom{display:flex;gap:30px;margin:24px 0 5px}.drawer-backdrop{position:fixed;inset:0;background:#10172179;z-index:10;backdrop-filter:blur(8px);display:flex;justify-content:flex-end}.drawer{width:480px;max-width:100%;height:100%;overflow:auto;background:#293240f5;padding:40px 36px;box-shadow:-25px 0 70px #0c101650;animation:arrive .3s}.drawer h2{font-size:30px;margin:30px 0 20px}.drawer p{font-size:14px;color:var(--muted);margin:14px 0}.drawer .close{float:right;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;font-size:23px}.detail-list{margin:25px 0}.detail-list div{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.detail-list b{font-weight:400;text-align:right}.drawer h3{font-size:18px;margin:25px 0 12px}.drawer .primary{margin-top:25px}.primary{background:#eee4d6;color:#2b3038;border:1px solid #f3e8d9;border-radius:7px;padding:13px 23px;min-height:46px;font-size:13px}.primary:hover{background:#fff3e4}.secondary{border:1px solid #ffffff36;border-radius:7px;padding:12px 19px;font-size:13px}.create{max-width:850px;margin:30px auto 0}.steps{display:flex;gap:7px;margin-bottom:30px}.steps button{height:3px;flex:1;background:#ffffff20;padding:0}.steps button.passed{background:#c7d0d9}.steps button.active{background:var(--warm)}.create h1{font-size:42px;letter-spacing:-1px;margin:14px 0}.create .lead{font-size:14px;color:var(--muted);margin-bottom:28px}.choice{display:flex;gap:14px;margin:23px 0}.choice button{flex:1;text-align:left;padding:22px;border:1px solid var(--line);border-radius:12px;background:#ffffff04}.choice button.active{border-color:#efd4b49c;background:#e4cfb311}.choice strong{display:block;font-size:20px;font-weight:350;margin-bottom:9px}.choice small{font-size:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:22px 0}.form-grid .full{grid-column:1/-1}label{display:block;font-size:12px;color:var(--muted)}input,select,textarea{display:block;width:100%;min-height:44px;border:1px solid #d6dce336;background:#b9c1cd0b;border-radius:6px;color:#fff;padding:12px 13px;margin-top:9px;font-size:14px}input:focus,textarea:focus,select:focus{outline:1px solid var(--warm)}input::placeholder,textarea::placeholder{color:#a6afbe}select option{background:#293341}textarea{resize:vertical;min-height:80px}.big-input{font-size:28px;padding:15px 0;background:transparent;border-width:0 0 1px;border-radius:0}.help{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6}.form-actions{display:flex;justify-content:space-between;align-items:center;gap:20px;border-top:1px solid var(--line);margin-top:30px;padding-top:24px}.form-actions .right{display:flex;gap:25px;align-items:center}.error{font-size:13px;color:#ffcfb9;min-height:21px;margin-top:15px}.material{padding:16px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:14px}.material small{display:block;margin-top:6px}.inline-editor{margin-top:18px;padding:22px;background:#ffffff06;border:1px solid var(--line);border-radius:12px}.inline-editor h3{font-size:20px}.inline-editor .form-grid{gap:15px;margin:15px 0}.review{padding:18px 0;font-size:13px;color:var(--muted);line-height:1.7}.review strong{color:white;font-weight:400}#toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);opacity:0;background:#ece7df;color:#303845;padding:13px 22px;border-radius:8px;font-size:12px;z-index:20;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}dialog{background:#293240;color:white;border:1px solid var(--line);border-radius:15px;max-width:450px;padding:28px}dialog::backdrop{background:#111923ac}dialog h2{margin-bottom:15px;font-size:25px}dialog p{font-size:13px;color:var(--muted)}dialog .form-actions{margin-top:20px}body:has(dialog[open]){overflow:hidden}.empty{padding:35px 0}.unavailable{font-size:18px;line-height:1.6;color:var(--muted)}@media(min-height:950px){.economy{padding-top:65px}.trajectory{margin-top:48px}.facts-strip{padding-top:30px;padding-bottom:35px}}@media(max-width:1100px){header{padding:20px 28px;gap:20px}.workspace{width:calc(100% - 56px)}.company{display:none}.order-object{grid-template-columns:20px 1.1fr 1fr 145px 15px;gap:15px}.order-object h2{font-size:20px}.detail-layout{gap:20px}.detail-main{padding:25px}.foot{padding:20px 28px}.lens{gap:20px}}@media(max-width:760px){header{height:80px;padding:18px 20px;gap:18px}.brand{width:80px}.lens{margin-left:auto;margin-right:0;gap:14px;font-size:11px}.account{display:none}.workspace{width:calc(100% - 40px)}.toolbar{height:auto;align-items:start;gap:15px}.actions{gap:10px;flex-wrap:wrap;justify-content:end}.periods button{padding:7px 10px}.new-order{font-size:11px;padding:9px 12px}.economy{padding-top:35px}.economy h1{font-size:31px}.lede{font-size:13px}.numbers{padding:25px 22px 14px;gap:14px}.numbers .amount{font-size:30px}.numbers .forecast .amount{font-size:43px}.numbers small{font-size:10px}.numbers .sub{font-size:10px}.trajectory{margin-top:27px}.trajectory .explanation{padding:16px 20px;font-size:11px}.trajectory .explanation>span{display:none}.facts-strip{gap:22px;flex-wrap:wrap}.fact{font-size:11px}.fact b{font-size:16px}.load-track{width:100px}.dive strong{font-size:17px}.dive small{font-size:11px}.foot{font-size:9px;padding:20px;flex-wrap:wrap}.page-heading{align-items:start}.page-heading h1{font-size:29px}.context-result{display:none}.order-stream{padding:0 18px}.order-object{grid-template-columns:1fr 90px;gap:16px;padding:22px 0}.order-index,.order-object>.arrow{display:none}.order-object .order-progress{grid-column:1/-1;grid-row:2}.order-object h2{font-size:21px}.order-result b{font-size:20px}.order-result small{font-size:9px}.detail-layout{grid-template-columns:1fr}.detail-main h2{font-size:25px}.detail-number{font-size:55px}.forecast-column{padding-top:0}.forecast-column .row{margin-top:15px;padding-bottom:17px}.detail-bottom{gap:20px;flex-wrap:wrap}.create{margin-top:27px}.create h1{font-size:31px}.choice{gap:10px}.choice button{padding:16px}.choice strong{font-size:18px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.form-actions{gap:10px}.form-actions .right{gap:12px}.drawer{padding:25px}.breadcrumbs{font-size:10px;gap:6px;flex-wrap:wrap}.numbers .unit{font-size:.45em}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Keep the overview inside the desktop viewport; longer forms scroll naturally. */
+@media(min-width:1101px) and (max-height:950px){.order-object{padding-top:20px;padding-bottom:20px}.page-heading{margin-bottom:22px}.order-object h2{font-size:22px}.order-stream+.help{margin-top:10px}}
+</style><style>.landscape{background-image:url("assets/a752fffe3f310f5d.png");background-position:center 56%}.veil{background:linear-gradient(90deg,#142133ad,#17253568),linear-gradient(0deg,#142334ab,transparent)}body[data-depth='decision'] .landscape{filter:blur(3px) saturate(.62);opacity:.7;transform:scale(1.03)}body[data-depth='decision'] .veil{background:linear-gradient(90deg,#1c293ca6,#1c293c5c),linear-gradient(0deg,#1d2b3ff0,transparent 80%)}body[data-depth='focus'] .landscape{filter:blur(20px);opacity:.12}body[data-depth='focus'] .veil{background:#202c3aed}.decision-workspace{width:calc(100% - 96px);max-width:1344px;margin:auto;padding-bottom:142px}.decision-workspace h1{font-size:34px;letter-spacing:-.8px}.order-title{display:flex;justify-content:space-between;align-items:end;gap:30px;margin:33px 0 22px}.order-title h1{margin-top:12px;font-size:32px}.order-title h1>span{font-size:23px;color:var(--muted);font-weight:300}.order-meta{display:flex;flex-direction:column;align-items:end;gap:13px;font-size:12px}.order-meta b{font-weight:400;margin-left:9px}.order-meta button{font-size:11px;color:var(--muted);padding:0}.three-decisions{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:65px;position:relative;margin:30px 0 28px}.three-decisions:before{content:'';position:absolute;left:12%;right:12%;height:1px;top:117px;background:linear-gradient(90deg,#ced7da0a,#cdd4d935,#ced7da0a);z-index:-1}.decision-object{padding:0 12px;display:flex;flex-direction:column;position:relative;transition:transform .35s}.decision-object:hover{transform:translateY(-5px)}.decision-art{height:145px;display:flex;align-items:center;color:#d6d4ca;opacity:.78}.decision-art svg{width:100%;max-width:300px;height:130px;stroke-width:1.2}.decision-state{font-size:10px;color:#c6d4d8;margin-top:17px;letter-spacing:.025em}.decision-state.warn{color:#e4c5a6}.decision-object h2{font-size:29px;font-weight:350;letter-spacing:.06em;margin:16px 0 8px}.decision-object>p{font-size:13px;color:var(--muted);margin:0 0 29px}.decision-object>strong{font-size:35px;font-weight:300;letter-spacing:-.7px;white-space:nowrap}.decision-object>strong small{font-size:14px;letter-spacing:0}.decision-object>strong.mode-title{font-size:35px}.object-detail{font-size:11px;color:var(--muted);line-height:1.7;margin:13px 0 25px;min-height:36px}.open-object{font-size:12px;display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-top:1px solid #ffffff42}.open-object i{font-style:normal;font-size:20px}.quiet-context{display:flex;justify-content:space-between;gap:30px;font-size:10px;color:var(--muted);margin:24px 12px 10px}.quiet-context a{border-bottom:1px solid #ffffff38;padding-bottom:5px}.decision-summary{position:fixed;z-index:5;bottom:22px;left:48px;right:48px;max-width:1344px;margin:auto;border-top:1px solid #e4e4df50;background:#202d3cea;backdrop-filter:blur(18px);display:flex;align-items:center;gap:55px;padding:19px 23px;border-radius:0 0 12px 12px;box-shadow:0 -15px 50px #1e2d3b30}.decision-summary small{display:block;font-size:10px}.decision-summary b{display:block;font-weight:350;font-size:24px;margin:8px 0 5px}.decision-summary span{font-size:10px;color:var(--muted)}.forecast-summary{min-width:280px}.summary-actions{display:flex;gap:25px;align-items:center;margin-left:auto}.text-button{font-size:11px;padding:4px 0;border-bottom:1px solid #ffffff32}.ready-summary b{font-size:19px}.decision-summary .primary{font-size:12px}.quiet-header{height:70px;padding-top:15px;padding-bottom:15px}.quiet-header .brand{width:75px;height:34px}.quiet-header .company{font-size:10px}.quiet-header .company small{font-size:9px}.quiet-header .account{font-size:10px}.focus-workspace{width:calc(100% - 64px);max-width:1440px}.focus-heading{display:flex;justify-content:space-between;align-items:center;gap:30px;margin:9px 0 19px}.focus-heading h1{font-size:30px;margin:13px 0 8px}.focus-heading p{font-size:12px;color:var(--muted)}.focus-back{font-size:10px;color:var(--muted)}.focus-heading-actions{display:flex;align-items:center;gap:30px}.exit-focus{width:37px;height:37px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-size:24px;color:var(--muted)}.cut-workspace{display:grid;grid-template-columns:190px minmax(0,1fr) 285px;gap:26px;height:calc(100vh - 340px);min-height:450px}.color-rail{border-right:1px solid var(--line);padding-right:20px}.color-rail>small{font-size:10px;display:block;margin:14px 0 20px}.color-rail button{display:flex;gap:12px;align-items:start;width:100%;text-align:left;padding:18px 8px;border-block:1px solid transparent;font-size:13px}.color-rail button.selected{background:#b7c5ce0e;border-color:var(--line)}.color-rail i{width:17px;height:17px;display:block;border:1px solid #ffffff40;border-radius:50%;flex-shrink:0}.color-rail button small{display:block;font-size:9px;line-height:1.7;margin-top:8px}.color-rail p{font-size:10px;line-height:1.7;color:var(--muted);margin:35px 7px}.cut-center{overflow:auto;padding:10px 4px 20px}.size-demand{display:flex;align-items:center;gap:35px;padding-bottom:24px;border-bottom:1px solid var(--line)}.size-demand>div{flex:1}.size-demand small{font-size:10px}.size-demand h2{font-size:25px;margin-top:10px}.size-demand b{display:block;font-weight:350;font-size:24px;margin-top:8px}.lay-proposals{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:25px 0}.lay-object{border:1px solid var(--line);border-radius:10px;padding:17px 20px;text-align:left;background:#a9bdcd06;min-height:165px}.lay-object.selected{border-color:#e4cfb2b5;background:#dec8a710}.lay-object>span{font-size:11px;color:var(--muted)}.marker-mini{display:flex;gap:8px;height:50px;margin:17px 0}.marker-mini i{border:1px solid #9caab7a0;background:#9dafc012;display:grid;place-items:center;flex:1;font-size:15px;font-style:normal}.lay-object b{display:block;font-weight:400;font-size:13px}.lay-object em{font-style:normal;color:var(--muted);margin:0 8px}.lay-object small{font-size:10px;display:block;margin-top:11px}.unavailable-lay{opacity:.45}.cut-result{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:var(--muted);padding:17px 0;border-top:1px solid var(--line)}.decision-panel{padding:16px 0 20px 24px;border-left:1px solid var(--line);overflow:auto}.decision-panel>small{font-size:10px}.decision-panel h2{font-size:24px;margin:10px 0 20px}.decision-panel p{font-size:12px;line-height:1.75;color:var(--muted);margin:18px 0}.decision-panel label{font-size:11px;margin:17px 0}.decision-panel input,.decision-panel select{font-size:12px;min-height:40px;padding:9px 11px}.panel-actions{display:flex;flex-direction:column;align-items:start;gap:17px;padding:17px 0;border-top:1px solid var(--line);margin-top:15px}.checkline{display:flex;gap:11px;align-items:start;font-size:12px;line-height:1.7;margin:22px 0}.checkline input{width:15px;min-height:15px;height:15px;margin:3px 0 0;flex-shrink:0}details{font-size:11px;color:var(--muted);margin-top:20px;line-height:1.7}summary{cursor:pointer}details p{font-size:11px!important}.organization-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:30px}.organization-choice{border-block:1px solid var(--line);text-align:left;padding:22px 25px;background:#aabbd405;display:flex;flex-direction:column}.organization-choice.selected{border-top-color:#dec8ac;background:#dec8ac0b}.choice-caption{font-size:10px;color:var(--muted)}.organization-choice h2{font-size:28px;margin:14px 0}.mode-preview{height:90px;margin:15px 0;display:flex;gap:8px;align-items:center}.mode-preview.whole{display:grid;grid-template-columns:repeat(4,22px);gap:12px;align-content:center}.mode-preview.whole i{display:block;border:1px solid #b5c3cf;width:22px;height:19px;border-radius:3px}.mode-preview.nodes{flex-wrap:wrap;align-content:center;max-width:285px}.mode-preview.nodes i{font-style:normal;font-size:10px;padding:10px 12px;border-bottom:1px solid #c8d6df80}.mode-preview.nodes b{display:block;width:100%;text-align:center;font-size:12px;font-weight:400;margin-top:7px}.mode-preview.flow i{font-style:normal;padding:17px 14px;border:1px solid var(--line);font-size:12px}.mode-preview.flow b{font-weight:300}.organization-choice p{font-size:12px;color:var(--muted);line-height:1.75;min-height:105px}.choice-forecast{margin:21px 0}.choice-forecast small{display:block;font-size:10px}.choice-forecast strong{font-weight:300;font-size:28px;display:block;margin-top:11px}.organization-choice>span:last-child{font-size:11px;color:var(--warm);margin-top:auto}.organization-explanation{display:grid;grid-template-columns:1fr 1fr auto;align-items:start;gap:35px;margin:25px 0}.organization-explanation>p{font-size:11px;color:var(--muted)}.organization-explanation details{margin:0}.organization-explanation .primary{font-size:11px}
+.shop-workspace{display:grid;grid-template-columns:1fr;position:relative;min-height:420px;height:calc(100vh - 370px)}.shop-workspace.has-panel{grid-template-columns:minmax(0,1fr) 300px;gap:24px}.shop-map-area{position:relative;min-width:0;border-top:1px solid var(--line)}.spatial-map{position:relative;width:100%;height:100%;min-height:420px}.map-connections{position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:#c2d0d9}.map-connections path{stroke:#c2d0d955;fill:none;stroke-width:1.2}.map-connections path.highlight{stroke:#e6d0b0;stroke-width:2}.map-connections path.faded{opacity:.2}.place{position:absolute;transform:translate(-50%,-50%);width:118px;min-height:67px;border:1px solid #b7c3cd45;border-radius:9px;background:#293748;padding:10px 8px;text-align:center;transition:opacity .25s,border-color .2s}.place small{display:block;font-size:9px;color:#aebdca}.place b{display:block;font-size:12px;font-weight:400;margin:6px 0}.place span{display:block;font-size:10px;color:var(--muted)}.place.constraint{border-color:#d8b68d9c}.place.chosen{background:#424d56;border-color:#edd5b4;box-shadow:0 10px 25px #111b243a}.place.dimmed{opacity:.26}.place.drop-ok{border:1px dashed #c3decf;opacity:1}.place em{font-size:10px;font-style:normal;display:block;color:#ddceb5;margin-top:6px}.shop-panel{padding-top:0}.panel-title{display:flex;justify-content:space-between;align-items:start;gap:12px}.panel-title h2{margin-top:8px}.panel-close{font-size:24px;line-height:1;padding:4px}.attention{color:var(--warm)!important}.work-rows{margin:20px 0}.work-rows>div{display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding:14px 0;cursor:grab}.work-rows input{width:14px;min-height:14px;height:14px;margin:0;flex-shrink:0}.work-rows span{font-size:11px;line-height:1.5;flex:1}.work-rows small{display:block;font-size:9px;margin-top:7px}.work-rows b{font-weight:400;color:var(--muted)}.block-drag{font-size:11px;border:1px dashed var(--line);padding:11px;cursor:grab}.shop-footer{display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:11px;color:var(--muted);padding:20px 0}.whole-shop{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;max-width:950px;margin:18px auto}.unit{display:flex;flex-direction:column;align-items:center;padding:15px 10px;border:1px solid var(--line);border-radius:12px;background:#b2c5d009}.unit.chosen{border-color:var(--warm)}.unit small{font-size:10px}.unit svg{height:40px;width:40px;margin:12px 0;color:#cdd5da}.unit span{font-size:10px;color:var(--muted)}.whole-shop>p{grid-column:1/-1;font-size:11px;color:var(--muted)}.scenario-sheet{position:absolute;z-index:4;inset:12px 15px;background:#253444f5;backdrop-filter:blur(20px);padding:25px 30px;box-shadow:0 15px 50px #14202eaa;border:1px solid #ffffff30;border-radius:13px;overflow:auto}.scenario-sheet h2{font-size:25px;margin:0 0 17px}.scenario-sheet>small{font-size:11px}.scenario-options{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:24px}.scenario-options article{padding:18px;border-top:1px solid var(--line)}.scenario-options article.selected{border-color:var(--warm);background:#decbb409}.scenario-options h3{font-size:22px}.scenario-options p{font-size:12px;color:var(--muted);margin:15px 0}.scenario-options strong{display:block;font-size:30px;font-weight:300}.scenario-options small{display:block;font-size:10px;margin:12px 0 22px}.scenario-options button{font-size:11px}.technology-focus{height:calc(100vh - 340px);min-height:450px;overflow:auto}.technology-focus.has-detail{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:45px}.product-heading{text-align:center;margin:30px 0}.product-heading h2{font-size:29px}.product-heading p{font-size:12px;color:var(--muted);margin-top:12px}.technology-nodes{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;margin:30px 0}.technology-nodes a{padding:24px 18px;border-top:1px solid var(--line);background:#b1c3cc04}.technology-nodes small{font-size:10px}.technology-nodes h2{font-size:22px;margin:16px 0 12px}.technology-nodes p{font-size:11px;color:var(--muted);min-height:36px}.technology-nodes span{font-size:10px;display:block;margin-top:20px}.node-heading{font-size:29px;margin:30px 0}.tech-operations>button{display:flex;align-items:center;gap:25px;justify-content:space-between;border-bottom:1px solid var(--line);padding:24px 0;text-align:left;width:100%}.tech-operations span{font-size:21px;flex:1}.tech-operations b{font-weight:350;font-size:16px;color:var(--muted)}.tech-operations i{font-style:normal}.decision-panel dl{font-size:11px;line-height:1.7}.decision-panel dt{color:var(--muted);margin-top:16px}.decision-panel dd{margin:5px 0 0}.overview-heading{margin:45px 0}.overview-heading h1{font-size:37px;margin:18px 0}.overview-heading p{font-size:13px;color:var(--muted)}.overview-orders{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin:50px 0}.overview-orders>a{padding:10px 0}.overview-orders i{display:block;width:14px;height:14px;border:1px solid #d6d5c5;border-radius:50%;margin:30px 0;background:#d6c8b3}.overview-orders h2{font-size:25px;margin:15px 0}.overview-orders p{font-size:14px;margin:15px 0}.overview-orders span{font-size:11px;color:var(--muted)}.scope-note{font-size:11px;color:var(--muted);margin:28px 0}.decision-dialog{width:570px;max-width:calc(100vw - 40px);max-height:85vh;overflow:auto;padding:30px}.decision-dialog .panel-close{float:right}.decision-dialog h2{font-size:27px;margin:10px 0 25px}.decision-dialog p{font-size:13px;line-height:1.7;margin:17px 0}.decision-dialog .primary{display:inline-block;margin-top:15px}.dialog-error{color:#f2c6a7}.execution-layer{display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:25px;margin-top:17px}
+@media(min-width:1101px) and (max-height:850px){.order-title{margin-top:15px}.three-decisions{margin-top:10px}.decision-art{height:105px}.decision-art svg{height:100px}.decision-object>p{margin-bottom:18px}.decision-object h2{font-size:25px}.decision-summary{bottom:12px;padding-block:14px}.cut-workspace,.technology-focus{min-height:370px}.shop-workspace,.spatial-map{min-height:340px}.organization-choice{padding:16px}.organization-choice p{min-height:90px}.organization-choice h2{font-size:25px}.mode-preview{height:60px}.choice-forecast{margin:14px 0}}
+@media(max-width:1100px){.decision-workspace{width:calc(100% - 48px)}.three-decisions{gap:26px}.decision-object{padding:0 5px}.decision-object h2{font-size:23px}.decision-object>strong{font-size:28px}.decision-object>strong small{font-size:11px}.decision-summary{left:24px;right:24px;gap:30px}.forecast-summary{min-width:220px}.decision-summary b{font-size:21px}.cut-workspace{grid-template-columns:150px 1fr 250px;gap:18px}.lay-proposals{grid-template-columns:1fr}.size-demand{gap:15px}.size-demand h2{font-size:21px}.organization-choices{gap:20px}.organization-choice{padding:18px}.organization-explanation{grid-template-columns:1fr 1fr}.shop-workspace.has-panel{grid-template-columns:1fr}.shop-workspace.has-panel{height:auto}.shop-panel{max-height:350px}.spatial-map{height:440px}.place{width:105px}.technology-nodes{gap:15px}.technology-nodes h2{font-size:19px}}
+@media(max-width:760px){.decision-workspace,.focus-workspace{width:calc(100% - 36px);padding-bottom:235px}.order-title{align-items:start;flex-direction:column;gap:18px;margin:20px 0}.order-title h1{font-size:27px}.order-title h1>span{font-size:19px}.order-meta{flex-direction:row;align-items:center;gap:25px;font-size:11px}.three-decisions{grid-template-columns:1fr;gap:26px;margin-top:20px}.three-decisions:before{display:none}.decision-object{display:grid;grid-template-columns:1fr 110px;gap:0 15px;border-bottom:1px solid var(--line);padding-bottom:5px}.decision-art{grid-column:2;grid-row:1/5;height:110px;align-self:center}.decision-object h2{font-size:24px;grid-column:1}.decision-state{font-size:9px;margin-top:12px}.decision-object>p{margin-bottom:16px}.decision-object>strong{font-size:28px;grid-column:1/-1}.object-detail,.open-object{grid-column:1/-1}.object-detail{min-height:0;margin-bottom:12px}.quiet-context{margin:25px 0;flex-direction:column;gap:15px;line-height:1.7}.decision-summary{left:10px;right:10px;bottom:8px;padding:14px 15px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.forecast-summary{min-width:0}.decision-summary b{font-size:19px}.ready-summary b{font-size:15px}.decision-summary small,.decision-summary span{font-size:9px}.summary-actions{grid-column:1/-1;margin:5px 0 0;justify-content:space-between}.decision-summary .primary{padding:10px 16px;min-height:40px;font-size:11px}.quiet-header{height:64px;padding:12px 18px}.quiet-header .brand{width:65px}.focus-heading{gap:15px;margin:12px 0 20px}.focus-heading h1{font-size:28px}.focus-heading p{font-size:11px}.focus-heading-actions{gap:12px}.focus-heading-actions .text-button{font-size:10px;max-width:110px}.exit-focus{flex-shrink:0}.cut-workspace{height:auto;min-height:0;display:flex;flex-direction:column;gap:15px}.color-rail{border-right:0;display:flex;flex-wrap:wrap;gap:5px;padding:0}.color-rail>small{width:100%;margin:0 0 10px}.color-rail button{width:calc(33.333% - 4px);padding:10px 5px;gap:6px;font-size:11px}.color-rail button small{font-size:8px}.color-rail i{width:12px;height:12px}.color-rail p{display:none}.size-demand{gap:20px;padding:16px 0}.size-demand h2{font-size:22px}.lay-proposals{grid-template-columns:1fr 1fr;gap:10px}.lay-object{padding:14px 10px;min-height:155px}.lay-object b{font-size:10px}.lay-object em{margin:0 4px}.lay-object small{font-size:9px}.decision-panel{border-left:0;border-top:1px solid var(--line);padding:20px 0;overflow:visible}.organization-choices{grid-template-columns:1fr;gap:22px;margin-top:20px}.organization-choice p{min-height:0}.organization-explanation{grid-template-columns:1fr;gap:20px}.shop-workspace,.shop-workspace.has-panel{height:auto;min-height:0}.shop-map-area{overflow-x:auto}.spatial-map{width:780px;height:480px}.place{width:100px}.shop-panel{max-height:none}.shop-footer{flex-wrap:wrap;line-height:1.7}.whole-shop{grid-template-columns:repeat(3,1fr);gap:10px}.unit{padding:10px}.unit small{font-size:9px}.scenario-sheet{position:relative;inset:auto;padding:18px 15px;margin-top:20px}.scenario-options{grid-template-columns:1fr;gap:15px}.technology-focus,.technology-focus.has-detail{height:auto;min-height:0;display:block}.technology-nodes{grid-template-columns:1fr 1fr;gap:15px}.technology-nodes a{padding:18px 10px}.technology-nodes h2{font-size:18px}.tech-operations span{font-size:18px}.overview-heading{margin:30px 0}.overview-heading h1{font-size:29px}.overview-orders{grid-template-columns:1fr 1fr;gap:25px;margin:30px 0}.overview-orders h2{font-size:21px}.execution-layer{flex-direction:column;align-items:start}.decision-dialog{padding:24px}.product-heading{text-align:left}}
+.work-rows .read-only-work{cursor:default}.shared-episode{grid-column:1/-1;display:flex;gap:12px;flex-wrap:wrap}.whole-shop .shared-episode button{font-size:12px}.shop-map-area{min-height:0}.whole-shop{max-height:calc(100% - 36px);overflow:auto;padding-bottom:12px}
+
+@media(min-width:1101px){.cut-workspace{height:calc(100vh - 390px);min-height:400px}.cut-center{display:flex;flex-direction:column;overflow:hidden}.size-demand{flex-shrink:0;padding-bottom:18px}.lay-proposals{overflow:auto;min-height:0;flex:1;margin:18px 0;gap:14px}.lay-object{min-height:145px;padding:14px 17px}.marker-mini{height:36px;margin:12px 0}.cut-result{flex-shrink:0;padding:12px 0}.shop-workspace{height:calc(100vh - 420px);min-height:380px}.spatial-map{min-height:380px}.shop-footer{padding:16px 0}.execution-layer{margin-top:12px}.scope-note{margin:14px 0}}
+
+.whole-shop:has(.shared-episode) .unit{padding:6px 10px}.whole-shop:has(.shared-episode) .unit svg{height:28px;margin:6px 0}
+@media(min-width:1101px){body[data-contour="action"] .shop-workspace{height:calc(100vh - 450px)}}
+</style></head><body data-contour="action"><div class="landscape" aria-hidden="true"></div><div class="veil" aria-hidden="true"></div><div id="app"></div><div id="toast" role="status"></div><script>/* Synthetic management model. No accounting rules or external data sources. */
+(function(root){
+const periods={
+ month:{label:'Октябрь 2026',end:'31 октября',nowIncome:5400000,nowFixed:1170000,nowVariable:4860000,income:19200000,fixed:3900000,variable:13240000,baseline:2900000,load:84,hours:3840,usedHours:3226},
+ week:{label:'5–11 октября',end:'11 октября',nowIncome:1700000,nowFixed:630000,nowVariable:1380000,income:4800000,fixed:910000,variable:4210000,baseline:125000,load:96,hours:960,usedHours:922},
+ day:{label:'9 октября',end:'концу дня',nowIncome:600000,nowFixed:90000,nowVariable:385000,income:900000,fixed:130000,variable:670000,baseline:160000,load:89,hours:160,usedHours:142}
+};
+const orders=[
+ {id:'jacket',code:'Ш-104',name:'Жакет двубортный',type:'contract',client:'Север · одежда',qty:5000,unit:'шт.',done:3500,time:71,deadline:'2026-10-28',forecastDate:'2026-10-31',price:1764,priceBasis:'unit',target:null,baselineCost:6195000,forecastCost:6750000,actualCost:3420000,status:'Срок сдвигается',note:'Сборка жакета ограничивает поток',cause:'Последовательность сборки и ожидание пачек сдвигают завершение. Свободные совместимые места пока не включены в распределение.',extra:555000,start:'2026-10-02',versions:[{label:'Исходный план · 2 октября',date:'2026-10-28',cost:6195000},{label:'Текущий прогноз · 9 октября',date:'2026-10-31',cost:6750000}],materials:'Костюмная ткань заказчика; нитки и фурнитура производства',wip:0,reject:14,downtime:18},
+ {id:'hoodie',code:'Ш-108',name:'Худи без молнии',type:'contract',client:'Контур · одежда',qty:2500,unit:'шт.',done:875,time:33,deadline:'2026-10-29',forecastDate:'2026-10-29',price:6600000,priceBasis:'total',target:null,baselineCost:5500000,forecastCost:5800000,actualCost:1300000,status:'В срок · затраты выше',note:'Материал дороже первоначального расчёта',cause:'Стоимость согласованной партии футера выше исходного расчёта. Время выполнения пока не изменилось.',extra:300000,start:'2026-10-05',versions:[{label:'Исходный план · 5 октября',date:'2026-10-29',cost:5500000},{label:'Текущий прогноз · 9 октября',date:'2026-10-29',cost:5800000}],materials:'Футер куплен под заказ',wip:120,reject:3,downtime:0},
+ {id:'trousers',code:'Ш-111',name:'Брюки прямые',type:'contract',client:'Линия · одежда',qty:3200,unit:'шт.',done:640,time:19,deadline:'2026-10-30',forecastDate:'2026-10-30',price:1181.25,priceBasis:'unit',target:null,baselineCost:2685000,forecastCost:2750000,actualCost:450000,status:'По плану',note:'Сборка идёт в заданном темпе',cause:'Текущий расход ниток и фурнитуры немного выше исходного основания. Влияние включено в прогноз.',extra:65000,start:'2026-10-06',versions:[{label:'Исходный план · 6 октября',date:'2026-10-30',cost:2685000},{label:'Текущий прогноз · 9 октября',date:'2026-10-30',cost:2750000}],materials:'Материалы производства',wip:26,reject:0,downtime:0},
+ {id:'coat',code:'С-012',name:'Куртка утеплённая',type:'own',client:'Собственная продукция',qty:1200,unit:'шт.',done:720,time:57,deadline:'2026-10-18',forecastDate:'2026-10-18',price:null,priceBasis:'unit',target:1600,baselineCost:1920000,forecastCost:1840000,actualCost:860000,status:'В пределах цели',note:'Прогноз себестоимости ниже заданного предела',cause:'Меньше потерь материала относительно исходного расчёта. Продажная цена не задана: прибыль от продажи не рассчитывается.',extra:-80000,start:'2026-10-02',versions:[{label:'Исходная цель · 2 октября',date:'2026-10-18',cost:1920000},{label:'Текущий прогноз · 9 октября',date:'2026-10-18',cost:1840000}],materials:'Плащевая ткань и утеплитель производства',wip:180,reject:7,downtime:0}
+];
+// Only confirmed plan versions affect this demo projection. Facts stay unchanged.
+try {
+ const bridges=JSON.parse(localStorage.getItem('easy3.system.5fa9724eed8445169364580e5ba52ad5.projections')||'{}');
+ for(const order of orders){if(JSON.parse(localStorage.getItem('easy3.system.5fa9724eed8445169364580e5ba52ad5.production-projection')||'{}')[order.id]?.schema===2)continue;const b=bridges[order.id];if(!b?.finish?.day||!b.baselineFinish||![b.work,b.baselineWork,b.remaining,b.finish.seconds,b.baselineFinish.seconds].every(Number.isFinite))continue;
+ const labourDelta=(b.work-b.baselineWork)*b.remaining*0.12;
+ const periodDelta=(b.finish.seconds-b.baselineFinish.seconds)/28800*18000;
+ const delta=Math.round(labourDelta)+Math.round(periodDelta);
+ order.forecastCost=Math.max(0,order.forecastCost+delta);order.forecastDate=b.finish.day;order.extra=order.forecastCost-order.baselineCost;
+ order.status=order.forecastDate<=order.deadline?'План обновлён · в срок':'План обновлён · срок сдвигается';order.note='Применена версия плана '+b.version;
+ order.cause='Подтверждённая версия '+b.version+' изменила календарный прогноз. Фактический выпуск и понесённые затраты сохранены.';
+ order.planProjection=b;order.versions.push({label:'Применённый план · версия '+b.version,date:b.finish.day,cost:order.forecastCost});
+ periods.month.fixed+=Math.round(periodDelta);periods.month.variable+=Math.round(labourDelta);
+ }
+} catch (_) {}
+// Research-based PLAN exports scope and remaining work, never a fabricated cost rate.
+try {
+ const b=JSON.parse(localStorage.getItem('easy3.system.5fa9724eed8445169364580e5ba52ad5.production-projection')||'{}').jacket;
+ if(b?.schema===2&&Number.isInteger(b.version)&&Number.isFinite(b.scope)){
+  const o=orders.find(o=>o.id==='jacket');
+  if(b.finish?.day)o.forecastDate=b.finish.day;
+  o.status=b.blocked?'Получен частичный план':'Получен производственный прогноз';
+  o.note='План v'+b.version+' · '+b.scope+' изделий в области';
+  o.cause=b.blocked?'План рассчитан только для доступной части. Дата всего заказа и прежняя оценка затрат не пересчитаны.':'Календарный прогноз обновлён. Для пересчёта экономики нужны согласованные ставки и правила распределения расходов.';
+  o.planProjection=b;
+ }
+} catch (_) {}
+const sum=(a,b)=>a+b;
+function revenue(o){if(o.type!=='contract'||!Number.isFinite(o.price))return null;return o.priceBasis==='total'?o.price:Number.isFinite(o.qty)?o.price*o.qty:null}
+function economics(o){const income=revenue(o),cost=o.forecastCost??null;return {income,cost,unitCost:cost!==null&&o.qty>0?cost/o.qty:null,result:income!==null&&cost!==null?income-cost:null,goal:o.type==='own'&&Number.isFinite(o.target)&&o.qty>0?o.target*o.qty:o.baselineCost??null}}
+function period(key){const p=periods[key]||periods.month;return {...p,nowCost:p.nowFixed+p.nowVariable,cost:p.fixed+p.variable,now:p.nowIncome-p.nowFixed-p.nowVariable,forecast:p.income-p.fixed-p.variable,delta:p.income-p.fixed-p.variable-p.baseline}}
+function parseNumber(v){if(String(v).trim()==='')return null;const n=Number(String(v).replace(',','.'));return Number.isFinite(n)&&n>=0?n:NaN}
+function missing(o){return [!o.name?.trim()?'название':null,!(o.qty>0)?'объём':null,o.type==='own'?o.target==null?'целевая себестоимость':null:o.price==null?'цена подряда':null,!o.deadline?'срок':null,!o.materials?.length?'материалы и расходы':null].filter(Boolean)}
+const api={periods,orders,period,revenue,economics,parseNumber,missing};root.TargetModel=api;if(typeof module!=='undefined')module.exports=api;
+})(typeof window==='undefined'?globalThis:window);
+</script><script>/* Synthetic fixtures. No factory norms, real people or production approvals. */
+(function (root) {
+  'use strict';
+  const copy = value => JSON.parse(JSON.stringify(value));
+  const source = { kind: 'demo-estimate', label: 'Учебная оценка для проверки модели', reference: 'research/03-WORK-MEASUREMENT', approved: false };
+  const nodes = [
+    ['cut', 'Раскрой и комплект', 'Материал → совместимый комплект'],
+    ['front', 'Полочки и карманы', 'Две листочки · симметрия'],
+    ['back', 'Спинка', 'Средний шов и шлица'],
+    ['sleeve', 'Рукава', 'Пара рукавов'],
+    ['collar', 'Воротник', 'Верхний и нижний воротник'],
+    ['lining', 'Подкладка', 'Отдельная параллельная ветвь'],
+    ['assembly', 'Сборка', 'Соединение подготовленных узлов'],
+    ['finish', 'Отделка и приёмка', 'ВТО → петли → пуговицы → ОТК'],
+  ].map(([id, name, output]) => ({ id, name, output }));
+  function seed() {
+    const m = {
+      schema: 2, organizationId: 'demo-forma', orderId: 'jacket', qty: 5000, accepted: 3500,
+      snapshot: '2026-10-12', deadline: '2026-10-28', revision: 1,
+      product: { version: 'J-02', name: 'Жакет двубортный', pattern: 'Лекала J-02 / демонстрация', sample: 'Учебный образец J-02', color: 'Графит', sizes: [{ size: '44', qty: 2500 }, { size: '46', qty: 2500 }], features: ['Прямой силуэт', 'Два кармана с листочкой', 'Воротник с лацканами', 'Подкладка', 'Две пуговицы', 'Клеевая прокладка и ВТО'] },
+      calendar: { start: '2026-10-12', shiftSeconds: 28800, weekdays: [1, 2, 3, 4, 5, 6], startHour: 9, notBefore: 0 },
+      organization: { division: 'mixed', movement: 'parallel', transfer: 20, resourceMode: 'groups', release: 'complete-kits', wipLimit: 240 },
+      materials: [
+        { id: 'shell-A', name: 'Костюмная ткань', owner: 'Заказчик', lot: 'A / графит', width: 150, inspected: true, compatible: true },
+        { id: 'lining-A', name: 'Подкладка', owner: 'Заказчик', lot: 'L1 / графит', width: 145, inspected: true, compatible: true },
+        { id: 'lining-B', name: 'Подкладка следующей партии', owner: 'Заказчик', lot: 'L2 / графит', width: null, inspected: false, compatible: false },
+        { id: 'fuse-A', name: 'Клеевая прокладка', owner: 'Производство', lot: 'F1', width: 90, inspected: true, compatible: true },
+      ],
+      cutting: { marker: 'J02-44-46', patternVersion: 'J-02', layers: 10, setsPerLayer: 2, markerLength: 4.8, regime: 'Режим подтверждён только в учебном образце; производственные параметры не заданы', futureReadyAt: 28800 },
+      components: ['shell', 'lining', 'fusing'],
+      kits: ['44', '46'].map(size => ({ id: 'K-' + size, size, color: 'Графит', shade: 'A', version: 'J-02', components: { shell: 400, lining: 400, fusing: 400 }, reserved: 0, accepted: true })),
+      pending: ['44', '46'].map(size => ({ id: 'P-' + size, size, qty: 260, material: 'lining-B' })),
+      nodes: copy(nodes), blocks: [], ops: [], cohorts: [],
+      quality: { acceptedUnit: 'garment', checkpoints: ['Комплектность кроя', 'Проба дублирования', 'Симметрия карманов', 'Посадка рукавов', 'Измерения и внешний вид'], defectRate: null },
+      reservations: [{ block: 'holes', lane: 0, start: 0, end: 57600, order: 'Брюки Ш-111', reason: 'Подтверждённая учебная бронь · 12–13 октября' }],
+      assumptions: ['Все количества и длительности вымышлены.', 'Прогноз предполагает приёмку с первого предъявления; вероятность брака не задана.', 'Общая загрузка остальных заказов неизвестна; учтена только явная бронь петельной машины.', 'Календарь: 8 часов, понедельник–суббота; перерывы включены в доступный фонд.'],
+    };
+    function block(id, name, stage, machine, count, skills, tools = []) {
+      m.blocks.push({ id, name, stage, machine, count, workers: count, skills, tools });
+    }
+    block('cutting', 'Раскрой', 0, 'cut', 2, ['cut'], ['patterns']);
+    block('fusing', 'Дублирование', 0, 'fuse', 2, ['press'], ['sample']);
+    block('front', 'Полочки', 1, 'straight', 4, ['sew', 'welt'], ['welt-guide']);
+    block('back', 'Спинка', 1, 'straight', 2, ['sew']);
+    block('sleeve', 'Рукава', 1, 'straight', 2, ['sew']);
+    block('collar', 'Воротник', 1, 'straight', 2, ['sew']);
+    block('lining', 'Подкладка', 1, 'straight', 3, ['sew']);
+    block('reserve', 'Совместимый резерв', 1, 'straight', 2, ['sew', 'welt'], ['welt-guide']);
+    block('assembly', 'Сборка', 2, 'straight', 4, ['sew', 'assembly']);
+    block('press', 'Финишное ВТО', 3, 'iron', 2, ['press'], ['form']);
+    block('holes', 'Петли и подготовка', 3, 'hole', 1, ['hole', 'hand'], ['template']);
+    block('buttons', 'Пуговицы', 3, 'button', 1, ['button']);
+    block('hand', 'Ручная подготовка', 3, 'hand', 2, ['hand'], ['template']);
+    block('qc', 'Приёмка', 4, 'hand', 2, ['quality'], ['measure']);
+    // One operation's quantity basis is one garment, including paired parts.
+    function op(id, name, node, blockId, machine, skill, seconds, pre, method, check, tools = []) {
+      m.ops.push({ id, version: 1, name, node, block: blockId, machine, skill, tools, pre, method,
+        input: pre.length ? 'Принятый выход предыдущих операций этого комплекта' : 'Проверенный материал и лекала J-02',
+        output: name + ' · принято для следующего перехода', check, unit: 'garment',
+        time: { observed: null, standard: null, planning: seconds, source: copy(source), conditions: 'J-02 · размеры 44/46 · графит · указанный метод и оснастка' },
+        phases: [{ name: 'Обработка', share: 1, worker: true, machine: true }], setup: 0 });
+    }
+    op('spread', 'Настилание', 'cut', 'cutting', 'cut', 'cut', 45, [], 'Настил по карте, без смешения оттенков', 'Лицо, направление, натяжение', ['patterns']);
+    op('cut', 'Вырезание и нумерация', 'cut', 'cutting', 'cut', 'cut', 80, ['spread'], 'По согласованным лекалам', 'Контур и надсечки', ['patterns']);
+    op('kit', 'Контроль и комплектование', 'cut', 'cutting', 'cut', 'cut', 40, ['cut'], 'Комплект верха, подкладки и клеевой одного размера', 'Комплектность и идентичность');
+    op('fuse', 'Дублирование и охлаждение', 'cut', 'fusing', 'fuse', 'press', 80, ['kit'], 'Загрузка → пресс → охлаждение → проверка', 'Проба соединения, усадка, отсутствие пузырей', ['sample']);
+    m.ops.at(-1).phases = [{ name: 'Загрузка', share: .2, worker: true, machine: true }, { name: 'Прессование', share: .4, worker: false, machine: true }, { name: 'Выгрузка и контроль', share: .15, worker: true, machine: true }, { name: 'Охлаждение', share: .25, worker: false, machine: false }];
+    op('darts', 'Вытачки полочек', 'front', 'front', 'straight', 'sew', 240, ['fuse'], 'Стачивание по разметке', 'Симметрия');
+    op('pockets', 'Два кармана с листочкой', 'front', 'front', 'straight', 'welt', 660, ['darts'], 'Последовательная обработка двух карманов с направителем', 'Рамка, уголки, симметрия', ['welt-guide']);
+    op('back', 'Спинка и шлица', 'back', 'back', 'straight', 'sew', 480, ['fuse'], 'Стачивание и обработка шлицы', 'Совпадение шва');
+    op('sleeves', 'Пара рукавов', 'sleeve', 'sleeve', 'straight', 'sew', 420, ['fuse'], 'Сборка двух рукавов', 'Парность');
+    op('collar', 'Воротник и лацканы', 'collar', 'collar', 'straight', 'sew', 300, ['fuse'], 'Обтачивание и формование', 'Форма и симметрия');
+    op('lining', 'Сборка подкладки', 'lining', 'lining', 'straight', 'sew', 480, ['kit'], 'Отдельная ветвь подкладки', 'Свобода и контрольные метки');
+    op('body', 'Соединить полочки и спинку', 'assembly', 'assembly', 'straight', 'assembly', 240, ['pockets', 'back'], 'Стачивание плечевых и боковых швов', 'Баланс изделия');
+    op('join-collar', 'Соединить воротник с изделием', 'assembly', 'assembly', 'straight', 'assembly', 180, ['body', 'collar'], 'Втачивание по меткам', 'Линия перегиба');
+    op('join-sleeves', 'Втачать рукава', 'assembly', 'assembly', 'straight', 'assembly', 300, ['join-collar', 'sleeves'], 'Распределение посадки', 'Посадка без складок');
+    op('join-lining', 'Соединить подкладку', 'assembly', 'assembly', 'straight', 'assembly', 360, ['join-sleeves', 'lining'], 'Закрытие изделия подкладкой', 'Свобода подкладки');
+    op('press', 'Финишное ВТО', 'finish', 'press', 'iron', 'press', 300, ['join-lining'], 'Обработка на форме и охлаждение', 'Форма, отсутствие лас', ['form']);
+    op('mark', 'Разметить петли и пуговицы', 'finish', 'holes', 'hand', 'hand', 120, ['press'], 'По шаблону застёжки', 'Расположение', ['template']);
+    op('holes', 'Выполнить петли', 'finish', 'holes', 'hole', 'hole', 120, ['mark'], 'Петельная машина после проверки образца', 'Размер и чистота петли');
+    op('buttons', 'Пришить две пуговицы', 'finish', 'buttons', 'button', 'button', 60, ['holes'], 'Пуговичная машина', 'Прочность крепления');
+    op('clean', 'Очистить изделие', 'finish', 'holes', 'hand', 'hand', 90, ['buttons'], 'Удаление ниток и осмотр', 'Чистота');
+    op('qc', 'Приёмка и упаковка', 'finish', 'qc', 'hand', 'quality', 120, ['clean'], 'Измерения, внешний вид и маркировка', 'Принятый жакет', ['measure']);
+    const through = end => { const found = new Set(); function add(id) { found.add(id); m.ops.find(o => o.id === id).pre.forEach(add); } add(end); return [...found]; };
+    for (const size of ['44', '46']) {
+      m.cohorts.push({ id: 'W-body-' + size, size, qty: 50, completed: through('body'), kind: 'wip', quality: 'in-process' });
+      m.cohorts.push({ id: 'W-fuse-' + size, size, qty: 35, completed: through('fuse'), kind: 'wip', quality: 'in-process' });
+      m.cohorts.push({ id: 'R-' + size, size, qty: 5, completed: m.ops.filter(o => o.id !== 'qc').map(o => o.id), kind: 'repair', quality: 'held', repairSeconds: 240 });
+    }
+    return m;
+  }
+  root.ProductionData = { seed, copy, nodes };
+  if (typeof module !== 'undefined') module.exports = root.ProductionData;
+})(typeof window === 'undefined' ? globalThis : window);
+</script><script>/* Deterministic teaching scheduler. Working-time axis; no industrial optimizer. */
+(function (root) {
+  'use strict';
+  const copy = x => JSON.parse(JSON.stringify(x));
+  function topo(m) {
+    const ordered = [], visiting = new Set(), done = new Set(), byId = new Map(m.ops.map(o => [o.id, o]));
+    if (byId.size !== m.ops.length) throw Error('Повтор идентификатора операции');
+    function visit(id) {
+      if (!byId.has(id)) throw Error('Не найдена зависимость ' + id);
+      if (visiting.has(id)) throw Error('Цикл зависимостей');
+      if (done.has(id)) return;
+      visiting.add(id); byId.get(id).pre.forEach(visit); visiting.delete(id); done.add(id); ordered.push(byId.get(id));
+    }
+    m.ops.forEach(o => visit(o.id)); return ordered;
+  }
+  function compatible(op, block) {
+    return !!block && (op.machine === 'hand' || op.machine === block.machine) && block.skills.includes(op.skill) && op.tools.every(t => block.tools.includes(t));
+  }
+  function kits(m) {
+    return m.kits.map(k => ({ ...k, complete: k.accepted && k.version === m.product.version && (m.product.colors ? m.product.colors.includes(k.color) : k.color === m.product.color) ? Math.max(0, Math.min(...m.components.map(c => k.components[c] || 0)) - k.reserved) : 0 }));
+  }
+  function cohorts(m) {
+    const groups = copy(m.cohorts);
+    kits(m).forEach(k => { if (k.complete) groups.push({ id: k.id, size: k.size, color: k.color, shade: k.shade, version: k.version, qty: k.complete, kind: 'ready', completed: ['spread', 'cut', 'kit'], quality: 'in-process' }); });
+    m.pending.forEach(p => { const lot = m.materials.find(l => l.id === p.material); if (lot?.inspected && lot.compatible && lot.width > 0) groups.push({ ...p, kind: 'cut', completed: [], quality: 'in-process', ready: m.cutting.futureReadyAt }); });
+    return groups;
+  }
+  function remaining(m) {
+    const rows = cohorts(m), amounts = Object.fromEntries(m.ops.map(o => [o.id, rows.reduce((s, c) => s + (c.completed.includes(o.id) ? 0 : c.qty), 0)]));
+    return { rows, amounts, qty: rows.reduce((s, c) => s + c.qty, 0) };
+  }
+  function calendar(m, seconds) {
+    if (!Number.isFinite(seconds)) return null;
+    let days = Math.floor(Math.max(0, seconds - 0.001) / m.calendar.shiftSeconds), d = new Date(m.calendar.start + 'T00:00:00Z');
+    while (!m.calendar.weekdays.includes(d.getUTCDay())) d.setUTCDate(d.getUTCDate() + 1);
+    while (days > 0) { d.setUTCDate(d.getUTCDate() + 1); if (m.calendar.weekdays.includes(d.getUTCDay())) days--; }
+    return { day: d.toISOString().slice(0, 10), seconds };
+  }
+  function issues(m) {
+    const errors = [];
+    try { topo(m); } catch (e) { errors.push(e.message); }
+    if (!Number.isInteger(m.organization.transfer) || m.organization.transfer < 1 || m.organization.transfer > 100) errors.push('Передача: целое число от 1 до 100 изделий');
+    if (!Number.isInteger(m.organization.wipLimit) || m.organization.wipLimit < 180 || m.organization.wipLimit > 1000) errors.push('Учебный лимит запуска: от 180 до 1000 изделий');
+    if (!['mixed', 'operations', 'whole', 'nodes'].includes(m.organization.division)) errors.push('Для этой организации ещё не заданы допустимые навыки и размещение');
+    if (m.organization.division === 'whole' && !(m.organization.wholeUnits > 0)) errors.push('Не задана мощность комплексных исполнителей');
+    const r = remaining(m);
+    m.ops.forEach(o => {
+      if (r.amounts[o.id] && !(Number.isFinite(o.time.planning) && o.time.planning > 0)) errors.push('Нет времени: ' + o.name);
+      if (!compatible(o, m.blocks.find(b => b.id === o.block))) errors.push('Нет совместимого места: ' + o.name);
+      if (Math.abs(o.phases.reduce((s, p) => s + p.share, 0) - 1) > 1e-8) errors.push('Неверный состав фаз: ' + o.name);
+    });
+    m.blocks.forEach(b => { if (!Number.isInteger(b.count) || b.count < 1 || b.count > 16 || !Number.isInteger(b.workers) || b.workers < 1 || b.workers > b.count) errors.push('Неверная мощность: ' + b.name); });
+    const wip = m.cohorts.reduce((s, c) => s + c.qty, 0);
+    if (m.accepted + wip + kits(m).reduce((s, k) => s + k.complete, 0) + m.pending.reduce((s, p) => s + p.qty, 0) > m.qty) errors.push('Количество превышает заказ');
+    if (r.qty + m.accepted > m.qty) errors.push('Повторное включение изделий');
+    return [...new Set(errors)];
+  }
+  function simulate(m) {
+    const errors = issues(m), rem = remaining(m), blocked = m.qty - m.accepted - rem.qty;
+    const base = { errors, blocked, scope: rem.qty, remaining: m.qty - m.accepted, quantities: rem.amounts, jobs: [], batches: [], loads: {}, first: null, last: null, finish: null, labor: null, knownLabor: 0, maxWip: 0 };
+    if (errors.length) return base;
+    const books = {}, resource = (id, count) => Array.from({ length: count }, (_, i) => { const key = id + ':' + i; books[key] = []; return key; });
+    const pools = Object.fromEntries(m.blocks.map(b => [b.id, { machine: resource('machine/' + b.id, b.count), worker: resource('worker/' + b.id, b.workers) }]));
+    const cooling = resource('cooling', 4);
+    const whole = m.organization.division === 'whole' ? resource('whole', m.organization.wholeUnits) : null;
+    const nodePools = m.organization.division === 'nodes' ? Object.fromEntries(m.nodes.map(n => [n.id, resource('node/' + n.id, m.organization.nodeUnits?.[n.id] || 1)])) : null;
+    const heldUntil = {};
+    let boundWorker = null;
+    function claim(pool) { return [...pool].sort((a, b) => (heldUntil[a] || 0) - (heldUntil[b] || 0))[0]; }
+    m.reservations.forEach(r => {
+      ['machine', 'worker'].forEach(type => { const key = type + '/' + r.block + ':' + r.lane; if (books[key]) books[key].push({ start: r.start, end: r.end, reservation: r.order }); });
+    });
+    function earliest(keys, ready, duration) {
+      let start = ready;
+      for (let tries = 0; tries < 100000; tries++) {
+        const conflicts = keys.flatMap(k => books[k]).filter(j => j.start < start + duration && j.end > start);
+        if (!conflicts.length) return start;
+        start = Math.max(...conflicts.map(j => j.end));
+      }
+      throw Error('Не удалось разместить работу');
+    }
+    function phase(op, ph, ready, duration, batch) {
+      const pool = pools[op.block], machines = ph.machine ? pool.machine : [null], workers = ph.worker ? (boundWorker ? [boundWorker] : pool.worker) : [null];
+      let best = null;
+      const options = !ph.machine && !ph.worker ? cooling.map(k => [k]) : machines.flatMap(a => workers.map(b => [a, b].filter(Boolean)));
+      options.forEach(keys => { const start = earliest(keys, ready, duration); if (!best || start < best.start) best = { keys, start, end: start + duration }; });
+      const job = { ...best, op: op.id, block: op.block, phase: ph.name, batch: batch.id, qty: batch.qty, labor: ph.worker ? duration : 0 };
+      best.keys.forEach(k => { books[k].push(job); }); base.jobs.push(job); return best.end;
+    }
+    const ordered = topo(m), released = [];
+    let lastRelease = m.calendar.notBefore || 0;
+    const groups = [...rem.rows].sort((a, b) => {
+      const rank = c => ['wip', 'repair'].includes(c.kind) ? -1 : (c.ready || 0);
+      return rank(a) - rank(b);
+    }).flatMap(c => {
+      const rows = []; for (let i = 0; i < c.qty; i += m.organization.transfer) rows.push({ ...copy(c), id: c.id + '/' + i, cohort: c.id, qty: Math.min(m.organization.transfer, c.qty - i) }); return rows;
+    });
+    for (const batch of groups) {
+      let release = Math.max(batch.ready || 0, m.calendar.notBefore || 0);
+      const worker = whole ? claim(whole) : null, nodeBindings = {};
+      if (worker) release = Math.max(release, heldUntil[worker] || 0);
+      if (batch.kind === 'ready' || batch.kind === 'cut') {
+        release = Math.max(release, lastRelease);
+        while (released.filter(x => x.start <= release && x.end > release).reduce((s, x) => s + x.qty, 0) + batch.qty > m.organization.wipLimit) {
+          release = Math.min(...released.filter(x => x.end > release).map(x => x.end));
+        }
+        lastRelease = release;
+      }
+      const ends = Object.fromEntries(batch.completed.map(id => [id, release]));
+      boundWorker = worker;
+      if (batch.kind === 'repair') {
+        const repairOp = { ...m.ops.find(o => o.id === 'join-sleeves'), id: 'repair' };
+        release = phase(repairOp, { name: 'Исправление посадки', worker: true, machine: true }, release, batch.repairSeconds * batch.qty, batch);
+      }
+      for (const op of ordered) {
+        if (batch.completed.includes(op.id)) continue;
+        let ready = Math.max(release, ...op.pre.map(id => ends[id] ?? release));
+        if (nodePools) {
+          nodeBindings[op.node] ||= claim(nodePools[op.node]);
+          boundWorker = nodeBindings[op.node];
+          ready = Math.max(ready, heldUntil[boundWorker] || 0);
+        }
+        for (const ph of op.phases) ready = phase(op, ph, ready, op.time.planning * ph.share * batch.qty, batch);
+        ends[op.id] = ready;
+        if (nodePools) heldUntil[boundWorker] = ready;
+      }
+      const end = ends.qc;
+      if (worker) heldUntil[worker] = end;
+      const entry = { id: batch.id, cohort: batch.cohort, qty: batch.qty, size: batch.size, kind: batch.kind, start: batch.ready || 0, release: batch.kind === 'repair' ? 0 : release, end };
+      // Historical WIP already occupies the release window at the snapshot.
+      entry.start = ['wip', 'repair'].includes(batch.kind) ? (m.calendar.notBefore || 0) : release;
+      released.push(entry); base.batches.push(entry);
+    }
+    base.labor = base.jobs.reduce((s, j) => s + j.labor, 0); base.knownLabor = base.labor;
+    m.blocks.forEach(b => { base.loads[b.id] = base.jobs.filter(j => j.block === b.id).reduce((s, j) => s + j.labor, 0) / b.workers; });
+    const end = Math.max(0, ...base.batches.map(b => b.end));
+    base.first = base.batches.length ? calendar(m, Math.min(...base.batches.map(b => b.end))) : null;
+    base.last = base.batches.length ? calendar(m, end) : null;
+    base.finish = blocked === 0 ? base.last : null;
+    base.bottleneck = Object.keys(base.loads).sort((a, b) => base.loads[b] - base.loads[a])[0];
+    base.maxWip = Math.max(0, ...base.batches.map(b => base.batches.filter(x => x.start <= b.start && x.end > b.start).reduce((s, x) => s + x.qty, 0)));
+    base.books = books;
+    base.daily = {};
+    base.batches.forEach(b => { const d = calendar(m, b.end).day; base.daily[d] = (base.daily[d] || 0) + b.qty; });
+    return base;
+  }
+  function move(m, ids, destination) {
+    const block = m.blocks.find(b => b.id === destination), ops = ids.map(id => m.ops.find(o => o.id === id));
+    if (!ids.length || ops.some(o => !o || !compatible(o, block))) throw Error('Перенос невозможен: проверьте оборудование, навык и оснастку');
+    ops.forEach(o => { o.block = destination; });
+  }
+  function scenarios(m) {
+    const options = [
+      { id: 'manual', title: 'Вынести ручную подготовку', detail: 'Разметка и очистка переходят на ручные места. Петельная машина остаётся для петель.', change: x => move(x, ['mark', 'clean'], 'hand') },
+      { id: 'parallel', title: 'Подключить совместимый резерв', detail: 'Блок двух карманов переносится на два свободных места с навыком и направителем.', change: x => move(x, ['pockets'], 'reserve') },
+      { id: 'transfer', title: 'Передавать по 10 изделий', detail: 'Меньше ожидание комплекта; транспортные и переналадочные затраты в этой демке ещё не измерены.', change: x => { x.organization.transfer = 10; } },
+    ];
+    return options.map(o => { const model = copy(m); o.change(model); return { id: o.id, title: o.title, detail: o.detail, model, result: simulate(model) }; });
+  }
+  root.ProductionModel = { copy, topo, compatible, kits, cohorts, remaining, calendar, issues, simulate, move, scenarios };
+  if (typeof module !== 'undefined') module.exports = root.ProductionModel;
+})(typeof window === 'undefined' ? globalThis : window);
+</script><script>(function (root) {
+  'use strict';
+  const M = ProductionModel;
+  const colors = [
+    { id: 'black', name: 'Чёрный', total: 2800, accepted: 2000, ready: 500, demand: { '44': 150, '46': 150 }, swatch: '#222831' },
+    { id: 'graphite', name: 'Графит', total: 1400, accepted: 900, ready: 200, demand: { '44': 60, '46': 60 }, swatch: '#7c858d' },
+    { id: 'milk', name: 'Молочный', total: 800, accepted: 600, ready: 100, demand: { '44': 50, '46': 50 }, swatch: '#d9d0bf' },
+  ];
+  const markers = [
+    { id: 'pair', name: '44 + 46', sizes: { '44': 1, '46': 1 }, length: 4.8, width: 145 },
+    { id: 's44', name: 'Только 44', sizes: { '44': 1, '46': 0 }, length: 2.35, width: 145 },
+    { id: 's46', name: 'Только 46', sizes: { '44': 0, '46': 1 }, length: 2.45, width: 145 },
+  ];
+  const modes = { whole: 'Одно изделие', nodes: 'По узлам', flow: 'Поток' };
+  function autoLays(s) {
+    const lays = []; let index = 1;
+    s.colors.forEach(c => {
+      const rest = { ...c.demand };
+      while (rest['44'] || rest['46']) {
+        const marker = rest['44'] && rest['46'] ? markers[0] : rest['44'] ? markers[1] : markers[2];
+        const layers = Math.min(s.maxLayers, ...Object.entries(marker.sizes).filter(([, count]) => count).map(([size, count]) => Math.floor(rest[size] / count)));
+        lays.push({ id: 'L' + index++, color: c.id, marker: marker.id, layers });
+        for (const [size, count] of Object.entries(marker.sizes)) rest[size] -= layers * count;
+      }
+    }); return lays;
+  }
+  function seed() {
+    const raw = ProductionData.seed(); raw.product.colors = colors.map(c => c.name); raw.product.color = 'Три цвета';
+    raw.kits = colors.flatMap(c => ['44', '46'].map(size => ({ id: 'K-' + c.id + '-' + size, size, color: c.name, shade: c.id + '-A', version: 'J-02', accepted: true, reserved: 0, components: { shell: c.ready / 2, lining: c.ready / 2, fusing: c.ready / 2 } })));
+    raw.cohorts.forEach(c => { c.color = 'Графит'; c.shade = 'graphite-A'; });
+    raw.pending = [];
+    raw.materials = []; // Material availability is owned by colors; derived below.
+    raw.cutting = { markerVersion: 'J-02', source: 'decision.lays' };
+    const s = { schema: 3, revision: 1, mode: 'flow', raw, colors: M.copy(colors).map(c => ({ ...c, available: true, width: 150 })), maxLayers: 40, lays: [] };
+    s.lays = autoLays(s); return s;
+  }
+  function cutting(s) {
+    const demand = Object.fromEntries(s.colors.map(c => [c.id, { ...c.demand }])), remaining = M.copy(demand), table = [0, 0], rows = [], releases = [];
+    let meters = 0, excess = 0;
+    for (const lay of s.lays) {
+      const color = s.colors.find(c => c.id === lay.color), marker = markers.find(m => m.id === lay.marker);
+      if (!color || !marker || !Number.isInteger(lay.layers) || lay.layers < 1 || lay.layers > s.maxLayers) throw Error('Проверьте раскладку и число слоёв: от 1 до ' + s.maxLayers);
+      const output = Object.values(marker.sizes).reduce((a, b) => a + b, 0) * lay.layers;
+      const valid = color.available && marker.width <= color.width;
+      const lane = table[0] <= table[1] ? 0 : 1, duration = 600 + lay.layers * 30 + output * 80;
+      const start = Math.max(table[lane], s.raw.calendar.notBefore || 0), end = valid ? start + duration : null;
+      if (valid) { table[lane] = end; meters += marker.length * lay.layers; }
+      rows.push({ ...lay, output, markerData: marker, valid, lane, start, end, meters: marker.length * lay.layers });
+      if (!valid) continue;
+      for (const [size, perLayer] of Object.entries(marker.sizes)) {
+        const supplied = perLayer * lay.layers, qty = Math.min(remaining[color.id][size], supplied);
+        excess += supplied - qty; remaining[color.id][size] -= qty;
+        if (qty) releases.push({ id: lay.id + '-' + size, size, color: color.name, qty, ready: end, completed: ['spread', 'cut', 'kit'], kind: 'cut', quality: 'in-process', shade: color.id + '-A' });
+      }
+    }
+    const deficit = Object.values(remaining).flatMap(Object.values).reduce((a, b) => a + b, 0);
+    return { rows, releases, deficit, excess, meters, remaining, last: Math.max(...table), planned: releases.reduce((n, c) => n + c.qty, 0) };
+  }
+  function calculate(s) {
+    const cut = cutting(s), model = M.copy(s.raw);
+    model.materials = s.colors.map(c => ({ id: c.id + '-A', color: c.name, width: c.width, available: c.available, source: 'Учебные партии комплекта' }));
+    model.cohorts.push(...cut.releases);
+    model.organization.division = s.mode === 'flow' ? 'operations' : s.mode;
+    model.organization.wholeUnits = 12;
+    model.organization.nodeUnits = { cut: 2, front: 4, back: 2, sleeve: 2, collar: 2, lining: 3, assembly: 4, finish: 4 };
+    const unassigned = model.ops.filter(o => !o.block), calc = M.simulate(model);
+    const work = model.ops.filter(o => !['spread', 'cut', 'kit'].includes(o.id));
+    const load = Object.fromEntries(model.blocks.map(b => {
+      const ops = work.filter(o => o.block === b.id);
+      const use = kind => ops.reduce((sum, o) => sum + (o.time.planning ?? 0) * o.phases.filter(p => p[kind]).reduce((v, p) => v + p.share, 0), 0);
+      return [b.id, Math.max(use('worker') / b.workers, use('machine') / b.count)];
+    }));
+    const cycle = calc.errors.length ? null : Math.max(...Object.values(load));
+    let shifts = 0, d = new Date(model.calendar.start + 'T12:00:00Z');
+    while (d.toISOString().slice(0, 10) <= model.deadline) { if (model.calendar.weekdays.includes(d.getUTCDay())) shifts++; d.setUTCDate(d.getUTCDate() + 1); }
+    const fund = shifts * model.calendar.shiftSeconds - (model.calendar.notBefore || 0), requiredTakt = fund / (model.qty - model.accepted);
+    const unitLabor = work.some(o => o.time.planning == null) ? null : work.reduce((sum, o) => sum + o.time.planning * o.phases.filter(p => p.worker).reduce((v, p) => v + p.share, 0), 0);
+    return { ...calc, model, cut, unassigned, load, cycle, requiredTakt, rhythmConstraint: Object.keys(load).sort((a, b) => load[b] - load[a])[0], unitLabor, minimumUnits: calc.labor == null ? null : Math.ceil(calc.labor / fund), readyKits: M.kits(model).reduce((sum, k) => sum + k.complete, 0), mode: s.mode };
+  }
+  function split(s, id) { const i = s.lays.findIndex(l => l.id === id), lay = s.lays[i]; if (!lay || lay.layers < 2) throw Error('Для разделения нужно хотя бы два слоя'); const a = Math.floor(lay.layers / 2); s.lays.splice(i, 1, { ...lay, layers: a }, { ...lay, id: 'L' + (Math.max(...s.lays.map(x => Number(x.id.slice(1)))) + 1), layers: lay.layers - a }); }
+  function merge(s, id) { const a = s.lays.find(l => l.id === id), b = s.lays.find(l => l.id !== id && l.color === a.color && l.marker === a.marker && l.layers + a.layers <= s.maxLayers); if (!b) throw Error('Нет совместимого настила для объединения в пределах ' + s.maxLayers + ' слоёв'); a.layers += b.layers; s.lays = s.lays.filter(l => l.id !== b.id); }
+  function variants(s) {
+    return [
+      { id: 'manual', title: 'Освободить петельное место', reason: 'Перенести разметку и очистку на совместимые ручные места.', edit: x => M.move(x.raw, ['mark', 'clean'], 'hand') },
+      { id: 'pockets', title: 'Отделить обработку карманов', reason: 'Передать два кармана на существующий резерв с нужным навыком и оснасткой.', edit: x => M.move(x.raw, ['pockets'], 'reserve') },
+    ].map(v => { const state = M.copy(s); v.edit(state); return { ...v, state, result: calculate(state) }; });
+  }
+  root.DecisionModel = { seed, colors, markers, modes, autoLays, cutting, calculate, split, merge, variants };
+})(typeof window === 'undefined' ? globalThis : window);
+</script><script>(function (root) {
+  'use strict';
+  const KEY = 'easy3.system.5fa9724eed8445169364580e5ba52ad5.decisions', D = DecisionModel, M = ProductionModel;
+  const read = () => JSON.parse(localStorage.getItem(KEY) || 'null') || { schema: 3, draft: D.seed(), active: null, versions: [], undo: [], events: [], assigned: false };
+  function save(r) { localStorage.setItem(KEY, JSON.stringify(r)); return r; }
+  function change(fn) { const r = read(), next = M.copy(r.draft); fn(next); D.cutting(next); M.topo(next.raw); r.undo.push(r.draft); r.undo = r.undo.slice(-20); next.revision = r.draft.revision + 1; r.draft = next; return save(r); }
+  function undo() { const r = read(); if (r.undo.length) { r.draft = r.undo.pop(); save(r); } return r; }
+  function confirm(ack, reviewed) { const r = read(), result = D.calculate(r.draft); if (!ack) throw Error('Подтвердите область и учебные условия'); if (reviewed && reviewed !== JSON.stringify(r.draft)) throw Error('Черновик изменился. Закройте окно и заново просмотрите план перед подтверждением.'); if (result.errors.length || !result.last) throw Error('Сначала распределите работы и уточните время');
+    r.active = { number: r.versions.length + 1, state: M.copy(r.draft), scope: result.scope, forecast: result.finish, partial: result.last, from: '2026-10-12', boundary: r.draft.raw.calendar.notBefore || 0 }; r.versions.push(M.copy(r.active)); r.assigned = false; save(r);
+    localStorage.setItem('easy3.system.5fa9724eed8445169364580e5ba52ad5.production-projection', JSON.stringify({ jacket: { schema: 2, version: r.active.number, scope: result.scope, blocked: result.blocked, finish: result.finish, laborSeconds: result.labor } })); return r;
+  }
+  function assign() { const r = read(); if (!r.active) throw Error('Сначала подтвердите план'); r.assigned = true; return save(r); }
+  function fact() { const r = read(); if (!r.active || !r.assigned) throw Error('Назначьте людей на учебный эпизод'); if (r.events.length) throw Error('Эта партия уже принята'); const repairs = r.draft.raw.cohorts.filter(c => c.kind === 'repair');
+    repairs.forEach(c => ['repaired', 'accepted'].forEach(type => r.events.push({ id: c.id + '/' + type, type, qty: c.qty, unit: 'garment', orderId: 'jacket', organizationId: 'demo-forma', size: c.size, color: c.color, productVersion: 'J-02', planVersion: r.active.number, operation: type === 'accepted' ? 'qc' : 'repair', actor: type === 'accepted' ? 'Ольга · вымышленная' : 'Ирина · вымышленная', occurredAt: '2026-10-12T10:30:00+03:00', source: 'explicit-demo-simulation' })));
+    repairs.forEach(c => { r.draft.colors.find(color => color.name === c.color).accepted += c.qty; });
+    r.draft.raw.accepted += repairs.reduce((a, c) => a + c.qty, 0); r.draft.raw.cohorts = r.draft.raw.cohorts.filter(c => c.kind !== 'repair'); r.draft.raw.calendar.notBefore = 5400; r.draft.revision++; r.undo = []; return save(r);
+  }
+  root.DecisionStore = { KEY, read, change, undo, confirm, assign, fact };
+})(typeof window === 'undefined' ? globalThis : window);
+</script><script>(function () {
+  'use strict';
+  const D = DecisionModel, M = ProductionModel, S = DecisionStore, app = document.querySelector('#app');
+  const execution = document.body.dataset.contour === 'action';
+  const n = v => v == null ? 'Не определено' : new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1 }).format(v);
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const day = v => v ? new Date((v.day || v) + 'T12:00:00').toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }) : 'Не определён';
+  const href = part => '#/order/jacket' + (part ? '/' + part : '');
+  const links = kind => (location.protocol === 'file:' ? { home: 'EASY3.html', goal: 'Goal.html', plan: 'Plan.html', action: 'Action.html' } : { home: 'EASY3.html', goal: 'Goal.html', plan: 'Plan.html', action: 'Action.html' })[kind];
+  const btn = (label, action, value = '', cls = 'text-button') => `<button class="${cls}" data-act="${action}" data-value="${esc(value)}">${label}</button>`;
+  const positions = { cutting: [7, 48], fusing: [21, 48], front: [39, 10], back: [39, 29], sleeve: [39, 48], collar: [39, 67], lining: [39, 86], reserve: [21, 84], assembly: [59, 48], press: [72, 15], holes: [86, 34], buttons: [86, 65], hand: [70, 84], qc: [94, 88] };
+  const nodePositions = { cut: [10, 49], front: [34, 12], back: [34, 30], sleeve: [34, 49], collar: [34, 68], lining: [34, 87], assembly: [62, 49], finish: [86, 49] };
+  let record, state, result, color = 'black', layId = null, focus = null, selected = new Set(), scenarios = false, preview = null, operationId = null, notice = '', timer;
+  function route() { const p = location.hash.slice(2).split('/'); return { view: p[0] || 'overview', id: p[0] === 'order' ? decodeURIComponent(p[1] || '') : null, part: p[2] || '', node: p[3] || '' }; }
+  function message(text) { notice = text; clearTimeout(timer); const el = document.querySelector('#toast'); el.textContent = text; el.classList.add('show'); timer = setTimeout(() => el.classList.remove('show'), 4500); }
+  let pointerEdit = false, pendingRender = false, reviewed = null, lastStored = '';
+  // A blur/change must not remove the button whose pointer click is still in progress.
+  document.addEventListener('pointerdown', e => {
+    pointerEdit = !!document.activeElement?.matches('#layers, #op-time') && !!e.target.closest('button, a');
+  }, true);
+  function finishPointerEdit() { pointerEdit = false; if (pendingRender) { pendingRender = false; render(); } }
+  document.addEventListener('pointerup', () => setTimeout(finishPointerEdit, 150), true);
+  document.addEventListener('pointercancel', finishPointerEdit, true);
+  function change(fn, label) { const before = result; S.change(fn); selected.clear(); render(); message(`${label}. Прогноз: ${day(before.finish)} → ${day(result.finish)}. Отмена доступна.`); }
+  function shell(id, deep) { return `<header class="${deep ? 'quiet-header' : ''}"><a class="brand" href="${links('home')}" aria-label="Главная EASY3"><svg viewBox="300 270 1080 440"><defs><filter id="logo-cut" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -.2126 -.7152 -.0722 0 1"/><feComposite operator="in" in2="SourceGraphic"/></filter></defs><image href="assets/fd35f6255ddb0a0f.png" width="1684" height="948" filter="url(#logo-cut)"/></svg></a><div class="company">Форма<br><small>Швейное производство</small></div><nav class="lens"><a href="${links('goal')}${id ? '#/order/' + id : '#/economy'}">Цель</a><a class="${execution ? '' : 'active'}" href="${links('plan')}${id ? '#/order/' + id : '#/overview'}">План</a><a class="${execution ? 'active' : ''}" href="${links('action')}${id ? '#/order/' + id : '#/overview'}">Действие</a></nav><span class="account">${execution ? 'Бригадир' : 'Технолог'} · демо</span></header>`; }
+  const caption = () => result.errors.length ? `${result.unassigned.length ? 'Не распределено ' + result.unassigned.length + ' операций' : 'Есть незаданное время'}` : result.cut.deficit ? `Не обеспечено кроем ${n(result.cut.deficit)} изделий` : result.finish?.day > state.raw.deadline ? 'Текущая организация не укладывается' : 'По учебному расчёту укладываемся';
+  function summary() { return `<div class="decision-summary"><div class="forecast-summary"><small>Прогноз готовности · предварительный</small><b>${day(result.finish)}</b><span>${esc(caption())}</span></div><div class="ready-summary"><small>К пошиву сейчас</small><b>${n(result.readyKits)} комплектов</b><span>Ещё ${n(result.cut.planned)} — по плану раскроя</span></div><div class="summary-actions">${execution ? '' : btn('Отменить', 'undo')}${execution ? `<a class="primary" href="${links('plan')}${href('')}">К плану</a>` : btn('Подтвердить план', 'confirm-review', '', 'primary')}</div></div>`; }
+  function art(kind) {
+    if (kind === 'cut') return `<svg viewBox="0 0 300 130" aria-hidden="true"><g fill="none" stroke="currentColor">${[0, 1, 2, 3].map(i => `<path d="M45 ${44 + i * 8} 155 ${18 + i * 8} 264 ${47 + i * 8} 154 ${77 + i * 8}Z"/>`).join('')}<path d="m104 47 48-12 40 12-41 12Zm48-12v24"/></g></svg>`;
+    if (kind === 'organization') return `<svg viewBox="0 0 300 130" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M30 65H92M113 30h57l48 35h55M113 65h160M113 100h57l48-35"/><circle cx="102" cy="30" r="11"/><circle cx="102" cy="65" r="11"/><circle cx="102" cy="100" r="11"/><circle cx="230" cy="65" r="5"/></g></svg>`;
+    return `<svg viewBox="0 0 300 130" aria-hidden="true"><g fill="none" stroke="currentColor"><path d="M35 35h230v72H35M92 35v72m58-72v72m57-72v72M47 72h205"/>${[63, 121, 178, 237].map(x => `<rect x="${x - 11}" y="49" width="22" height="14" rx="2"/>`).join('')}<path d="m248 67 7 5-7 5"/></g></svg>`;
+  }
+  function main() {
+    return `<div class="order-title"><div><span class="eyebrow">План · Ш-104</span><h1>Жакет двубортный <span>· 5 000 шт.</span></h1></div><div class="order-meta"><span>Срок <b>28 октября</b></span><button data-act="history">Черновик · v${state.revision}${record.active ? ' / действует ' + record.active.number : ''}</button></div></div><div class="three-decisions"><a class="decision-object" href="${href('cut')}"><div class="decision-art">${art('cut')}</div><span class="decision-state">${result.cut.deficit ? 'Требует решения' : 'План раскроя собран'}</span><h2>КРОЙ</h2><p>Что запускаем</p><strong>${n(result.readyKits)} <small>комплектов готовы</small></strong><span class="object-detail">${n(result.cut.planned)} подготовим · ${result.cut.rows.length} настилов${result.cut.deficit ? ' · не хватает ' + result.cut.deficit : ''}</span><span class="open-object">Открыть крой <i>↗</i></span></a><a class="decision-object" href="${href('organization')}"><div class="decision-art">${art('organization')}</div><span class="decision-state warn">${result.finish?.day > state.raw.deadline ? 'Нужно изменить организацию' : 'Способ изготовления выбран'}</span><h2>ОРГАНИЗАЦИЯ</h2><p>Как будем производить</p><strong class="mode-title">${D.modes[state.mode]}</strong><span class="object-detail">${state.mode === 'flow' ? `${n(result.cycle)} с/изд. · требуется ${n(result.requiredTakt)}` : state.mode === 'whole' ? '12 комплексных производственных единиц' : 'Параллельные узлы → сборка'}</span><span class="open-object">Выбрать организацию <i>↗</i></span></a><a class="decision-object" href="${href('shop')}"><div class="decision-art">${art('shop')}</div><span class="decision-state">${result.unassigned.length ? 'Есть нераспределённая работа' : 'Работа распределена'}</span><h2>ЦЕХ</h2><p>Как это физически работает</p><strong>${state.raw.blocks.length} <small>групп рабочих мест</small></strong><span class="object-detail">${state.raw.blocks.filter(b => state.raw.ops.some(o => o.block === b.id)).length} задействовано · ${result.unassigned.length ? result.unassigned.length + ' операций ждут места' : esc(state.raw.blocks.find(b => b.id === result.rhythmConstraint)?.name || 'распределение') + ' · наибольшая нагрузка'}</span><span class="open-object">Открыть цех <i>↗</i></span></a></div><div class="quiet-context"><a href="${href('technology')}">Технология J-02 · ${state.raw.ops.length} укрупнённых операций ↗</a><span>${n(state.raw.accepted)} принято · ${n(state.raw.cohorts.reduce((a, c) => a + c.qty, 0))} в работе · данные учебные</span></div>${summary()}`;
+  }
+  function focusTitle(title, subtitle, extra = '') { return `<div class="focus-heading"><div><a class="focus-back" href="${execution ? links('plan') + href('') : href('')}">← Жакет · План</a><h1>${title}</h1><p>${subtitle}</p></div><div class="focus-heading-actions">${extra}<a class="exit-focus" aria-label="Закрыть рабочую область" href="${execution ? links('plan') + href('') : href('')}">×</a></div></div>`; }
+  function cutView() {
+    const c = state.colors.find(c => c.id === color), rows = result.cut.rows.filter(l => l.color === color), lay = rows.find(l => l.id === layId) || rows[0];
+    layId = lay?.id;
+    return focusTitle('Крой', 'Комплектность для продолжения заказа · 800 уже готовы, 520 нужно подготовить', btn('Предложить настилы заново', 'auto')) + `<div class="cut-workspace"><nav class="color-rail"><small>Цвет заказа</small>${state.colors.map(c => `<button class="${color === c.id ? 'selected' : ''}" data-act="color" data-value="${c.id}"><i style="background:${c.swatch}"></i><span>${c.name}<small>${n(c.total)} в заказе · ${Object.values(c.demand).reduce((a, b) => a + b, 0)} в новый крой</small></span></button>`).join('')}<p>Принятые изделия и существующая незавершёнка не включаются в новый раскрой.</p></nav><div class="cut-center"><div class="size-demand"><div><small>Новая потребность · ${c.name}</small><h2>${Object.values(c.demand).reduce((a, b) => a + b, 0)} комплектов</h2></div>${Object.entries(c.demand).map(([size, qty]) => `<span><small>Размер ${size}</small><b>${qty}</b></span>`).join('')}</div><div class="lay-proposals">${rows.map(l => `<button class="lay-object ${l.id === layId ? 'selected' : ''} ${!l.valid ? 'unavailable-lay' : ''}" data-act="lay" data-value="${l.id}"><span>Настил ${l.id.slice(1)}</span><div class="marker-mini">${Object.entries(l.markerData.sizes).filter(([, q]) => q).map(([size, q]) => `<i>${size}${q > 1 ? ' × ' + q : ''}</i>`).join('')}</div><b>${l.layers} слоёв <em>→</em> ${l.output} комплектов</b><small>${l.valid ? 'Комплектный крой ' + day(M.calendar(state.raw, l.end)) : 'Материал недоступен'}</small></button>`).join('')}</div><div class="cut-result"><span>${result.cut.rows.length} настилов</span><span>${n(result.cut.meters)} м верха без потерь</span><span>${result.cut.deficit ? 'Не хватает ' + result.cut.deficit : 'Размерная потребность закрыта'}${result.cut.excess ? ' · лишних ' + result.cut.excess : ''}</span></div></div><aside class="decision-panel"><small>Выбранный настил</small><h2>${lay ? 'Настил ' + lay.id.slice(1) : 'Нет настилов'}</h2>${lay ? `<label>Число слоёв<input id="layers" type="number" min="1" max="${state.maxLayers}" value="${lay.layers}"></label><label>Доступная раскладка<select id="marker">${D.markers.map(m => `<option value="${m.id}" ${lay.marker === m.id ? 'selected' : ''}>${m.name}</option>`).join('')}</select></label><p>Выход: ${lay.output} комплектов<br>Отрез верха: ${n(lay.meters)} м</p><div class="panel-actions">${btn('Разделить настил', 'split', lay.id)}${btn('Объединить с совместимым', 'merge', lay.id)}</div>` : ''}<label class="checkline"><input type="checkbox" id="material-available" ${c.available ? 'checked' : ''}>Партия материала доступна</label><details><summary>Условия предложения</summary><p>Ширина ${c.width} см; раскладка требует 145 см. Не более ${state.maxLayers} слоёв. Учебные комплектующие верха, подкладки и клеевой синхронизированы. Геометрия лекал и реальные потери не рассчитываются.</p><p>Два условных раскройных места. На настил: 600 с подготовки + 30 с на слой + 80 с на комплект. Это демонстрационная формула, не производственная норма.</p></details></aside></div>${summary()}`;
+  }
+  function organization() {
+    const options = Object.entries(D.modes).map(([id, name]) => { const s = M.copy(state); s.mode = id; return { id, name, r: D.calculate(s) }; });
+    return focusTitle('Организация', 'Одна технология. Три способа разделить работу и движение.') + `<div class="organization-choices">${options.map(o => `<button class="organization-choice ${state.mode === o.id ? 'selected' : ''}" data-act="mode" data-value="${o.id}"><span class="choice-caption">${o.id === 'flow' ? 'Рекомендуемый для сравнения' : o.id === 'whole' ? 'Самостоятельные единицы' : 'Крупные части изделия'}</span><h2>${o.name}</h2><div class="mode-preview ${o.id}">${o.id === 'whole' ? Array.from({ length: 12 }, () => '<i></i>').join('') : o.id === 'nodes' ? '<i>Полочки</i><i>Рукава</i><i>Подкладка</i><b>↓ Сборка</b>' : '<i>РМ</i><b>→</b><i>РМ</i><b>→</b><i>РМ</i>'}</div><p>${o.id === 'whole' ? `Плановый труд: ${n(o.r.unitLabor == null ? null : o.r.unitLabor / 3600)} ч/изделие. 12 доступных комплексных единиц; нижняя оценка потребности — ${n(o.r.minimumUnits)}.` : o.id === 'nodes' ? 'Пять параллельных ветвей, сборка и отделка. Работа закрепляется за группой своего узла.' : `Требуемый такт ${n(o.r.requiredTakt)} с/изд. Текущий расчётный интервал ${n(o.r.cycle)} с/изд. Отдельные места выполняют назначенные операции.`}</p><div class="choice-forecast"><small>Прогноз того же остатка</small><strong>${day(o.r.finish)}</strong></div><span>${state.mode === o.id ? 'Выбрано' : 'Выбрать этот способ →'}</span></button>`).join('')}</div><div class="organization-explanation"><p>Поток предлагается для сравнения из-за повторяемой технологии и доступных специализированных мест. Текущую конфигурацию всё равно нужно проверить по сроку.</p><details><summary>Что допущено в расчёте</summary><p>В режиме целого изделия 12 учебных универсальных единиц обслуживают общие специальные машины; единица занята своей пачкой до приёмки. В режиме узлов принята отдельная мощность квалифицированных групп. В потоке мощность задана по рабочим местам. Это разные конфигурации использования ресурсов, а не сравнение одинаковой численности. Квалификации вымышлены; оборудование, технология и исходные объёмы сохраняются.</p></details><a class="primary" href="${href('shop')}">Открыть выбранную организацию в цехе →</a></div>${summary()}`;
+  }
+  function map(mode, action = false) {
+    if (mode === 'whole') return `<div class="whole-shop">${action ? `<div class="shared-episode">${btn(record.assigned ? "Ирина · исправление" : "Исправление", "focus", "assembly", "secondary")}${btn(record.assigned ? "Ольга · приёмка" : "Приёмка", "focus", "qc", "secondary")}</div>` : ""}${Array.from({ length: 12 }, (_, i) => `<button class="unit ${focus === 'unit-' + i ? 'chosen' : ''}" data-act="focus" data-value="unit-${i}"><small>Единица ${String(i + 1).padStart(2, '0')}</small><svg viewBox="0 0 50 55"><path d="m15 7-9 8 6 16 5-3-2 23h22l-2-23 5 3 5-16-10-8-10 7Z" fill="none" stroke="currentColor"/></svg><span>Изделие целиком</span></button>`).join('')}<p>Общие специальные ресурсы: дублирование · ВТО · петли · пуговицы · приёмка. Комплексная единица ожидает их доступности.</p></div>`;
+    const nodes = mode === 'nodes' ? state.raw.nodes : state.raw.blocks, pos = mode === 'nodes' ? nodePositions : positions;
+    const groupFor = o => mode === 'nodes' ? o.node : o.block;
+    const edges = [...new Set(state.raw.ops.flatMap(o => o.pre.map(id => { const from = groupFor(state.raw.ops.find(x => x.id === id)), to = groupFor(o); return from && to && from !== to ? from + '|' + to : null; })).filter(Boolean))].map(x => x.split('|'));
+    const near = new Set([focus, ...edges.filter(e => e.includes(focus)).flat()]);
+    return `<div class="spatial-map" data-map-mode="${mode}"><svg class="map-connections" viewBox="0 0 1000 540" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="m0 0 5 3-5 3" fill="none" stroke="currentColor"/></marker></defs>${edges.map(([a, b]) => { const p = pos[a], q = pos[b]; if (!p || !q) return ''; return `<path class="${focus && [a, b].includes(focus) ? 'highlight' : focus ? 'faded' : ''}" d="M${p[0] * 10} ${p[1] * 5.4} C${(p[0] * 10 + q[0] * 10) / 2} ${p[1] * 5.4},${(p[0] * 10 + q[0] * 10) / 2} ${q[1] * 5.4},${q[0] * 10} ${q[1] * 5.4}" marker-end="url(#arrow)"/>`; }).join('')}</svg>${nodes.map((b, i) => `<button class="place ${focus === b.id ? 'chosen' : ''} ${focus && !near.has(b.id) ? 'dimmed' : ''} ${b.id === result.rhythmConstraint && mode === 'flow' ? 'constraint' : ''}" style="left:${pos[b.id][0]}%;top:${pos[b.id][1]}%" data-act="focus" data-value="${b.id}" ${mode === 'flow' && !action ? `data-drop="${b.id}"` : ''}><small>${mode === 'flow' ? 'РМ-' + String(i + 1).padStart(2, '0') + ' · группа ' + b.count : 'Узел'}</small><b>${esc(b.name)}</b><span>${mode === 'flow' ? (b.id === 'cutting' ? 'План настилов' : result.errors.length ? 'Не определено' : result.load[b.id] === 0 ? 'Свободно' : n(result.load[b.id]) + ' с/изд.') : state.raw.ops.filter(o => o.node === b.id).length + ' операций'}</span>${action && record.assigned && ['assembly', 'qc', 'finish'].includes(b.id) ? `<em>${b.id === 'assembly' ? 'Ирина' : 'Ольга'} · демо</em>` : ''}</button>`).join('')}</div>`;
+  }
+  function opRows(ops, editable = true) { return `<div class="work-rows">${ops.map(o => `<div ${editable && state.mode === 'flow' ? `draggable="true" data-drag="${o.id}"` : 'class="read-only-work"'}>${editable ? `<input type="checkbox" data-select="${o.id}" aria-label="Выбрать ${esc(o.name)}" ${selected.has(o.id) ? 'checked' : ''}>` : ''}<span>${esc(o.name)}<small>${o.time.planning == null ? 'Не определено' : n(o.time.planning) + ' с / изделие'}</small></span>${editable && state.mode === 'flow' ? '<b>⠿</b>' : ''}</div>`).join('') || '<p>Операций здесь нет</p>'}</div>`; }
+  function focusPanel() {
+    if (!focus) return '';
+    const unassigned = focus === 'unassigned', unit = focus.startsWith('unit-');
+    const b = unassigned ? { name: 'Не распределено' } : unit ? { name: 'Комплексная единица ' + (Number(focus.slice(5)) + 1) } : (state.mode === 'nodes' ? state.raw.nodes : state.raw.blocks).find(b => b.id === focus);
+    const ops = unassigned ? result.unassigned : unit ? state.raw.ops : state.raw.ops.filter(o => (state.mode === 'nodes' ? o.node : o.block) === focus);
+    const editable = !execution && (state.mode === 'flow' || unassigned);
+    const title = `<div class="panel-title"><h2>${esc(b?.name || 'Работа')}</h2>${btn('×', 'focus', '', 'panel-close')}</div>`;
+    if (execution) {
+      const actor = focus === 'assembly' ? 'Ирина · исправление' : ['qc', 'finish'].includes(focus) ? 'Ольга · приёмка' : null;
+      return `<aside class="decision-panel shop-panel">${title}<p>Подтверждённый план ${record.active.number}. ${unit ? 'Единица ведёт пачку через общие специальные ресурсы.' : ops.length + ' технологических операций.'}</p><p>${actor && record.assigned ? esc(actor) + ' · вымышленный участник учебного эпизода.' : 'На это место люди в учебном эпизоде не назначались.'}</p>${actor && record.events.length ? '<p>Эпизод завершён: 10 изделий исправлены и приняты.</p>' : ''}${opRows(ops, false)}<a href="${links('plan')}${href('shop')}">Перейти к черновику плана ↗</a></aside>`;
+    }
+    if (focus === 'cutting') return `<aside class="decision-panel shop-panel">${title}<p>${result.cut.rows.length} настилов готовят ${n(result.cut.planned)} комплектов. Работа двух раскройных мест рассчитывается в плане настилов.</p><p>Изменение слоёв и размерного сочетания обновляет время поступления кроя в цех.</p><a class="secondary" href="${href('cut')}">Открыть крой ↗</a></aside>`;
+    if (unit) return `<aside class="decision-panel shop-panel">${title}<p>Одна квалифицированная единица ведёт свою пачку до принятого изделия. Общие специальные машины остаются конечным ресурсом.</p><p>Плановый труд: ${n(result.unitLabor == null ? null : result.unitLabor / 3600)} ч/изделие.<br>Мощность: 12 параллельных единиц.</p><a href="${href('technology')}">Открыть состав технологии ↗</a></aside>`;
+    return `<aside class="decision-panel shop-panel">${title}<p>${ops.length} технологических операций${state.mode === 'flow' && !unassigned ? `<br>Интервал группы: ${n(result.cycle == null ? null : result.load[focus])} с/изд.<br>Требуемый такт: ${n(result.requiredTakt)} с/изд.` : ''}</p>${focus === result.rhythmConstraint ? '<p class="attention">Наибольшая нагрузка группы. Сравните варианты, чтобы проверить влияние на полный срок.</p>' : ''}${focus === 'holes' ? '<p>Общий ресурс: бронь другого заказа на 12–13 октября.</p>' : ''}${!unassigned ? btn('Посмотреть варианты', 'scenarios', '', 'secondary') : '<p>Назначьте операции на совместимые физические места. Выбранный способ организации сохранится.</p>'}${opRows(ops, editable)}${editable ? `<label>Совместимое место<select id="destination"><option value="">Выберите место</option>${state.raw.blocks.filter(b => selected.size && [...selected].every(id => M.compatible(state.raw.ops.find(o => o.id === id), b))).map(b => `<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select></label><div class="panel-actions">${btn('Перенести выбранные', 'move')}${!unassigned ? btn('Снять выбранные с места', 'unassign') : ''}${ops.length && state.mode === 'flow' ? `<button class="block-drag" draggable="true" data-drag-block="${ops.map(o => o.id).join(',')}">⠿ Перетащить весь блок</button>` : ''}</div>` : `<a href="${href('technology/' + focus)}">Открыть операции узла ↗</a><p>Распределение между физическими местами доступно на карте потока.</p>`}</aside>`;
+  }
+  function scenarioSheet() { if (!scenarios) return ''; return `<div class="scenario-sheet"><div class="panel-title"><h2>Варианты для текущей организации</h2>${btn('×', 'scenarios', '', 'panel-close')}</div><small>Сейчас ${day(result.finish)} · ${n(result.scope)} изделий в расчёте</small><div class="scenario-options">${D.variants(state).map(v => `<article class="${preview === v.id ? 'selected' : ''}"><h3>${v.title}</h3><p>${v.reason}</p><strong>${day(v.result.finish)}</strong><small>${n(v.result.scope)} изделий · WIP до ${v.result.maxWip}${state.mode === 'flow' ? ' · интервал ' + n(v.result.cycle) + ' с/изд.' : ''}</small>${preview === v.id ? `<p>Трудоёмкость ${n(v.result.labor == null ? null : v.result.labor / 3600)} ч. Дополнительные люди и машины не добавляются. Меняется будущая работа; факт сохраняется.</p>${btn('Применить в черновик', 'apply', v.id, 'primary')}` : btn('Сравнить последствия', 'preview', v.id, 'secondary')}</article>`).join('')}</div></div>`; }
+  function shop(action = false) {
+    return focusTitle(action ? 'Действие · тот же цех' : 'Цех', `${D.modes[state.mode]} · ${action ? 'снимок подтверждённой версии ' + record.active?.number : 'выберите место, чтобы раскрыть работу'}`, action ? '' : btn('Не распределено · ' + result.unassigned.length, 'unassigned')) + `<div class="shop-workspace ${focus ? 'has-panel' : ''}"><div class="shop-map-area">${map(state.mode, action)}${!action ? scenarioSheet() : ''}</div>${focusPanel()}</div>${action ? `<div class="execution-layer"><span>${n(record.draft.raw.accepted)} принято · WIP ${record.draft.raw.cohorts.reduce((s, c) => s + c.qty, 0)} · ${record.events.length} новых учебных событий</span>${record.events.length ? '<b>Учебный эпизод завершён · принято 10</b>' : !record.assigned ? btn('Назначить Ирину и Ольгу на эпизод исправления', 'assign', '', 'secondary') : btn('Смоделировать приёмку 10 после исправления', 'fact', '', 'secondary')}</div><p class="scope-note">Люди и события вымышлены. Карта сохраняет подтверждённую организацию; новый факт пересчитывает только будущий черновик.</p>` : `<div class="shop-footer"><span>${state.mode === 'flow' ? `Требуемый такт ${n(result.requiredTakt)} с/изд. · текущий интервал ${n(result.cycle)} с/изд.` : state.mode === 'nodes' ? 'Параллельные ветви сходятся по зависимостям' : '12 комплексных единиц используют общие специальные ресурсы'}</span>${btn('Посмотреть варианты', 'scenarios')}<a href="${href('organization')}">Изменить организацию ↗</a></div>`}${summary()}`;
+  }
+  function technology(node) {
+    const chosen = state.raw.nodes.find(n => n.id === node), op = state.raw.ops.find(o => o.id === operationId);
+    return focusTitle('Технология', 'J-02 · изделие → узел → операция. Плановое время — учебная оценка.') + `<div class="technology-focus ${op ? 'has-detail' : ''}"><div>${chosen ? `<a class="text-button" href="${href('technology')}">← Всё изделие</a><h2 class="node-heading">${chosen.name}</h2><div class="tech-operations">${state.raw.ops.filter(o => o.node === node).map(o => `<button data-act="operation" data-value="${o.id}"><span>${esc(o.name)}</span><b>${o.time.planning == null ? 'Не определено' : n(o.time.planning) + ' с'}</b><i>↗</i></button>`).join('')}</div>` : `<div class="product-heading"><h2>Жакет с подкладкой</h2><p>Две листочки · воротник · два рукава · две пуговицы</p></div><div class="technology-nodes">${state.raw.nodes.map(n => `<a href="${href('technology/' + n.id)}"><small>${state.raw.ops.filter(o => o.node === n.id).length} операций</small><h2>${n.name}</h2><p>${n.output}</p><span>Открыть узел ↗</span></a>`).join('')}</div>`}</div>${op ? `<aside class="decision-panel"><div class="panel-title"><h2>${esc(op.name)}</h2>${btn('×', 'operation', '', 'panel-close')}</div><p>${esc(op.method)}</p><dl><dt>Вход</dt><dd>${esc(op.input)}</dd><dt>Результат</dt><dd>${esc(op.output)}</dd><dt>Место</dt><dd>${esc(state.raw.blocks.find(b => b.id === op.block)?.name || 'Не назначено')}</dd><dt>Контроль</dt><dd>${esc(op.check)}</dd><dt>Передача</dt><dd>Совместимая пачка · до ${state.raw.organization.transfer} изделий</dd></dl>${['spread', 'cut', 'kit'].includes(op.id) ? '<p>Подготовка комплектного кроя рассчитывается по настилам: 600 с на настил + 30 с на слой + 80 с на комплект. Пооперационные значения ниже — справочные и не используются второй раз в прогнозе.</p><a href="' + href('cut') + '">Открыть план настилов ↗</a>' : `<label>Плановое время, с/изделие<input id="op-time" type="number" min="1" max="86400" value="${op.time.planning ?? ''}" placeholder="Не определено"></label>`}<details><summary>Источник и другие виды времени</summary><p>${esc(op.time.source.label)}. Применимость: J-02, выбранный метод и оборудование. История: версия операции ${op.version}.</p><p>Наблюдаемое — нет измерений.<br>Нормативное — не утверждено.<br>Фактическое — нет замеров.</p></details></aside>` : ''}</div>${summary()}`;
+  }
+  function overview(ordersOnly) { return `<div class="overview-heading"><span class="eyebrow">${execution ? "Действие" : "План"} · всё производство</span><h1>${ordersOnly ? 'Заказы и их исполнимость' : 'У каждого заказа — свой путь'}</h1><p>Одна подробная модель жакета. Для остальных заказов технология ещё не подготовлена.</p></div><div class="overview-orders">${TargetModel.orders.map(o => `<a href="#/order/${o.id}"><small>К ${day(o.deadline)}</small><i></i><h2>${o.name}</h2><p>${n(o.qty)} шт.</p><span>${o.id === 'jacket' ? (execution ? record.active ? 'Открыть подтверждённый план ' + record.active.number : 'Сначала нужен подтверждённый план' : 'Крой · организация · цех') : 'Нужно подготовить модель'}</span></a>`).join('')}</div>${!ordersOnly ? '<a class="primary" href="#/orders">Все планируемые заказы →</a>' : ''}<p class="scope-note">Общая исполнимость не подтверждена. Часть занятости общих ресурсов ещё неизвестна.</p>`; }
+  function dialog(title, html) { document.querySelector('dialog')?.remove(); const el = document.createElement('dialog'); el.className = 'decision-dialog'; el.innerHTML = `<form method="dialog"><button class="panel-close" aria-label="Закрыть">×</button></form><h2>${title}</h2>${html}<p class="dialog-error" role="alert"></p>`; document.body.append(el); el.showModal(); }
+  function render() {
+    record = S.read(); state = execution && record.active ? record.active.state : record.draft; result = D.calculate(state); lastStored = JSON.stringify(record);
+    if (pointerEdit) { pendingRender = true; return; }
+    const r = route(), deep = !!r.part || (execution && !!r.id);
+    document.body.dataset.depth = deep ? 'focus' : r.id ? 'decision' : 'overview';
+    let content;
+    if (!r.id) content = overview(r.view === 'orders');
+    else if (r.id !== 'jacket') content = `<div class="overview-heading"><a href="#/orders">← Заказы</a><h1>${esc(TargetModel.orders.find(o => o.id === r.id)?.name || 'Заказ не найден')}</h1><p>Для этого заказа технология и производственный план ещё не подготовлены.</p></div>`;
+    else if (execution) content = record.active ? shop(true) : focusTitle('Сначала нужен подтверждённый план', 'Черновик не становится производственным заданием автоматически.') + `<a class="primary" href="${links('plan')}${href('')}">Открыть План жакета →</a>`;
+    else content = ({ cut: cutView, organization, shop, technology: () => technology(r.node) }[r.part] || main)();
+    app.innerHTML = shell(r.id, deep) + `<main class="decision-workspace ${deep ? 'focus-workspace' : ''}">${content}</main>`;
+  }
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-act]'); if (!el) { finishPointerEdit(); return; }
+    pointerEdit = false;
+    const action = el.dataset.act, value = el.dataset.value;
+    try {
+      if (action === 'color') { color = value; layId = null; render(); }
+      if (action === 'lay') { layId = value; render(); }
+      if (action === 'auto') change(s => { s.lays = D.autoLays(s); }, 'Настилы предложены по потребности');
+      if (action === 'split') change(s => D.split(s, value), 'Настил разделён');
+      if (action === 'merge') change(s => D.merge(s, value), 'Настилы объединены');
+      if (action === 'mode') change(s => { s.mode = value; }, 'Выбрано: ' + D.modes[value]);
+      if (action === 'focus') { focus = value || null; selected.clear(); render(); }
+      if (action === 'unassigned') { focus = 'unassigned'; selected.clear(); render(); }
+      if (action === 'undo') { if (!record.undo.length) throw Error('В этом черновике пока нет изменений для отмены'); S.undo(); render(); message('Предыдущее состояние восстановлено. Факт и действующий план сохранены.'); }
+      if (action === 'scenarios') { scenarios = !scenarios; preview = null; render(); }
+      if (action === 'preview') { preview = value; render(); }
+      if (action === 'apply') { const v = D.variants(state).find(v => v.id === value); change(s => Object.assign(s, v.state), 'Сценарий применён в черновик'); scenarios = false; preview = null; render(); }
+      if (action === 'move') { if (!selected.size) throw Error('Сначала выберите операции'); const target = document.querySelector('#destination').value; if (!target) throw Error('Выберите совместимое место'); change(s => M.move(s.raw, [...selected], target), 'Работа перенесена'); selected.clear(); render(); }
+      if (action === 'unassign') { if (!selected.size) throw Error('Выберите операции'); change(s => s.raw.ops.filter(o => selected.has(o.id)).forEach(o => { o.block = ''; }), 'Работа возвращена в нераспределённую'); selected.clear(); render(); }
+      if (action === 'operation') { operationId = value || null; render(); }
+      if (action === 'confirm-review') { reviewed = JSON.stringify(S.read().draft); dialog('Передача плана в Действие', `<p>${n(result.scope)} изделий в области плана. ${result.blocked ? n(result.blocked) + ' остаются вне области.' : 'Остаток заказа включён целиком.'}</p><p>Прогноз ${day(result.finish || result.last)}. ${esc(caption())}.</p><p>Версия действует только для ещё не выполненной работы после учебного среза 12 октября, ${state.raw.calendar.notBefore ? '10:30' : '09:00'}. Нормы, квалификации и длительности вымышлены.</p>${result.errors.length ? `<p class="attention">${esc(result.errors.join('; '))}</p>` : ''}<label class="checkline"><input id="ack" type="checkbox">Понимаю область, отклонение от срока и учебные условия.</label>${btn('Подтвердить учебный план', 'confirm', '', 'primary')}`); }
+      if (action === 'confirm') { S.confirm(document.querySelector('#ack').checked, reviewed); document.querySelector('dialog').close(); render(); dialog('План передан', `<p>Подтверждённая карта сохранена. Конкретных людей назначает бригадир в ДЕЙСТВИИ.</p><a class="primary" href="${links('action')}${href('')}">Перейти в Действие →</a>`); }
+      if (action === 'history') dialog('Черновик и действующие версии', `<p>Черновик v${state.revision}. Изменения не применяются к действующей версии автоматически.</p>${record.versions.map(v => `<p>План ${v.number} · ${D.modes[v.state.mode]} · ${n(v.scope)} изделий · ${day(v.forecast || v.partial)}</p>`).join('') || '<p>Действующих версий пока нет.</p>'}`);
+      if (action === 'assign') { S.assign(); render(); message('Вымышленные Ирина и Ольга назначены на исправление и приёмку.'); }
+      if (action === 'fact') { S.fact(); render(); message('10 изделий приняты. Будущий черновик обновлён, карта действующего плана сохранена.'); }
+    } catch (error) { const el = document.querySelector('dialog[open] .dialog-error'); if (el) el.textContent = error.message; else message(error.message); } finally { finishPointerEdit(); }
+  });
+  document.addEventListener('change', e => {
+    try {
+      if (e.target.id === 'layers') { const value = Number(e.target.value); change(s => { s.lays.find(l => l.id === layId).layers = value; }, 'Слои изменены'); }
+      if (e.target.id === 'marker') { const value = e.target.value; change(s => { s.lays.find(l => l.id === layId).marker = value; }, 'Размерное сочетание изменено'); }
+      if (e.target.id === 'material-available') { const value = e.target.checked; change(s => { s.colors.find(c => c.id === color).available = value; }, 'Доступность партии изменена'); }
+      if (e.target.matches('[data-select]')) { e.target.checked ? selected.add(e.target.dataset.select) : selected.delete(e.target.dataset.select); render(); }
+      if (e.target.id === 'op-time') { const value = e.target.value === '' ? null : Number(e.target.value); if (value !== null && (!Number.isFinite(value) || value <= 0 || value > 86400)) throw Error('Укажите положительное время до 86 400 секунд или оставьте неизвестным'); change(s => { const op = s.raw.ops.find(o => o.id === operationId); op.time.planning = value; op.version++; op.time.source.label = 'Ручная учебная оценка'; }, 'Плановое время изменено'); }
+    } catch (error) { message(error.message); render(); }
+  });
+  document.addEventListener('dragstart', e => { const el = e.target.closest('[data-drag],[data-drag-block]'); if (!el) return; const ids = el.dataset.dragBlock ? el.dataset.dragBlock.split(',') : selected.has(el.dataset.drag) ? [...selected] : [el.dataset.drag]; e.dataTransfer.setData('text/plain', JSON.stringify(ids)); e.dataTransfer.effectAllowed = 'move'; document.querySelectorAll('[data-drop]').forEach(t => t.classList.toggle('drop-ok', ids.every(id => M.compatible(state.raw.ops.find(o => o.id === id), state.raw.blocks.find(b => b.id === t.dataset.drop))))); });
+  document.addEventListener('dragover', e => { if (e.target.closest('[data-drop]')) e.preventDefault(); });
+  document.addEventListener('drop', e => { const el = e.target.closest('[data-drop]'); if (!el) return; e.preventDefault(); try { const ids = JSON.parse(e.dataTransfer.getData('text/plain')); if (!Array.isArray(ids)) return; change(s => M.move(s.raw, ids, el.dataset.drop), 'Блок работ перенесён'); } catch (error) { message(error.message); } });
+  document.addEventListener('dragend', () => document.querySelectorAll('.drop-ok').forEach(el => el.classList.remove('drop-ok')));
+  addEventListener('hashchange', () => { document.querySelector('dialog')?.remove(); reviewed = null; focus = null; selected.clear(); scenarios = false; operationId = null; render(); window.scrollTo(0, 0); });
+  if (!location.hash) { const order = new URLSearchParams(location.search).get('order'); history.replaceState(null, '', order ? '#/order/' + encodeURIComponent(order) : '#/overview'); }
+  function sync() {
+    if (pointerEdit || document.activeElement?.matches('input, select')) return;
+    if (JSON.stringify(S.read()) === lastStored) return;
+    document.querySelector('dialog')?.remove(); reviewed = null; selected.clear(); render();
+    message('Данные обновлены из другой вкладки. Действующая версия и черновик показаны отдельно.');
+  }
+  addEventListener('storage', e => { if (e.key === S.KEY) sync(); });
+  addEventListener('pageshow', sync);
+  addEventListener('focus', sync);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) sync(); });
+  // file:// storage events differ by browser; also compare the small saved record.
+  setInterval(sync, 1500);
+  render();
+})();
+</script></body></html>
