@@ -67,13 +67,15 @@ function apiRun(string $action,array $input):array{
  }
  if($action==='logout'){$_SESSION=[];session_regenerate_id(true);$_SESSION['csrf']=bin2hex(random_bytes(24));return ['csrf'=>$_SESSION['csrf']];}
  if($action==='state')return stateData();
+ if($action==='catalog_search'){permit(['owner','technologist','chief']);require_once __DIR__.'/catalog.php';return ['operations'=>catalogFind(textField($input,'query',300),40)];}
+ if($action==='technology_examples'){permit(['owner','technologist']);require_once __DIR__.'/catalog.php';return technologyExamples();}
  if($action==='company_switch'){$u=user();$m=one('SELECT company_id FROM memberships WHERE company_id=? AND user_id=?',[$input['id']??'',$u['id']]);if(!$m)fail('Нет доступа к компании',403);$_SESSION['company_id']=$m['company_id'];return stateData();}
  if($action==='company_create'){$u=user();$id=companyNew(textField($input,'name',120,true),$u['id']);$_SESSION['company_id']=$id;return stateData();}
  if($action==='demo_role'){
   $c=context();if(empty($_SESSION['demo_company'])||$_SESSION['demo_company']!==$c['id']||!$c['is_demo'])fail('Переключение доступно только в собственном демо-сеансе',403);
   $m=one('SELECT user_id FROM memberships WHERE company_id=? AND role=?',[$c['id'],$input['role']??'']);if(!$m)fail('Роль недоступна',403);establish($m['user_id'],$c['id']);return stateData();
  }
- $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event'],'finance'=>['economy_observe'],'technology'=>['technology_generate']];
+ $moduleActions=['passport'=>['passport_save'],'goal'=>['order_save','order_archive'],'builder'=>['layout_save'],'plan'=>['route_save','plan_calculate','plan_approve','plan_publish'],'production'=>['production_event'],'finance'=>['economy_observe'],'technology'=>['technology_generate','technology_step','technology_status','technology_jobs']];
  foreach($moduleActions as $module=>$actions)if(in_array($action,$actions,true)){$file=__DIR__.'/modules/'.$module.'.php';if(!is_file($file))fail('Модуль подключается',503);require_once $file;$handler=$module.'Action';return $handler($action,$input);}
  if($action==='ai_request')fail('В разработке. Продолжите вручную.',501);
  fail('Действие не найдено',404);

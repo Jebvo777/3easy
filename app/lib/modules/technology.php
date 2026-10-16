@@ -1,29 +1,41 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/../ai/gateway.php';require_once __DIR__.'/goal.php';
+function aiJobRecord(string $id,bool $lock=false):array{$c=context();$r=one('SELECT * FROM ai_generations WHERE id=? AND company_id=? AND actor_id=?'.($lock?lockSuffix():''),[$id,$c['id'],$_SESSION['user_id']]);if(!$r)fail('Генерация не найдена',404);return $r;}
+function aiJobResult(array $r):array{$job=decode($r['job_json']);$out=['generation_id'=>$r['id'],'order_id'=>$r['order_id'],'order_revision'=>(int)$r['order_revision'],'state'=>$r['state'],'stage'=>$job['stage']??'outline','groups_done'=>(int)($job['group_index']??0),'groups_total'=>count($job['groups']??[]),'operations'=>count($job['route']??[]),'current_group'=>$job['groups'][$job['group_index']??0]['name']??null,'error'=>$job['error']??null,'calls'=>(int)$r['call_count']];if(in_array($r['state'],['ready','applied'],true))$out+=decode($r['response_json']);return $out;}
 function technologyAction(string $action,array $input):array{
- $c=permit(['owner','technologist']);$cfg=aiConfiguration();if(!aiStorageAvailable())fail('Для AI импортируйте 004_ai_technology.sql. Остальные модули доступны.',503);
- $technical=aiTechnicalInput($input);$requestKey=textField($input,'key',100,true);$orderId=textField($input,'order_id',32,true);$hash=hash('sha256',j(['order_id'=>$orderId,'revision'=>$input['revision']??null,'technical'=>$technical]));$db=db();$id=null;
- $db->beginTransaction();try{
-  $c=context(true);$o=orderRecord($orderId,true);aiTechnicalPrivacy($technical,$c,$o);
-  $existing=one('SELECT *,TIMESTAMPDIFF(SECOND,created_at,CURRENT_TIMESTAMP) age_seconds FROM ai_generations WHERE company_id=? AND actor_id=? AND request_key=?'.lockSuffix(),[$c['id'],$_SESSION['user_id'],$requestKey]);
-  if($existing){
-   if(!hash_equals($existing['request_hash'],$hash))fail('Ключ генерации уже использован с другим описанием',409);
-   if(in_array($existing['state'],['ready','applied'],true)){$cached=decode($existing['response_json']);$db->commit();return array_replace($cached,['replayed'=>true]);}
-   if($existing['state']==='pending'&&(int)$existing['age_seconds']<90)fail('AI ещё готовит эту последовательность. Повторите запрос чуть позже.',409);fail('Предыдущая генерация не завершена. Запустите новую попытку.',409);
-  }
-  checkRevision((int)$o['revision'],$input);if($o['status']==='archived')fail('Выберите активную цель');if(one("SELECT id FROM tasks WHERE company_id=? AND order_id=? AND state<>'cancelled' LIMIT 1",[$c['id'],$o['id']]))fail('Технология уже опубликована. Генерация доступна для новой цели.');
-  if(!aiCapability()['configured'])fail('AI не подключён: проверьте серверный ключ и PHP cURL.',503);
-  // Serialize budget reservations, then release every DB lock before the external HTTP call.
-  $bucket=hash('sha256','easy3-ai-global-budget');query('INSERT IGNORE INTO auth_limits (bucket,failures) VALUES (?,0)',[$bucket]);one('SELECT bucket FROM auth_limits WHERE bucket=?'.lockSuffix(),[$bucket]);
-  $daily=(int)one('SELECT COUNT(*) n FROM ai_generations WHERE company_id=? AND created_at>=CURRENT_DATE()',[$c['id']])['n'];$global=(int)one('SELECT COUNT(*) n FROM ai_generations WHERE created_at>=CURRENT_DATE()')['n'];
-  if($daily>=(int)$cfg['daily_limit']||$global>=(int)$cfg['global_daily_limit'])fail('Дневной лимит AI исчерпан. Продолжите вручную или повторите завтра.',429);
-  $recent=one('SELECT TIMESTAMPDIFF(SECOND,created_at,CURRENT_TIMESTAMP) age_seconds FROM ai_generations WHERE company_id=? AND actor_id=? ORDER BY created_at DESC LIMIT 1',[$c['id'],$_SESSION['user_id']]);if($recent&&(int)$recent['age_seconds']<(int)$cfg['min_interval'])fail('Подождите несколько секунд перед новой генерацией.',429);
-  $id=uid();query('INSERT INTO ai_generations (id,company_id,actor_id,order_id,order_revision,request_key,request_hash,prompt_version) VALUES (?,?,?,?,?,?,?,?)',[$id,$c['id'],$_SESSION['user_id'],$o['id'],(int)$o['revision'],$requestKey,$hash,AI_TECHNOLOGY_PROMPT_VERSION]);$db->commit();
+ $c=permit(['owner','technologist']);if(!aiStorageAvailable())fail('Импортируйте update_20261016.sql. Другие модули продолжают работать.',503);
+ if($action==='technology_jobs')return ['jobs'=>array_map('aiJobResult',rows('SELECT * FROM ai_generations WHERE company_id=? AND actor_id=? AND order_id=? ORDER BY created_at DESC LIMIT 8',[$c['id'],$_SESSION['user_id'],textField($input,'order_id',32,true)]))];
+ if($action==='technology_status')return aiJobResult(aiJobRecord(textField($input,'generation_id',32,true)));
+ if($action==='technology_generate'){
+  $technical=aiTechnicalInput($input);$requestKey=textField($input,'key',100,true);$orderId=textField($input,'order_id',32,true);$hash=hash('sha256',j([$orderId,$input['revision']??null,$technical]));$cfg=aiConfiguration();$db=db();$db->beginTransaction();try{
+   $c=context(true);$o=orderRecord($orderId,true);aiTechnicalPrivacy($technical,$c,$o);$existing=one('SELECT * FROM ai_generations WHERE company_id=? AND actor_id=? AND request_key=?'.lockSuffix(),[$c['id'],$_SESSION['user_id'],$requestKey]);if($existing){if(!hash_equals($existing['request_hash'],$hash))fail('Ключ генерации использован с другим описанием',409);$db->commit();return aiJobResult($existing);}
+   checkRevision((int)$o['revision'],$input);if($o['status']==='archived')fail('Выберите активный заказ');if(!aiCapability()['configured'])fail('Проверьте серверный ключ AI, cURL и SQL обновления.',503);
+   $count=(int)one('SELECT COUNT(*) n FROM ai_generations WHERE company_id=? AND created_at>=CURRENT_DATE()',[$c['id']])['n'];if($count>=(int)$cfg['daily_limit'])fail('Дневной лимит новых генераций исчерпан. Готовый прогресс можно продолжать.',429);
+   $id=uid();$job=['stage'=>'outline','groups'=>[],'group_index'=>0,'route'=>[],'continuation'=>'','assumptions'=>[],'questions'=>[],'error'=>null];query('INSERT INTO ai_generations (id,company_id,actor_id,order_id,order_revision,request_key,request_hash,prompt_version,request_json,job_json) VALUES (?,?,?,?,?,?,?,?,?,?)',[$id,$c['id'],$_SESSION['user_id'],$o['id'],(int)$o['revision'],$requestKey,$hash,AI_TECHNOLOGY_PROMPT_VERSION,j($technical),j($job)]);$db->commit();return aiJobResult(aiJobRecord($id));
+  }catch(Throwable $err){if($db->inTransaction())$db->rollBack();throw $err;}
+ }
+ if($action!=='technology_step')fail('Неизвестное действие AI',404);
+ $id=textField($input,'generation_id',32,true);$db=db();$lease=uid();$db->beginTransaction();try{
+  $r=aiJobRecord($id,true);if(in_array($r['state'],['ready','applied'],true)){$db->commit();return aiJobResult($r);}if($r['lease_until']&&strtotime($r['lease_until'])>time())fail('Текущая часть ещё создаётся. Подождите немного.',409);
+  $o=orderRecord($r['order_id'],true);if((int)$o['revision']!==(int)$r['order_revision'])fail('Заказ изменился. Сохранённый результат доступен, но нужна новая генерация для новой версии.',409);
+  $job=decode($r['job_json']);$technical=decode($r['request_json']);aiTechnicalPrivacy($technical,$c,$o);query("UPDATE ai_generations SET state='pending',lease_token=?,lease_until=DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 90 SECOND),error_code=NULL,call_count=call_count+1 WHERE id=?",[$lease,$id]);$db->commit();
  }catch(Throwable $err){if($db->inTransaction())$db->rollBack();throw $err;}
+ $originalJob=$job;if(session_status()===PHP_SESSION_ACTIVE)session_write_close();
  try{
-  $result=aiGateway($technical);$proposal=$result['proposal'];foreach($proposal['route'] as &$op)$op['ai_origin']=['generation_id'=>$id,'model'=>$result['model'],'prompt_version'=>$result['prompt_version']];unset($op);
-  $out=$proposal+['generation_id'=>$id,'order_id'=>$orderId,'order_revision'=>(int)$o['revision'],'model'=>$result['model'],'prompt_version'=>$result['prompt_version'],'usage'=>$result['usage'],'replayed'=>false];
-  $db->beginTransaction();query("UPDATE ai_generations SET state='ready',response_json=?,model=?,usage_json=?,latency_ms=? WHERE id=?",[j($out),$result['model'],j($result['usage']),$result['latency_ms'],$id]);audit('ai_technology_generated',['generation_id'=>$id,'order_id'=>$orderId,'operations'=>count($proposal['route']),'model'=>$result['model'],'prompt_version'=>$result['prompt_version']]);$db->commit();return $out;
- }catch(Throwable $err){if($db->inTransaction())$db->rollBack();query("UPDATE ai_generations SET state='failed',error_code=? WHERE id=?",[$err instanceof AppError?'generation_failed':'server_failed',$id]);throw $err;}
+  $result=aiGateway($technical,$job);$page=$result['data'];$job['error']=null;
+  if($job['stage']==='outline'){
+   foreach($page['groups'] as $group){$n=count($job['groups'])+1;foreach($group['after'] as $prev)if($prev>=$n)fail('Связь узла должна указывать на предыдущий узел. Повторите часть.',502);if(in_array($group['name'],array_column($job['groups'],'name'),true))fail('AI повторил узел. Повторите часть.',502);$job['groups'][]=$group+['id'=>'node-'.$n,'number'=>$n];}
+   $job['assumptions']=array_values(array_unique(array_merge($job['assumptions'],$page['assumptions'])));$job['questions']=array_values(array_unique(array_merge($job['questions'],$page['questions'])));$job['continuation']=$page['continuation'];if(!$page['has_more']){$job['stage']='operations';$job['continuation']='';}
+  }else{
+   $g=$job['groups'][$job['group_index']];$previous=array_values(array_filter($job['route'],fn($op)=>$op['node_id']===$g['id']));$last=$previous?end($previous)['id']:null;$dependencies=[];
+   if(!$last)foreach($g['after'] as $n){$node='node-'.$n;$prior=array_values(array_filter($job['route'],fn($op)=>$op['node_id']===$node));if($prior)$dependencies[]=end($prior)['id'];}
+   foreach($page['operations'] as $op){$op['id']='g'.($job['group_index']+1).'-op'.(count($previous)+1);if(in_array($op['name'],array_column($previous,'name'),true))fail('AI повторил операцию в узле. Повторите часть.',502);$op['node_id']=$g['id'];$op['node_name']=$g['name'];$op['dependencies']=$last?[$last]:$dependencies;$op['ai_origin']=['generation_id'=>$id,'model'=>$result['model'],'prompt_version'=>AI_TECHNOLOGY_PROMPT_VERSION];
+    $v=catalogVariant($op['catalog_variant']);if($v){$op['catalog_ref']=['operation'=>$v['operation'],'variant'=>$v['id'],'condition'=>$v['condition'],'construction'=>$v['construction'],'source'=>'1С ТехОперации 27.09.2026'];$op['estimated_seconds']=is_numeric($v['seconds'])&&$v['seconds']>0?(int)$v['seconds']:$op['estimated_seconds'];}$job['route'][]=$op;$previous[]=$op;$last=$op['id'];}
+   $job['questions']=array_values(array_unique(array_merge($job['questions'],$page['questions'])));$job['continuation']=$page['continuation'];if(!$page['has_more']){$job['group_index']++;$job['continuation']='';if($job['group_index']>=count($job['groups']))$job['stage']='ready';}
+  }
+  $ready=$job['stage']==='ready';$response=null;if($ready){$used=[];foreach($job['route'] as $op)foreach($op['dependencies'] as $d)$used[$d]=true;$sinks=array_column(array_filter($job['route'],fn($op)=>!isset($used[$op['id']])),'id');if(count($sinks)>1){$index=count($job['route'])-1;$last=$job['route'][$index]['id'];$job['route'][$index]['dependencies']=array_values(array_unique(array_merge($job['route'][$index]['dependencies'],array_values(array_diff($sinks,[$last])))));}
+   $response=['schema_version'=>2,'product'=>$technical['product'],'groups'=>$job['groups'],'route'=>$job['route'],'assumptions'=>$job['assumptions'],'questions'=>$job['questions'],'model'=>$result['model'],'prompt_version'=>AI_TECHNOLOGY_PROMPT_VERSION];}
+  query('UPDATE ai_generations SET state=?,job_json=?,response_json=?,model=?,usage_json=?,latency_ms=?,lease_token=NULL,lease_until=NULL WHERE id=? AND lease_token=?',[$ready?'ready':'pending',j($job),$response?j($response):null,$result['model'],j($result['usage']),$result['latency_ms'],$id,$lease]);if($ready)audit('ai_technology_generated',['generation_id'=>$id,'order_id'=>$r['order_id'],'operations'=>count($job['route']),'nodes'=>count($job['groups'])]);return aiJobResult(aiJobRecord($id));
+ }catch(Throwable $err){$job=$originalJob;$job['error']=$err instanceof AppError?$err->getMessage():'Не удалось закончить часть. Продолжите сохранённую генерацию.';query('UPDATE ai_generations SET job_json=?,error_code=?,lease_token=NULL,lease_until=NULL WHERE id=? AND lease_token=?',[j($job),'part_failed',$id,$lease]);throw $err;}
 }

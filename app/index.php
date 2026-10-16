@@ -7,7 +7,7 @@ if(isset($_GET['api'])){
   $action=(string)$_GET['api'];$method=$_SERVER['REQUEST_METHOD']??'GET';
   if(!in_array($action,['bootstrap','state'],true)&&$method!=='POST')fail('Нужен POST-запрос',405);
   $input=[];if($method==='POST'){
-   if((int)($_SERVER['CONTENT_LENGTH']??0)>262144)fail('Слишком большой запрос',413);
+   if((int)($_SERVER['CONTENT_LENGTH']??0)>16777216)fail('Слишком большой запрос',413);
    $raw=file_get_contents('php://input');$input=json_decode($raw?:'{}',true,64,JSON_THROW_ON_ERROR);if(!is_array($input))fail('Некорректные данные');
    $token=$_SERVER['HTTP_X_CSRF_TOKEN']??'';if(!is_string($token)||!hash_equals($_SESSION['csrf'],$token))fail('Сессия обновилась. Перезагрузите страницу.',419);
   }
