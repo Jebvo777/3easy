@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-const AI_TECHNOLOGY_PROMPT_VERSION='garment-nodes-20261016.1';
+const AI_TECHNOLOGY_PROMPT_VERSION='garment-nodes-20261016.2-luna';
 const AI_TECHNOLOGY_TYPES=['cut','sew','overlock','iron','hand','qc','pack'];
 function aiKeys(array $data,array $allowed,array $required=[]):void{if(array_diff(array_keys($data),$allowed)||array_diff($required,array_keys($data)))fail('AI вернул неверные поля. Повторите текущую часть.',502);}
 function aiString(mixed $v,int $limit,bool $required=false):string{if(!is_string($v)||!preg_match('//u',$v)||preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F]/',$v))fail('Некорректный текст AI',502);$v=trim($v);if(preg_match_all('/./us',$v)>$limit||($required&&$v===''))fail('Некорректная длина текста AI',502);return $v;}

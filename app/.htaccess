@@ -1,6 +1,6 @@
 Options -Indexes
 DirectoryIndex index.php
-<FilesMatch "^(config\.(local|example)\.php|.*\.(sql|md|json|log))$">
+<FilesMatch "^(config(?:\.ai)?\.(local|example)\.php|.*\.(sql|md|json|log))$">
     Require all denied
 </FilesMatch>
 <IfModule mod_headers.c>
