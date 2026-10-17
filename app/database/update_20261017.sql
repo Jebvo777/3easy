@@ -145,3 +145,18 @@ CREATE TABLE IF NOT EXISTS `document_import_applications` (
 UPDATE `assistant_jobs` SET `state`='pending',`lease_token`=NULL,`lease_until`=NULL,
  `error_message`='Предыдущий запрос прерван. Продолжите сохранённое задание.'
 WHERE `state`='working' AND `lease_until` IS NOT NULL AND `lease_until`<=CURRENT_TIMESTAMP;
+
+CREATE TABLE IF NOT EXISTS `simulation_cases` (
+ `id` CHAR(32) NOT NULL PRIMARY KEY,
+ `company_id` CHAR(32) NOT NULL,
+ `actor_id` CHAR(32) NOT NULL,
+ `job_id` CHAR(32) NOT NULL,
+ `variant_index` INT NOT NULL DEFAULT -1,
+ `title` VARCHAR(180) NOT NULL,
+ `source_hash` CHAR(64) NOT NULL,
+ `settings_json` LONGTEXT NOT NULL,
+ `result_json` LONGTEXT NOT NULL,
+ `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ UNIQUE KEY `simulation_job_variant` (`company_id`,`job_id`,`variant_index`),
+ KEY `simulation_owner` (`company_id`,`actor_id`,`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

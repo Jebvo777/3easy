@@ -16,5 +16,5 @@ function aiSanitizeText(string $text,array $company,array $aliases=[]):array{
  ];foreach($patterns as $pattern){$text=preg_replace($pattern,'[личные реквизиты скрыты]',$text,-1,$n)??$text;$count+=$n;}
  return ['text'=>$text,'redactions'=>$count];
 }
-function aiWorkflowSafeReply(string $text):void{if(preg_match('~https?://|www\.|\bsk-[\w-]+|[\w.+-]+@[\w.-]+\.[a-z]{2,}|\b\d{10,20}\b~iu',$text))fail('Ответ AI содержит недопустимые реквизиты. Повторите запрос.',502);}
+function aiWorkflowSafeReply(string $text):void{if(preg_match('~https?://|www\.|\bsk-[\w-]+|[\w.+-]+@[\w.-]+\.[a-z]{2,}~iu',$text))fail('Ответ AI содержит недопустимые реквизиты. Повторите запрос.',502);}
 function aiWorkflowTexts(mixed $values):array{if(!is_array($values)||!array_is_list($values)||count($values)>60)fail('Некорректные пояснения AI',502);return array_map(function($v){$s=aiString($v,600,true);aiWorkflowSafeReply($s);return $s;},$values);}
