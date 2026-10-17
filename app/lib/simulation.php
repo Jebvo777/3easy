@@ -14,7 +14,7 @@ function simulationSettings(array $raw,array $source):array{
 }
 function simulationCapture(array $c):array{
  [$orders,$tasks]=engineInputs($c);$records=[];foreach($orders as $o)$records[$o['id']]=workspaceRecord($c,$o);$plans=rows('SELECT * FROM plan_versions WHERE company_id=? ORDER BY version_no',[$c['id']]);foreach($plans as &$p){$p['snapshot']=decode($p['snapshot']);$p['approvals']=decode($p['approvals']);}unset($p);$observations=rows('SELECT * FROM economy_observations WHERE company_id=? ORDER BY order_id,revision DESC',[$c['id']]);foreach($observations as &$o)foreach(['revision','accepted_quantity','recognized_cents','direct_cents','labor_cents','common_cents'] as $f)$o[$f]=$o[$f]===null?null:(int)$o[$f];unset($o);
- $hash=hash('sha256',j([engineHash($c,$orders,$tasks),array_map(fn($o)=>[$o['id'],$o['revision']],$observations)]));return ['company'=>$c,'orders'=>$orders,'tasks'=>$tasks,'plans'=>$plans,'observations'=>$observations,'workspaces'=>$records,'source_hash'=>$hash,'as_of'=>intdiv(time(),60)*60];
+ $hash=hash('sha256',j([engineHash($c,$orders,$tasks),array_map(fn($o)=>[$o['id'],$o['revision']],$observations),$records,array_map(fn($p)=>[$p['id'],$p['state']],$plans)]));return ['company'=>$c,'orders'=>$orders,'tasks'=>$tasks,'plans'=>$plans,'observations'=>$observations,'workspaces'=>$records,'source_hash'=>$hash,'as_of'=>intdiv(time(),60)*60];
 }
 function simulationCalculate(array $source,array $settings):array{
  $c=$source['company'];$orders=$source['orders'];$tasks=$source['tasks'];$overrides=[];$warnings=[];$estimated=0;$c['_workspace_records']=$source['workspaces'];$c['_simulation_now']=$source['as_of'];$c['_simulation']=$settings;
