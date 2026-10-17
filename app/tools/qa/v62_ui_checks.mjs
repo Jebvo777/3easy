@@ -14,9 +14,10 @@ globalThis.devicePixelRatio=1;win.HTMLCanvasElement.prototype.getContext=()=>nul
 const app=fileURLToPath(new URL('../../',import.meta.url)),out=fileURLToPath(new URL('./output/v61/',import.meta.url)),js=pathToFileURL(app+'assets/js/');
 const read=n=>JSON.parse(fs.readFileSync(out+n+'.json')),state=read('state'),intent=read('intent'),shape=read('illustration'),aiResult=read('ai-result');
 const core=await import(new URL('core.js',js));core.setData(state);
-const style=document.createElement('style');style.textContent=fs.readFileSync(app+JSON.parse(fs.readFileSync(app+'assets/manifest.json')).css,'utf8');document.head.append(style);
+// Happy DOM requires whitespace after @media; browsers accept the original compact CSS.
+const style=document.createElement('style');style.textContent=fs.readFileSync(app+JSON.parse(fs.readFileSync(app+'assets/manifest.json')).css,'utf8').replace(/@media\(/g,'@media (');document.head.append(style);
 const main=document.querySelector('#view'),q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],tick=(ms=25)=>new Promise(r=>setTimeout(r,ms));
-const response=data=>({ok:true,status:200,headers:{get:()=>null},json:async()=>({ok:true,data})});
+const response=data=>data?.apiFailure?{ok:false,status:422,headers:{get:()=>null},json:async()=>({ok:false,error:data.apiFailure})}:{ok:true,status:200,headers:{get:()=>null},json:async()=>({ok:true,data})};
 let calls=[],pending={},cleanup,techJob={generation_id:'tech-v62',order_revision:1,state:'pending',stage:'operations',groups_done:0,groups_total:2,operations:0,illustration:shape,illustration_state:'ready',retry_after:0};
 globalThis.fetch=async(url,options={})=>{
  const action=new URL(url,'http://x').searchParams.get('api'),input=options.body&&JSON.parse(options.body);calls.push({action,input});
@@ -31,9 +32,14 @@ let checks=[],errors=[];async function test(label,fn){try{await fn();checks.push
 
 await test('Home gives reserved navigation space back to the 3D model',async()=>{
  main.className='desktop-persistent';const original=console.error;console.error=()=>{};try{cleanup=await (await import(new URL('desktop.js',js))).render(main);}finally{console.error=original;}
+ try{
  assert.equal(win.getComputedStyle(q('.desktop')).paddingBottom,'6px');assert.equal(win.getComputedStyle(q('.desktop')).gridTemplateRows,'auto minmax(0,1fr) auto auto');
  assert.equal(win.getComputedStyle(q('.finance-period-bar')).marginBottom,'12px');assert.equal(win.getComputedStyle(q('.finance-metric strong')).marginTop,'3px');assert.equal(qa('.finance-metric').length,3);
- const canvas=q('#loop-canvas');click('[data-finance-period=week]');assert.equal(q('#loop-canvas'),canvas);assert.equal(q('[data-finance-period=week]').getAttribute('aria-pressed'),'true');cleanup();main.className='window-content';
+ const canvas=q('#loop-canvas');click('[data-finance-period=week]');assert.equal(q('#loop-canvas'),canvas);assert.equal(q('[data-finance-period=week]').getAttribute('aria-pressed'),'true');
+ // Happy DOM caches media-dependent styles until a stylesheet mutation.
+ win.happyDOM.setWindowSize({width:1366,height:720});style.textContent=style.textContent;assert.equal(win.getComputedStyle(q('.desktop')).paddingBottom,'4px');assert.equal(win.getComputedStyle(q('.finance-metric strong')).fontSize,'26px');
+ win.happyDOM.setWindowSize({width:480,height:840});style.textContent=style.textContent;assert.equal(win.getComputedStyle(q('.desktop')).paddingBottom,'4px');assert.equal(win.getComputedStyle(q('.finance-metrics')).gridTemplateColumns,'repeat(3,minmax(0,1fr))');assert.equal(win.getComputedStyle(q('.period-picker')).width,'100%');
+ }finally{win.happyDOM.setWindowSize({width:1440,height:960});style.textContent=style.textContent;cleanup();main.className='window-content';}
 });
 await test('AI opens one animated overlay immediately and blocks repeated submissions',async()=>{
  cleanup=await (await import(new URL('simulation.js',js))).render(main);click('[data-simulation-tab=ai]');q('[name=intent]').value='За 109 дней получить результат 3 миллиона рублей';await start();submit();submit();
@@ -54,6 +60,9 @@ await test('Closing an overlay pauses the job without reopening the window',asyn
 });
 await test('Leaving simulation removes the overlay and prevents another step',async()=>{
  click('#simulation-ai-resume');pending.assistant_status(job(3));await tick();const count=calls.filter(c=>c.action==='simulation_ai_step').length;cleanup();await tick();assert(!q('.simulation-ai-overlay'));pending.simulation_ai_step(job(4));await tick();assert.equal(calls.filter(c=>c.action==='simulation_ai_step').length,count);
+});
+await test('A failed AI start closes the overlay, unlocks controls and shows the error',async()=>{
+ cleanup=await (await import(new URL('simulation.js',js))).render(main);await start();pending.simulation_ai_start({apiFailure:'Контрольная ошибка AI-подбора'});await tick();assert(!q('.simulation-ai-overlay'));assert(!q('#simulation-controls').disabled);assert(q('.simulation-activity.error').textContent.includes('Контрольная ошибка'));cleanup();
 });
 let figure,svg,observer,removals=[];
 await test('Technology keeps the drawing connected across operation progress',async()=>{
