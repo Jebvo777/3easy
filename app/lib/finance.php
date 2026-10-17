@@ -38,5 +38,13 @@ function financeAvailable():bool{
 function financeState(array $orders,array $plans,array $tasks,array $current,string $company):array{
  $available=financeAvailable();$observations=$available?rows('SELECT * FROM economy_observations WHERE company_id=? ORDER BY revision DESC',[$company]):[];
  foreach($observations as &$o){foreach(['revision','accepted_quantity','recognized_cents','direct_cents','labor_cents','common_cents'] as $k)$o[$k]=$o[$k]===null?null:(int)$o[$k];}unset($o);
- return ['available'=>$available,...financeRollup($orders,$plans,$tasks,$observations,$current)];
+ $result=['available'=>$available,...financeRollup($orders,$plans,$tasks,$observations,$current)];
+ $zone=new DateTimeZone(context()['passport']['timezone']??'Europe/Moscow');$today=new DateTimeImmutable('today',$zone);$result['periods']=[];
+ foreach(['day','week','month'] as $period){
+  $from=match($period){'week'=>$today->modify('monday this week'),'month'=>$today->modify('first day of this month'),default=>$today};
+  $to=match($period){'week'=>$from->modify('+6 days'),'month'=>$from->modify('last day of this month'),default=>$from};
+  $subset=array_values(array_filter($orders,fn($o)=>$o['deadline']>=$from->format('Y-m-d')&&$o['deadline']<=$to->format('Y-m-d')));
+  $result['periods'][$period]=financeRollup($subset,$plans,$tasks,$observations,$current)+['from'=>$from->format('Y-m-d'),'to'=>$to->format('Y-m-d'),'cohort'=>'Цели со сроком в выбранном периоде'];
+ }
+ return $result;
 }

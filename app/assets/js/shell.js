@@ -1,7 +1,7 @@
 import {app,S,e,api,setData,refresh,modal,button,toast,formData,submit,tabletClose} from './core.js';
 import {icon} from './icons.js';import {setWorkspaceFilm} from './background.js';
-const routes={desktop:['Рабочий стол','desktop'],goal:['Цель','goal'],plan:['План','plan'],production:['Действие','production'],builder:['Предприятие','builder'],passport:['Паспорт','passport']};
-const moduleLoaders={desktop:()=>import('./desktop.js'),goal:()=>import('./goal.js'),plan:()=>import('./plan.js'),production:()=>import('./production.js'),builder:()=>import('./builder.js'),passport:()=>import('./passport.js')};
+const routes={desktop:['Рабочий стол','desktop'],goal:['Цель','goal'],plan:['План','plan'],production:['Действие','production'],builder:['Предприятие','builder'],passport:['Паспорт','passport'],simulation:['Прогноз и симуляция','sparkle']};
+const moduleLoaders={desktop:()=>import('./desktop.js'),goal:()=>import('./goal.js'),plan:()=>import('./plan.js'),production:()=>import('./production.js'),builder:()=>import('./builder.js'),passport:()=>import('./passport.js'),simulation:()=>import('./simulation.js')};
 let renderTicket=0,shellKey=null,desktopDispose=null,viewDispose=null,clockTimer=null,desktopKey=null,desktopPromise=null,currentRoute=null,navigationRestored=false;
 const roles={owner:'Собственник',foreman:'Мастер',technologist:'Технолог',chief:'Начальник производства',worker:'Работник',qc:'ОТК'};
 async function navigate(route){if(S.beforeNavigate&&!await S.beforeNavigate())return;S.beforeNavigate=null;if(S.route===route)renderWorkspace();else location.hash=route;}

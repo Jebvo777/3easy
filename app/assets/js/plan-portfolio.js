@@ -1,0 +1,14 @@
+import {S,e,num,date,button,badge} from './core.js';
+import {icon} from './icons.js';
+export function mountPlanPortfolio(host,{onOpen}){
+ let filter='all';
+ const orders=S.data.orders.filter(o=>o.status!=='archived');
+ const state=o=>{const tasks=S.data.tasks.filter(t=>t.order_id===o.id),incomplete=!o.route.length||o.route.some(op=>op.seconds==null),published=S.data.plans.some(p=>p.state==='published'&&p.snapshot.order_revisions?.[o.id]);return {tasks,incomplete,published,risk:incomplete||(o.deadline<new Date().toLocaleDateString('en-CA')&&tasks.some(t=>t.state!=='completed'))};};
+ function draw(){
+  const stats=[['prepare','Подготовка',orders.filter(o=>state(o).incomplete).length,'Технология, комплектация и нормы'],['work','В работе',orders.filter(o=>state(o).published).length,'Опубликованные решения и задания'],['attention','Внимание',orders.filter(o=>state(o).risk).length,'Недостающие данные и риски срока']];
+  const visible=orders.filter(o=>filter==='all'||(filter==='prepare'?state(o).incomplete:filter==='work'?state(o).published:state(o).risk)).sort((a,b)=>a.deadline.localeCompare(b.deadline));
+  host.innerHTML=`<section class="plan-portfolio"><header class="page-heading"><div><p class="eyebrow">План · общая картина</p><h2>У каждого заказа — следующий шаг.</h2><p>Сначала портфель. Затем три решения заказа. Внутри — конкретные работы.</p></div>${button('Все заказы','grid','small',`data-plan-filter="all" ${filter==='all'?'aria-pressed="true"':''}`)}</header><div class="three-focus">${stats.map(([id,title,count,hint])=>`<button class="focus-tile ${filter===id?'selected':''} ${id==='attention'&&count?'warning':''}" data-plan-filter="${id}"><span>${title}</span><strong>${num(count)}</strong><small>${hint}</small></button>`).join('')}</div><div class="plan-portfolio-list">${visible.map(o=>{const s=state(o),accepted=s.tasks.filter(t=>t.is_final).reduce((v,t)=>v+t.accepted,0),last=S.data.plans.find(p=>p.snapshot.order_revisions?.[o.id]),finish=last?.snapshot.order_finishes?.[o.id];return `<button class="plan-portfolio-order" data-plan-order="${e(o.id)}"><span class="portfolio-order-symbol">${icon('shirt')}</span><span><strong>${e(o.title)}</strong><small>${e(o.product)} · ${num(o.quantity)} шт. · до ${date(o.deadline)}</small></span><span class="portfolio-stage">${badge(s.incomplete?'Подготовить технологию':s.published?'План опубликован':'Готов к расчёту',s.incomplete?'warning':'')}<small>${o.route.length} операций · ${num(accepted)} принято</small></span><span class="portfolio-finish"><small>Прогноз готовности</small><strong>${finish?date(finish):'Нужен расчёт'}</strong></span>${icon('arrow')}</button>`;}).join('')||'<div class="empty"><p>В этом фокусе пока нет заказов.</p></div>'}</div></section>`;
+  host.querySelectorAll('[data-plan-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.planFilter;draw();});host.querySelectorAll('[data-plan-order]').forEach(b=>b.onclick=()=>onOpen(b.dataset.planOrder));
+ }
+ draw();
+}
