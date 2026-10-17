@@ -10,7 +10,7 @@ export async function api(action,input=null){
  const options=input===null?{credentials:'same-origin'}:{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':S.csrf},credentials:'same-origin',body:JSON.stringify(input)};
  let response;try{response=await fetch(`index.php?api=${encodeURIComponent(action)}`,options);}catch{throw Error('Нет соединения. Ввод сохранён в этом окне; повторите отправку.');}
  let result;try{result=await response.json();}catch{const error=Error([502,503,504].includes(response.status)?(action.startsWith('technology_')?'Хостинг прервал запрос. Готовые части сохранены; можно продолжить генерацию.':'Хостинг прервал запрос. Обновите данные перед повтором.'):'Сервер не вернул ответ. Повторите позже.');error.status=response.status;error.retryable=[502,503,504].includes(response.status);throw error;}
- if(!response.ok||!result.ok){const error=Error(result.error||'Не удалось выполнить действие');error.status=response.status;error.code=result.code;error.retryable=result.retryable===true;throw error;}
+ if(!response.ok||!result.ok){const error=Error(result.error||'Не удалось выполнить действие');error.status=response.status;error.code=result.code;error.retryable=result.retryable===true;error.retryAfter=Number(result.retry_after||response.headers.get('Retry-After')||0);throw error;}
  if(result.data.csrf)S.csrf=result.data.csrf;return result.data;
 }
 export function toast(message,error=false){const el=document.createElement('div');el.className='toast'+(error?' error':'');el.textContent=message;document.querySelector('#toasts').append(el);setTimeout(()=>el.remove(),error?6500:3800);}

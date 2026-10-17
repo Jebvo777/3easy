@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-const AI_TECHNOLOGY_PROMPT_VERSION='garment-nodes-20261016.2-luna';
+const AI_TECHNOLOGY_PROMPT_VERSION='industrial-nodes-20261017.1-luna';
 const AI_TECHNOLOGY_TYPES=['cut','sew','overlock','iron','hand','qc','pack'];
 function aiKeys(array $data,array $allowed,array $required=[]):void{if(array_diff(array_keys($data),$allowed)||array_diff($required,array_keys($data)))fail('AI вернул неверные поля. Повторите текущую часть.',502);}
 function aiString(mixed $v,int $limit,bool $required=false):string{if(!is_string($v)||!preg_match('//u',$v)||preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F]/',$v))fail('Некорректный текст AI',502);$v=trim($v);if(preg_match_all('/./us',$v)>$limit||($required&&$v===''))fail('Некорректная длина текста AI',502);return $v;}
@@ -8,7 +8,7 @@ function aiInteger(mixed $v,int $min,int $max,bool $nullable=false):?int{if($nul
 function aiNoIdentifiers(string $text,int $status=422):void{
  if(preg_match('~(*UCP)(?:https?://|www\.|[\w.+-]+@[\w.-]+\.[a-z]{2,}|\bsk-[\w-]+|\+?\d[\d ()-]{8,}\d|\b(?:ФИО|ИНН|СНИЛС|паспорт|телефон|email|e-mail|заказчик|клиент|сотрудник)\b)~iu',$text)||preg_match('/\b[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+\s+[А-ЯЁ][а-яё]+\b/u',$text))fail('Оставьте только техническое описание изделия, без имён, контактов и данных предприятия.',$status);
 }
-function aiTechnicalInput(array $input):array{$p=textField($input,'product',180,true);$d=textField($input,'description',6000);aiNoIdentifiers($p.' '.$d);return ['product'=>$p,'description'=>$d];}
+function aiTechnicalInput(array $input):array{$p=textField($input,'product',180,true);$d=textField($input,'description',6000);aiNoIdentifiers($p.' '.$d);return ['product'=>$p,'description'=>$d,'cutting_in_route'=>(bool)($input['cutting_in_route']??false),'production_context'=>'Промышленный пошив; готовые пачки кроя поступают из отдельного раскройного цеха'];}
 function aiTechnicalPrivacy(array $technical,array $company,array $order):void{$text=$technical['product'].' '.$technical['description'];foreach([$company['name'],$order['customer']??'',user()['name'],...array_column($company['passport']['people']??[],'name')] as $name){$name=trim((string)$name);if(strlen($name)>=5&&preg_match('~'.preg_quote($name,'~').'~iu',$text))fail('Уберите имена и названия предприятия или заказчика из описания.');}}
 function aiJsonReply(string $reply):array{$reply=trim($reply);if(preg_match('/^```(?:json)?\s*([\s\S]*?)\s*```$/i',$reply,$m))$reply=$m[1];try{$o=json_decode($reply,true,128,JSON_THROW_ON_ERROR);}catch(JsonException){fail('AI вернул незавершённую часть. Уже готовые узлы сохранены; повторите эту часть.',502);}if(!is_array($o)||array_is_list($o))fail('AI вернул неверный JSON',502);return $o;}
 function aiTexts(mixed $v):array{if(!is_array($v)||!array_is_list($v))fail('Некорректные уточнения AI',502);return array_map(function($x){$s=aiString($x,600,true);aiNoIdentifiers($s,502);return $s;},$v);}
