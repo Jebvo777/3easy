@@ -7,7 +7,7 @@ export function renderTechnology(host,order,{onSaved,onDirty}={}){
  let route=structuredClone(order.route||[]),dirty=false,term='',opened=new Set(),limits={};const can=['owner','technologist'].includes(S.data.company.role);
  const ui={mode:'structure',selected:new Set(),undo:[],redo:[],snapshot:structuredClone(route)};
  const change=()=>{ui.undo.push(ui.snapshot);ui.undo=ui.undo.slice(-30);ui.redo=[];ui.snapshot=structuredClone(route);dirty=true;onDirty?.(true);};
- const set=(next,{repaint=true,history=true}={})=>{route=next;if(history)change();if(repaint)draw();};
+ const set=(next,{repaint=true,history=true}={})=>{route=next;if(history)change();if(repaint)draw();else{const undoButton=host.querySelector("[data-tech-undo]"),redoButton=host.querySelector("[data-tech-redo]");if(undoButton)undoButton.disabled=!ui.undo.length;if(redoButton)redoButton.disabled=!ui.redo.length;const note=host.querySelector(".technology-title>div>p:last-child");if(note)note.textContent=routeGroups(route).length+" узлов · "+num(route.length)+" операций · есть изменения";}};
  const restore=kind=>{const from=ui[kind],to=ui[kind==='undo'?'redo':'undo'];if(!from.length)return;to.push(structuredClone(route));route=from.pop();ui.snapshot=structuredClone(route);dirty=true;onDirty?.(true);draw();};
  async function save(){try{await api('route_save',{order_id:order.id,revision:order.revision,key:key(),route});dirty=false;onDirty?.(false);toast('Технология сохранена');await onSaved?.();}catch(err){toast(err.message,true);}}
  function draw(){
