@@ -88,18 +88,18 @@ function aiGateway(array $technical,array $job,?array $cfg=null,?callable $trans
  // A working fallback is preferred for this generation; new jobs start with Luna.
  if($preferred&&in_array($preferred,$models,true))$models=array_merge([$preferred],array_values(array_diff($models,[$preferred])));
  $started=microtime(true);$budget=max(8,min(24,(int)$cfg['total_timeout']));$phpLimit=(int)ini_get('max_execution_time');if($phpLimit>0)$budget=max(4,min($budget,$phpLimit-5));
- $attempts=[];$last='unavailable';$lastIndex=0;$messages=$job['_messages']??aiTechnologyMessages($technical,$job);$retryAfter=0;
+ if($transport==='aiHttp')aiProviderGate($cfg);$attempts=[];$last='unavailable';$lastIndex=0;$messages=$job['_messages']??aiTechnologyMessages($technical,$job);$retryAfter=0;
  foreach($models as $index=>$model){
   if($budget-(microtime(true)-$started)<3)break;$lastIndex=$index;$payload=aiProviderPayload($model,$messages,$cfg);
   for($variant=0;$variant<2;$variant++){
    $remaining=$budget-(microtime(true)-$started);if($remaining<3)break;$timeout=max(2,min((int)$cfg['attempt_timeout'],(int)floor($remaining)));
-   if($transport==='aiHttp')aiProviderGate($cfg);$response=$transport($cfg,$payload,$timeout);$code=(int)$response['http'];$body=(string)$response['body'];$envelope=json_decode($body,true);$providerError=is_array($envelope['error']??null)?$envelope['error']:[];
+   $response=$transport($cfg,$payload,$timeout);$code=(int)$response['http'];$body=(string)$response['body'];$envelope=json_decode($body,true);$providerError=is_array($envelope['error']??null)?$envelope['error']:[];
    $providerCode=strtolower((string)($providerError['code']??$providerError['type']??''));$providerMessage=strtolower((string)($providerError['message']??''));
    $last=$response['error']??($code>=200&&$code<300?'invalid':'provider');
    if($code===401)$last='key_rejected';
    elseif($code===403)$last=str_contains($body,'1010')||str_contains($body,'Cloudflare')?'provider_blocked':(str_contains($providerMessage,'model')||str_contains($providerCode,'model')?'model_unavailable':'access_denied');
    elseif($code===402||str_contains($providerCode,'insufficient_quota')||str_contains($providerCode,'balance'))$last='balance';
-   elseif($code===404)$last='model_unavailable';elseif($code===429)$last='rate_limit';elseif($code===413||str_contains($providerCode,'context_length'))$last='request_size';
+   elseif($code===404)$last='model_unavailable';elseif($code===429||str_contains($providerCode,'rate_limit')||str_contains($providerMessage,'requests per minute'))$last='rate_limit';elseif($code===413||str_contains($providerCode,'context_length'))$last='request_size';
    $attempts[]=['model'=>$model,'http'=>$code,'reason'=>$last];
    if($last==='rate_limit'){$retryAfter=max(15,(int)($response['retry_after']??0));if($transport==='aiHttp')aiProviderGate($cfg,false,$retryAfter);break 2;}
    if(in_array($last,['configuration','key_rejected','provider_blocked','access_denied','balance','request_size'],true))break 2;
