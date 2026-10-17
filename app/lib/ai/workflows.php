@@ -1,0 +1,21 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/gateway.php';require_once __DIR__.'/privacy.php';
+function workflowRecord(string $id,bool $lock=false):array{$c=context();$r=one('SELECT * FROM assistant_jobs WHERE id=? AND company_id=? AND actor_id=?'.($lock?lockSuffix():''),[$id,$c['id'],$_SESSION['user_id']]);if(!$r)fail('Задание не найдено',404);return $r;}
+function workflowPublic(array $r):array{$progress=decode($r['progress_json']);return ['id'=>$r['id'],'kind'=>$r['kind'],'state'=>$r['state'],'progress'=>$progress,'result'=>decode($r['result_json']),'error'=>$r['error_message'],'model'=>$r['model'],'retry_after'=>max(0,(int)$r['retry_at']-time(),$r['lease_until']?strtotime($r['lease_until'])-time():0),'updated_at'=>$r['updated_at']];}
+function workflowCreate(string $kind,array $input,array $progress,string $key):array{
+ $c=context();$digest=hash('sha256',j([$kind,$input]));$old=one('SELECT * FROM assistant_jobs WHERE company_id=? AND actor_id=? AND request_key=?',[$c['id'],$_SESSION['user_id'],$key]);if($old){if(!hash_equals($old['input_hash'],$digest))fail('Этот ключ уже использован для другого задания',409);return $old;}
+ $count=(int)(one('SELECT COUNT(*) AS n FROM assistant_jobs WHERE company_id=? AND created_at>=CURRENT_DATE()',[$c['id']])['n']??0);if($count>=60)fail('Дневной лимит новых заданий исчерпан. Сохранённые задания можно продолжить.',429);
+ $id=uid();query('INSERT INTO assistant_jobs (id,company_id,actor_id,kind,request_key,input_hash,input_json,progress_json) VALUES (?,?,?,?,?,?,?,?)',[$id,$c['id'],$_SESSION['user_id'],$kind,$key,$digest,j($input),j($progress)]);return workflowRecord($id);
+}
+function workflowStep(string $id,callable $run):array{
+ $db=db();$db->beginTransaction();$lease=uid();try{$r=workflowRecord($id,true);if(in_array($r['state'],['ready','applied'],true)){$db->commit();return workflowPublic($r);}if((int)$r['retry_at']>time())throw new AiGatewayError('Сохранённое задание ждёт разрешённого времени продолжения.',429,'rate_limit',[],true,null,(int)$r['retry_at']-time());if($r['lease_until']&&strtotime($r['lease_until'])>time())throw new AiGatewayError('Эта часть уже рассчитывается. Прогресс сохранён.',409,'busy',[],true,null,max(1,strtotime($r['lease_until'])-time()));query("UPDATE assistant_jobs SET state='working',lease_token=?,lease_until=DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 45 SECOND),error_message=NULL,calls=calls+1 WHERE id=?",[$lease,$id]);$db->commit();}catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;}
+ if(session_status()===PHP_SESSION_ACTIVE)session_write_close();$settled=false;register_shutdown_function(function()use(&$settled,$id,$lease){if(!$settled)try{query("UPDATE assistant_jobs SET state='pending',lease_token=NULL,lease_until=NULL,error_message=? WHERE id=? AND lease_token=?",['Хостинг прервал запрос. Готовые части сохранены; продолжите задание.',$id,$lease]);}catch(Throwable){}});
+ try{$out=$run($r);query('UPDATE assistant_jobs SET state=?,progress_json=?,result_json=?,model=?,lease_token=NULL,lease_until=NULL,retry_at=0,error_message=NULL WHERE id=? AND lease_token=?',[$out['ready']?'ready':'pending',j($out['progress']),isset($out['result'])?j($out['result']):null,$out['model']??null,$id,$lease]);$settled=true;return workflowPublic(workflowRecord($id));}
+ catch(Throwable $e){$retry=$e instanceof AiGatewayError?$e->retryAfter:0;query("UPDATE assistant_jobs SET state='pending',lease_token=NULL,lease_until=NULL,retry_at=?,error_message=? WHERE id=? AND lease_token=?",[time()+max(0,$retry),$e instanceof AppError?$e->getMessage():'Не удалось закончить часть. Её можно повторить.',$id,$lease]);$settled=true;throw $e;}
+}
+function workflowAction(string $action,array $input):array{
+ permit(['owner','technologist','chief']);if($action==='assistant_status')return workflowPublic(workflowRecord(textField($input,'id',32,true)));
+ if($action==='assistant_jobs')return ['jobs'=>array_map('workflowPublic',rows('SELECT * FROM assistant_jobs WHERE company_id=? AND actor_id=? ORDER BY created_at DESC LIMIT 12',[context()['id'],$_SESSION['user_id']]))];
+ fail('Неизвестное действие помощника',404);
+}

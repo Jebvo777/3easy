@@ -4,6 +4,7 @@ function orderRecord(string $id,bool $lock=false):array{$c=context();$o=one('SEL
 function goalAction(string $action,array $input):array{
  owner();return command($action,$input,function(array $c)use($action,$input){
  $id=textField($input,'id',32);$old=$id?orderRecord($id,true):null;if($old)checkRevision((int)$old['revision'],$input);
+ $importId=textField($input,'import_id',32);$candidate=null;if($importId){$candidate=numberField($input,'import_candidate',0,10000);$source=one('SELECT id,job_id FROM document_imports WHERE id=? AND company_id=? AND actor_id=?'.lockSuffix(),[$importId,$c['id'],$_SESSION['user_id']]);if(!$source)fail('Исходный документ недоступен',403);$job=one('SELECT state,result_json FROM assistant_jobs WHERE id=? AND company_id=?',[$source['job_id'],$c['id']]);$items=decode($job['result_json']??null)['goals']??[];if(!$job||!in_array($job['state'],['ready','applied'],true)||!isset($items[$candidate]))fail('Сначала завершите разбор документа',409);$applied=one('SELECT order_id FROM document_import_applications WHERE import_id=? AND candidate_index=? AND company_id=?',[$importId,$candidate,$c['id']]);if($applied&&!$old)return ['saved'=>true,'id'=>$applied['order_id'],'already_applied'=>true];}
  if($action==='order_archive'){
   if(!$old)fail('Заказ не найден');$active=one("SELECT id FROM tasks WHERE order_id=? AND company_id=? AND state NOT IN ('completed','cancelled') LIMIT 1",[$id,$c['id']]);if($active)fail('Сначала завершите активные задания заказа');query("UPDATE orders SET status='archived',revision=revision+1 WHERE id=? AND company_id=?",[$id,$c['id']]);audit('order_archived',['id'=>$id]);return ['saved'=>true];
  }
@@ -21,6 +22,7 @@ function goalAction(string $action,array $input):array{
   query('UPDATE orders SET title=?,product=?,customer=?,mode=?,quantity=?,deadline=?,start_date=?,price_cents=?,price_basis=?,target_cents=?,material_owner=?,expenses=?,revision=revision+1 WHERE id=? AND company_id=?',[$title,$product,$customer,$mode,$qty,$deadline,$start,$price,$basis,$target,$material,j($clean),$id,$c['id']]);
   audit('order_saved',['id'=>$id,'revision'=>(int)$old['revision']+1,'previous_conditions'=>['quantity'=>(int)$old['quantity'],'deadline'=>$old['deadline'],'mode'=>$old['mode'],'price_cents'=>$old['price_cents'],'target_cents'=>$old['target_cents'],'expenses'=>decode($old['expenses'])]]);
  }else{$id=uid();query('INSERT INTO orders (id,company_id,title,product,customer,mode,quantity,deadline,start_date,price_cents,price_basis,target_cents,material_owner,expenses,route) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$id,$c['id'],$title,$product,$customer,$mode,$qty,$deadline,$start,$price,$basis,$target,$material,j($clean),'[]']);audit('order_saved',['id'=>$id,'revision'=>1]);}
+ if($importId&&!$old){query('INSERT INTO document_import_applications (import_id,candidate_index,company_id,order_id,actor_id) VALUES (?,?,?,?,?)',[$importId,$candidate,$c['id'],$id,$_SESSION['user_id']]);audit('document_goal_applied',['document_id'=>$importId,'candidate'=>$candidate,'order_id'=>$id]);}
  return ['saved'=>true,'id'=>$id];
  });
 }

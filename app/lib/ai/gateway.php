@@ -24,12 +24,12 @@ function aiConfiguration():array {
  $cfg['max_tokens']=max(1500,min(5000,(int)($cfg['max_tokens']??5000)));return $cfg;
 }
 function aiStorageAvailable():bool {
- try{db()->query('SELECT id,job_json,request_json,lease_token,lease_until,call_count FROM ai_generations LIMIT 0');return true;}catch(Throwable){return false;}
+ try{db()->query('SELECT id,job_json,request_json,lease_token,lease_until,call_count FROM ai_generations LIMIT 0');db()->query('SELECT bucket FROM ai_provider_limits LIMIT 0');return true;}catch(Throwable){return false;}
 }
 function aiCapabilityMessage(?string $reason):?string {
  return match($reason){
   'disabled'=>'Генерация отключена в серверной конфигурации AI.',
-  'migration_required'=>'Не хватает таблицы или полей AI. Импортируйте SQL обновления из этого архива.',
+  'migration_required'=>'Импортируйте update_20261017.sql из текущего архива: он добавляет хранение и очередь AI.',
   'curl_required'=>'На хостинге не включено расширение PHP cURL. Включите его для серверных запросов AI.',
   'key_required'=>'Сервер не видит ключ AI. Сохраните прежний ключ в config.ai.local.php или EASY3_AI_KEY.',
   'configuration'=>'Проверьте HTTPS-адрес провайдера и формат серверного ключа AI.',default=>null};
