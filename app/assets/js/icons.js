@@ -1,4 +1,5 @@
 const paths={
+ chart:'<path d="M4 4v16h16M8 15v-4m4 4V7m4 8v-6"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
  desktop:'<rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/>',
  goal:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 8-8m-5 0h5v5"/>',
  plan:'<path d="M5 4h14M5 12h14M5 20h14"/><rect x="7" y="2" width="4" height="4" rx="1"/><rect x="13" y="10" width="4" height="4" rx="1"/><rect x="5" y="18" width="4" height="4" rx="1"/>',
