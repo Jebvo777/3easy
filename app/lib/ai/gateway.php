@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/prompt.php';
+require_once __DIR__.'/prompt.php';require_once __DIR__.'/pacing.php';
 
 class AiGatewayError extends AppError {
  public function __construct(string $message,int $status,public string $reason,public array $attempts=[],public bool $retryable=false,public ?string $nextModel=null,public int $retryAfter=0) {
@@ -62,7 +62,7 @@ function aiProviderGate(array $cfg,bool $reserve=true,int $cooldown=0):void{
   $row=one('SELECT next_allowed FROM ai_provider_limits WHERE bucket=?'.lockSuffix(),[$bucket]);$wait=max(0,(int)($row['next_allowed']??0)-time());
   if($cooldown>0){query('UPDATE ai_provider_limits SET next_allowed=? WHERE bucket=?',[max((int)($row['next_allowed']??0),time()+$cooldown),$bucket]);$db->commit();return;}
   if($wait>0){$db->commit();throw new AiGatewayError('Провайдер просит паузу. Прогресс сохранён; продолжение через '.$wait.' сек.',429,'rate_limit',[],true,null,$wait);}
-  if($reserve)query('UPDATE ai_provider_limits SET next_allowed=? WHERE bucket=?',[time()+max(3,min(60,(int)($cfg['min_interval_seconds']??6))),$bucket]);$db->commit();
+  if($reserve)query('UPDATE ai_provider_limits SET next_allowed=? WHERE bucket=?',[time()+max(3,min(60,(int)($cfg['min_interval_seconds']??$cfg['min_interval']??10))),$bucket]);$db->commit();
  }catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;}
 }
 function aiProviderPayload(string $model,array $messages,array $cfg):array {

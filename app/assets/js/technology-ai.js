@@ -14,11 +14,11 @@ export function generateTechnology(order,{onApply,currentLength=0}={}){
   const unavailable=body.querySelector('.ai-description>.hint:last-child');if(unavailable&&!S.data.ai?.configured)unavailable.textContent=S.data.ai?.message||'Подключите AI: импортируйте SQL обновления и сохраните серверную конфигурацию с ключом.';
   body.querySelector('form').onsubmit=async ev=>{ev.preventDefault();const submit=ev.currentTarget.querySelector('[type="submit"]');if(submit.disabled)return;submit.disabled=true;const x=formData(ev.currentTarget);d.product=x.product;d.description=x.description;d.cutting=!!x.cutting;d.requestKey=key();try{d.job=await api('technology_generate',{key:d.requestKey,order_id:order.id,revision:order.revision,product:d.product,description:d.description,cutting_in_route:d.cutting});await run();}catch(err){form(err.message);}finally{submit.disabled=false;}};
  }
- function working(error=''){
+ function working(error='',waiting=''){
   if(!live())return;const j=d.job;
   // Keep the entire drawing subtree connected: even moving the same SVG restarts CSS animation.
   if(!body.querySelector('.ai-working-layout')){
-   body.innerHTML=`<div class="ai-working-layout"><div class="ai-sketch-slot" hidden></div><div class="ai-working" aria-live="polite"><div class="ai-weave" aria-hidden="true"><i></i><i></i><i></i><i></i><span>${icon('sparkle')}</span></div><p class="eyebrow" data-working-stage></p><h3 data-working-title></h3><p data-working-count></p><p class="hint" data-working-hint></p><p class="hint" data-working-unavailable hidden>Иллюстрация недоступна. Создание технологии продолжается.</p><p class="error-box" role="alert" data-working-error hidden></p><div class="ai-working-actions">${button('Пауза','pause','','id="ai-pause"')}${button('К описанию','edit','ghost','id="ai-description"')}</div></div></div>`;
+   body.innerHTML=`<div class="ai-working-layout"><div class="ai-sketch-slot" hidden></div><div class="ai-working" aria-live="polite"><div class="ai-weave" aria-hidden="true"><i></i><i></i><i></i><i></i><span>${icon('sparkle')}</span></div><p class="eyebrow" data-working-stage></p><h3 data-working-title></h3><p data-working-count></p><p class="hint" data-working-hint></p><p class="hint" data-working-unavailable hidden>Иллюстрация недоступна. Создание технологии продолжается.</p><p class="ai-wait-note" role="status" data-working-wait hidden></p><p class="error-box" role="alert" data-working-error hidden></p><div class="ai-working-actions">${button('Пауза','pause','','id="ai-pause"')}${button('К описанию','edit','ghost','id="ai-description"')}</div></div></div>`;
    sketchKey='';body.querySelector('#ai-pause').onclick=()=>{if(d.busy){d.paused=true;working();}else run();};body.querySelector('#ai-description').onclick=()=>{d.paused=true;form();};
   }
   const layout=body.querySelector('.ai-working-layout'),slot=layout.querySelector('.ai-sketch-slot'),nextSketchKey=JSON.stringify(j.illustration)||'';
@@ -28,19 +28,19 @@ export function generateTechnology(order,{onApply,currentLength=0}={}){
   layout.querySelector('[data-working-title]').textContent=d.paused?'Прогресс сохранён':j.stage==='illustration'?'Строим контуры по описанию':j.current_group||'Собираем узлы';
   layout.querySelector('[data-working-count]').textContent=num(j.operations)+' операций'+(j.groups_total?' · '+j.groups_done+' из '+j.groups_total+' узлов готовы':'');
   layout.querySelector('[data-working-hint]').textContent=j.stage==='illustration'?'AI задаёт точки силуэта, швов и деталей. Затем контуры будут постепенно прорисовываться, пока создаются операции.':'Каждая готовая часть сохраняется на сервере. Можно закрыть окно и продолжить позднее.';
-  layout.querySelector('[data-working-unavailable]').hidden=j.illustration_state!=='unavailable';const problem=layout.querySelector('[data-working-error]');problem.hidden=!error;problem.textContent=error;
+  layout.querySelector('[data-working-unavailable]').hidden=j.illustration_state!=='unavailable';const problem=layout.querySelector('[data-working-error]');problem.hidden=!error;problem.textContent=error;const waitNote=layout.querySelector('[data-working-wait]');waitNote.hidden=!waiting;waitNote.textContent=waiting;
   layout.querySelector('#ai-pause').innerHTML=icon(d.paused?'play':'pause')+(d.paused?'Продолжить':'Пауза');
  }
 
  async function run(){
   if(d.busy){d.paused=false;working();return;}d.paused=false;d.busy=true;
   let retries=0;try{if(d.job?.generation_id)d.job=await api('technology_status',{generation_id:d.job.generation_id});
-   while(live()&&!d.paused&&!['ready','applied'].includes(d.job.state)){if(d.job.retry_after>0){await wait(d.job.retry_after);if(d.paused||!live())break;d.job.retry_after=0;}working();try{d.job=await api('technology_step',{generation_id:d.job.generation_id});retries=0;}catch(err){if(err.code==='busy'||err.code==='rate_limit'){await wait(Math.max(3,err.retryAfter||15),err.message);continue;}if(err.status===409){d.paused=true;working(err.message);return;}if(err.retryable&&retries++<3&&live()&&!d.paused){await wait(Math.max(3,err.retryAfter||6),err.message);continue;}throw err;}}
+   while(live()&&!d.paused&&!['ready','applied'].includes(d.job.state)){if(d.job.retry_after>0){await wait(d.job.retry_after);if(d.paused||!live())break;d.job.retry_after=0;}working();try{d.job=await api('technology_step',{generation_id:d.job.generation_id});retries=0;}catch(err){if(['busy','rate_limit','cooldown'].includes(err.code)){await wait(Math.max(3,err.retryAfter||15),err.message);continue;}if(err.status===409){d.paused=true;working(err.message);return;}if(err.retryable&&retries++<3&&live()&&!d.paused){await wait(Math.max(3,err.retryAfter||6),err.message);continue;}throw err;}}
    if(['ready','applied'].includes(d.job.state)){d.paused=true;if(live())preview();}else if(live())working();
   }catch(err){d.paused=true;if(live())working(err.message);}finally{d.busy=false;}
  }
- async function wait(seconds,message='Продолжение сохранённой генерации'){
-  const until=Date.now()+Math.min(3600,seconds)*1000;while(live()&&!d.paused&&Date.now()<until){working(message+' · через '+Math.ceil((until-Date.now())/1000)+' сек.');await new Promise(r=>setTimeout(r,1000));}
+ async function wait(seconds,message='Выдерживаем интервал между запросами'){
+  const until=Date.now()+Math.min(3600,seconds)*1000;while(live()&&!d.paused&&Date.now()<until){working('',message+' · через '+Math.ceil((until-Date.now())/1000)+' сек.');await new Promise(r=>setTimeout(r,1000));}
  }
  function preview(){
   if(!live())return;const p=d.job;if(!p?.route){form();return;}const groups=new Map();p.route.forEach(o=>{if(!groups.has(o.node_id))groups.set(o.node_id,{name:o.node_name,ops:[]});groups.get(o.node_id).ops.push(o);});
