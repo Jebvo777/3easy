@@ -5,7 +5,7 @@ import {typeNames} from './passport.js';
 import {factoryScene} from './factory3d.js';
 import {centreSizes,clampCentre,distributePeople,arrangeFactory,connectFromRoutes} from './factory-model.js';
 export async function render(el,options={}){
-let main,layout,newResources=[],selectedId=null,scene,history=[],future=[],dirty=false,mode='3d',connectFrom=null,disposed=false,editMode=true,assignments={},schemeZoom=1,schemeCleanup=null,workshopId='w-main',onBack=()=>{},companyPassport=null;
+let main,layout,newResources=[],selectedId=null,scene,history=[],future=[],dirty=false,mode='3d',connectFrom=null,disposed=false,editMode=true,assignments={},schemeZoom=1,schemeCleanup=null,workshopId='w-main',onBack=()=>{},companyPassport=null,leaving=null;
 const sizes=centreSizes;
 const clone=v=>structuredClone(v);
 const allowed=()=>['owner','technologist','chief','foreman'].includes(S.data.company.role);
@@ -67,7 +67,6 @@ function autoLayout(){if(!allowed()||!editMode)return;remember();const resources
 function autoPeople(){if(!allowed()||!editMode)return;remember();Object.assign(assignments,distributePeople(allResources().filter(r=>layout.objects.some(o=>o.resource===r.id)),workshopPeople()));changed();toast('Люди распределены по навыкам. Время проверяет календарь.');}
 function autoLinks(){if(!allowed()||!editMode)return;const routes=S.data.orders.filter(o=>o.status!=='archived'&&o.route.length).map(o=>o.route);if(!routes.length){toast('Сначала сохраните технологию в ПЛАНЕ',true);return;}const result=connectFromRoutes(layout,routes);remember();layout.links=result.links;changed();toast(result.missing?'Поток связан; для части операций не хватает центров':'Связи построены по сохранённым технологиям');}
 
-let leaving=null;
 function confirmLeave(){
  if(disposed||!dirty)return Promise.resolve(true);if(leaving)return leaving;
  leaving=new Promise(resolve=>{let settled=false;const finish=value=>{if(settled)return;settled=true;leaving=null;resolve(value);};const m=modal('Сохранить схему цеха?',`<p class="muted">В цехе есть несохранённые изменения.</p><div class="modal-actions">${button('Остаться','','','data-back-stay')}${button('Выйти без сохранения','','','data-back-discard')}${button('Сохранить и выйти','check','primary','data-back-save')}</div>`,{onClose:()=>finish(false)});m.el.querySelector('[data-back-stay]').onclick=()=>m.close();m.el.querySelector('[data-back-discard]').onclick=()=>{finish(true);m.close();};m.el.querySelector('[data-back-save]').onclick=async ev=>{const b=ev.currentTarget;if(b.disabled)return;b.disabled=true;if(await save()){finish(true);m.close();}else b.disabled=false;};});return leaving;
