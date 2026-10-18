@@ -47,3 +47,8 @@ DOM-harness проверяет действия, формы, переходы и
 ## v7: финальные проверки
 
 После публикации всех этапов и сборки: `php tools/qa/v61_contracts.php`, затем `php tools/qa/v7_integration.php`. Второй сценарий создаёт изолированную SQLite БД в памяти из определений установщика, не читает приватные конфигурации и не подключается к рабочей БД. Нужны PDO SQLite и zlib. После него `node tools/qa/v7_ui_checks.mjs` и `python3 tools/qa/v7_xlsx_checks.py` (openpyxl и Pillow только для разработки). Дополнительная регрессия: v61/v62 UI, engine_checks.php, finance_checks.php, model_checks.mjs, refinement_checks.mjs, v61_avatar_checks.mjs. Сценарии пишут только вымышленные данные в исключённую из поставки папку output. Живые ответы AI проверяются отдельно теми же контрактами; ключи не записываются в результаты. Подробности и ограничения — QA_REPORT_V7.md.
+
+
+## v7.1 · только после публикации сборки
+
+После v7_integration.php: `php tools/qa/v71_contracts.php`, `node tools/qa/v71_ui_checks.mjs`, `node tools/qa/v71_motion_checks.mjs`. Контракты используют БД SQLite в памяти; UI — контрольный API и Happy DOM; движение проверяется по реальной геометрии и рабочим фазам. Приватные ключи и рабочая БД не требуются. Дополнительный отчёт: QA_REPORT_V71.md.
