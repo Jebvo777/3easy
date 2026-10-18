@@ -1,8 +1,8 @@
 import {importEnterprise} from './enterprise-import.js';
 import {app,S,e,api,setData,refresh,modal,button,toast,formData,submit,tabletClose} from './core.js';
 import {icon} from './icons.js';import {setWorkspaceFilm} from './background.js';
-const routes={desktop:['Рабочий стол','desktop'],goal:['Цель','goal'],plan:['План','plan'],production:['Действие','production'],builder:['Предприятие','builder'],passport:['Паспорт','passport'],simulation:['Прогноз и симуляция','sparkle'],optimization:['Оптимизация производства','sparkle']};
-const moduleLoaders={desktop:()=>import('./desktop.js'),goal:()=>import('./goal.js'),plan:()=>import('./plan.js'),production:()=>import('./production.js'),builder:()=>import('./builder.js'),passport:()=>import('./passport.js'),simulation:()=>import('./simulation.js'),optimization:()=>import('./optimization.js')};
+const routes={desktop:['Рабочий стол','desktop'],goal:['Цель','goal'],plan:['План','plan'],production:['Действие','production'],builder:['Предприятие','builder'],passport:['Паспорт','passport'],simulation:['Прогноз и симуляция','sparkle'],optimization:['Оптимизация производства','sparkle'],analytics:['Аналитика','chart']};
+const moduleLoaders={desktop:()=>import('./desktop.js'),goal:()=>import('./goal.js'),plan:()=>import('./plan.js'),production:()=>import('./production.js'),builder:()=>import('./builder.js'),passport:()=>import('./passport.js'),simulation:()=>import('./simulation.js'),optimization:()=>import('./optimization.js'),analytics:()=>import('./analytics.js')};
 let renderTicket=0,shellKey=null,desktopDispose=null,viewDispose=null,clockTimer=null,desktopKey=null,desktopPromise=null,currentRoute=null,navigationRestored=false;
 const roles={owner:'Собственник',foreman:'Мастер',technologist:'Технолог',chief:'Начальник производства',worker:'Работник',qc:'ОТК'};
 async function navigate(route){if(S.beforeNavigate&&!await S.beforeNavigate())return;S.beforeNavigate=null;if(S.route===route)renderWorkspace();else location.hash=route;}

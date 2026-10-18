@@ -1,0 +1,46 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/simulation.php';
+function analyticsPeriod(array $input,string $timezone,?int $now=null):array{
+ $today=(new DateTimeImmutable('@'.($now??time())))->setTimezone(new DateTimeZone($timezone));$from=dateField($input+['from'=>$today->format('Y-m-01')],'from');$to=dateField($input+['to'=>$today->format('Y-m-d')],'to');
+ $a=new DateTimeImmutable($from,new DateTimeZone($timezone));$b=new DateTimeImmutable($to,new DateTimeZone($timezone));$days=(int)$a->diff($b)->format('%r%a')+1;if($days<1||$days>366)fail('Выберите период от одного дня до 366 дней.');
+ return ['from'=>$from,'to'=>$to,'days'=>$days,'previous_from'=>$a->modify('-'.$days.' days')->format('Y-m-d'),'previous_to'=>$a->modify('-1 day')->format('Y-m-d'),'timezone'=>$timezone];
+}
+function analyticsPauseCategory(string $reason):string{
+ return match(true){(bool)preg_match('/материал|ткан|нитк|фурнит|крой/iu',$reason)=>'Материалы',(bool)preg_match('/машин|оборуд|полом|ремонт|электр/iu',$reason)=>'Оборудование',(bool)preg_match('/ожидан|передач|комплект/iu',$reason)=>'Ожидание',(bool)preg_match('/переналад|настрой|обучен/iu',$reason)=>'Подготовка',default=>'Другая причина'};
+}
+function analyticsWorkSeconds(int $start,int $end,array $shift,string $zone):int{
+ if($end<=$start)return 0;$day=(new DateTimeImmutable('@'.$start))->setTimezone(new DateTimeZone($zone))->setTime(0,0)->modify('-1 day');$sum=0;
+ for($i=0;$i<369&&$day->getTimestamp()<=$end;$i++,$day=$day->modify('+1 day'))foreach(dayWindows($day,$shift) as [$a,$b])$sum+=max(0,min($end,$b)-max($start,$a));return $sum;
+}
+/** Period facts are event deltas. Repeated inspections do not inflate first-pass acceptance. */
+function analyticsAggregate(array $events,array $period,array $passport,array $plans=[],?int $now=null):array{
+ $zone=$period['timezone'];$tz=new DateTimeZone($zone);$from=(new DateTimeImmutable($period['from'].' 00:00:00',$tz))->getTimestamp();$to=min(($now??time()),(new DateTimeImmutable($period['to'].' 23:59:59',$tz))->getTimestamp());$previous=(new DateTimeImmutable($period['previous_from'].' 00:00:00',$tz))->getTimestamp();
+ $daily=[];$cursor=new DateTimeImmutable($period['from'],$tz);for($i=0;$i<$period['days'];$i++,$cursor=$cursor->modify('+1 day'))$daily[$cursor->format('Y-m-d')]=['date'=>$cursor->format('Y-m-d'),'accepted'=>0,'scrap'=>0,'rework'=>0,'released'=>0];
+ $totals=['accepted'=>0,'first_checked'=>0,'first_accepted'=>0,'released'=>0,'scrap'=>0,'rework'=>0,'pause_events'=>0,'pause_seconds'=>0,'events'=>0];$prior=['accepted'=>0];$open=[];$categories=[];$ambiguous=false;$last=[];$byPlan=array_column($plans,null,'id');$prepared=[];
+ foreach($events as $event){$event['details']=is_array($event['details']??null)?$event['details']:decode($event['details']??null);$event['_time']=isset($event['event_timestamp'])?(int)$event['event_timestamp']:(new DateTimeImmutable($event['created_at'],new DateTimeZone(date_default_timezone_get())))->getTimestamp();$prepared[]=$event;}
+ usort($prepared,fn($a,$b)=>($a['_time']<=>$b['_time'])?:(($a['details']['_task_revision']??0)<=>($b['details']['_task_revision']??0))?:strcmp($a['id'],$b['id']));
+ $pauseAdd=function($interval,int $end)use(&$totals,&$categories,$from,$to,$passport,$byPlan,$zone){$start=max($from,$interval['start']);$end=min($to,$end);$shift=$byPlan[$interval['plan_id']]['snapshot']['shift_snapshot']??$passport['shift'];$seconds=analyticsWorkSeconds($start,$end,$shift,$zone);$totals['pause_seconds']+=$seconds;$categories[$interval['category']]=($categories[$interval['category']]??0)+$seconds;};
+ foreach($prepared as $ev){$time=$ev['_time'];if($time>$to)continue;$kind=$ev['kind'];$task=$ev['task_id'];$d=$ev['details'];$in=$time>=$from&&$time<=$to;$day=(new DateTimeImmutable('@'.$time))->setTimezone($tz)->format('Y-m-d');
+  if($in)$totals['events']++;
+  if(in_array($kind,['pause','start'],true)){
+   if(isset($last[$task])&&$last[$task]['time']===$time&&$last[$task]['kind']!==$kind&&!isset($d['_task_revision']))$ambiguous=true;$last[$task]=['time'=>$time,'kind'=>$kind];
+   if($kind==='pause'){if(isset($open[$task]))$ambiguous=true;$open[$task]=['start'=>$time,'category'=>analyticsPauseCategory((string)($d['reason']??'')),'plan_id'=>$ev['plan_id']??''];if($in)$totals['pause_events']++;}
+   elseif(isset($open[$task])){$pauseAdd($open[$task],$time);unset($open[$task]);}
+  }
+  if(empty($ev['is_final']))continue;
+  if(in_array($kind,['quality','rework_quality'],true)){$accepted=(int)($d['accepted']??0);if($in){$totals['accepted']+=$accepted;$totals['scrap']+=(int)($d['scrap']??0);$totals['rework']+=(int)($d['rework']??0);$daily[$day]['accepted']+=$accepted;$daily[$day]['scrap']+=(int)($d['scrap']??0);$daily[$day]['rework']+=(int)($d['rework']??0);if($kind==='quality'){$totals['first_checked']+=(int)$ev['quantity'];$totals['first_accepted']+=$accepted;}}elseif($time>=$previous&&$time<$from)$prior['accepted']+=$accepted;}
+  if($in&&$kind==='release'){$totals['released']+=(int)$ev['quantity'];$daily[$day]['released']+=(int)$ev['quantity'];}
+ }
+ foreach($open as $interval)$pauseAdd($interval,$to);
+ return ['accepted'=>$totals['accepted'],'first_pass_percent'=>$totals['first_checked']?round($totals['first_accepted']/$totals['first_checked']*100,1):null,'first_checked'=>$totals['first_checked'],'first_accepted'=>$totals['first_accepted'],'released_final'=>$totals['released'],'scrap'=>$totals['scrap'],'sent_to_rework'=>$totals['rework'],'pause_events'=>$totals['pause_events'],'pause_hours'=>$ambiguous?null:round($totals['pause_seconds']/3600,2),'events'=>$totals['events'],'previous_accepted'=>$prior['accepted'],'accepted_delta'=>$totals['accepted']-$prior['accepted'],'daily'=>array_values($daily),'pause_categories'=>array_map(fn($name,$seconds)=>['name'=>$name,'hours'=>round($seconds/3600,2)],array_keys($categories),array_values($categories)),'timing_incomplete'=>$ambiguous];
+}
+function analyticsSnapshot(array $c,array $input):array{
+ $period=analyticsPeriod($input,$c['passport']['timezone']);$tz=new DateTimeZone($period['timezone']);$server=new DateTimeZone(date_default_timezone_get());$a=(new DateTimeImmutable($period['previous_from'].' 00:00:00',$tz))->setTimezone($server)->format('Y-m-d H:i:s');$b=(new DateTimeImmutable($period['to'].' 23:59:59',$tz))->setTimezone($server)->format('Y-m-d H:i:s');
+ // Carry the most recent pre-period pause/start so an ongoing pause is not lost.
+ $events=rows('SELECT e.*,t.is_final,t.plan_id,t.order_id FROM production_events e JOIN tasks t ON t.id=e.task_id AND t.company_id=e.company_id WHERE e.company_id=? AND e.created_at>=? AND e.created_at<=? ORDER BY e.created_at,e.id LIMIT 50001',[$c['id'],$a,$b]);if(count($events)>50000)fail('В периоде больше 50 000 событий. Выберите меньший период; данные не обрезаны.',413);
+ $carry=rows("SELECT e.*,t.is_final,t.plan_id,t.order_id FROM production_events e JOIN tasks t ON t.id=e.task_id AND t.company_id=e.company_id WHERE e.company_id=? AND e.created_at<? AND e.kind IN ('start','pause') AND NOT EXISTS (SELECT 1 FROM production_events n WHERE n.company_id=e.company_id AND n.task_id=e.task_id AND n.kind IN ('start','pause') AND n.created_at>e.created_at AND n.created_at<?) LIMIT 10001",[$c['id'],$a,$a]);if(count($carry)>10000)fail('Слишком много текущих интервалов для этой поставки.',413);
+ $source=simulationCapture($c);$facts=analyticsAggregate([...$carry,...$events],$period,$c['passport'],$source['plans']);$cohort=array_values(array_filter($source['orders'],fn($o)=>$o['deadline']>=$period['from']&&$o['deadline']<=$period['to']));$current=[];foreach($cohort as $o)$current[$o['id']]=orderEconomy($o,$c['passport']);$finance=financeRollup($cohort,$source['plans'],$source['tasks'],$source['observations'],$current);
+ $published=array_values(array_filter($source['plans'],fn($p)=>$p['state']==='published'));usort($published,fn($a,$b)=>(int)$b['version_no']<=>(int)$a['version_no']);$latest=$published[0]['snapshot']??[];$orders=[];$late=0;foreach($cohort as $o){$finish=$latest['order_finishes'][$o['id']]??null;$risk=$finish!==null&&substr($finish,0,10)>$o['deadline'];if($risk)$late++;$orders[]=['id'=>$o['id'],'title'=>$o['title'],'product'=>$o['product'],'mode'=>$o['mode'],'quantity'=>(int)$o['quantity'],'deadline'=>$o['deadline'],'finish'=>$finish,'late'=>$risk,'economy'=>$current[$o['id']]];}
+ return ['version'=>'period-analytics/1','period'=>$period,'as_of'=>date('c'),'source_hash'=>hash('sha256',j([$source['source_hash'],array_column($events,'id'),$period])),'facts'=>$facts,'goals_due'=>count($cohort),'risk_goals'=>$late,'finance'=>$finance,'orders'=>$orders,'notes'=>['Факты — новые события выбранного периода; выпуск и ОТК относятся только к конечным операциям.','Первичная приёмка не включает повторные проверки после доработки.','Паузы заданий считаются в рабочем календаре; это не доказанные потери рабочего времени человека.','Экономика ниже относится к текущим целям со сроком в периоде, а не к денежным движениям периода.','Изменённые задним числом факты не создаются.'],...($facts['timing_incomplete']?['timing_notice'=>'У старых событий совпало время с точностью до секунды. Точная длительность пауз не восстановлена.']:[])];
+}

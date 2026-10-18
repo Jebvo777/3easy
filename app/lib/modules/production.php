@@ -34,6 +34,6 @@ function productionAction(string $action,array $input):array{
  if($released>$total||$transferred>$released||$accepted+$rework+$scrap>$transferred||$reworkReady>$rework)fail('Нарушен баланс партии');
  if($t['is_final']&&$transferred===$total){if($accepted+$scrap===$total&&$rework===0)$state='completed';elseif($rework>0)$state='rework';else $state='quality';}
  query('UPDATE tasks SET state=?,released=?,transferred=?,accepted=?,rework=?,rework_ready=?,scrap=?,revision=revision+1 WHERE id=? AND company_id=?',[$state,$released,$transferred,$accepted,$rework,$reworkReady,$scrap,$t['id'],$c['id']]);
- $eventId=uid();query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[$eventId,$c['id'],$t['id'],$_SESSION['user_id'],$kind,$qty,j($details)]);audit('production_event',['task_id'=>$t['id'],'kind'=>$kind,'quantity'=>$qty]);return ['saved'=>true,'event_id'=>$eventId,'revision'=>(int)$t['revision']+1];
+ $details['_task_revision']=(int)$t['revision']+1;$eventId=uid();query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[$eventId,$c['id'],$t['id'],$_SESSION['user_id'],$kind,$qty,j($details)]);audit('production_event',['task_id'=>$t['id'],'kind'=>$kind,'quantity'=>$qty]);return ['saved'=>true,'event_id'=>$eventId,'revision'=>(int)$t['revision']+1];
  });
 }
