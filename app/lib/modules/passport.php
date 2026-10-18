@@ -5,6 +5,12 @@ function validTime(mixed $v):string{if(!is_string($v)||!preg_match('/^(?:[01]\d|
 function passportAction(string $action,array $input):array{
  owner();return command($action,$input,function(array $c)use($input){
  checkRevision($c['revision'],$input);$name=textField($input,'name',120,true);$p=$input['passport']??null;if(!is_array($p))fail('Паспорт не заполнен');
+ $clean=validatedPassport($p,$c);
+ query('UPDATE companies SET name=?,passport=?,revision=revision+1 WHERE id=?',[$name,j($clean),$c['id']]);audit('passport_saved',['section'=>$input['section']??'all']);return ['saved'=>true,'revision'=>$c['revision']+1];
+ });
+}
+
+function validatedPassport(array $p,array $c):array{
  $clean=['industry'=>textField($p,'industry',100,true),'city'=>textField($p,'city',100),'description'=>textField($p,'description',1000),'area'=>numberField($p,'area',1,100000,true),'timezone'=>textField($p,'timezone',60,true)];
  if(!in_array($clean['timezone'],DateTimeZone::listIdentifiers(),true))fail('Выберите корректный часовой пояс');
  $people=$p['people']??[];$resources=$p['resources']??[];if(!is_array($people)||count($people)>80||!is_array($resources)||count($resources)>120)fail('Слишком много ресурсов для демонстрации');
@@ -18,6 +24,5 @@ function passportAction(string $action,array $input):array{
  if($clean['shift']['start']===$clean['shift']['end'])fail('Начало и конец смены должны различаться');
  $ec=$p['economy']??[];$clean['economy']=['labor_hour_cents'=>numberField($ec,'labor_hour_cents',0,100000000,true),'monthly_common_cents'=>numberField($ec,'monthly_common_cents',0,100000000000,true),'monthly_hours'=>numberField($ec,'monthly_hours',1,100000,true),'currency'=>'RUB'];
  foreach(['excluded','unknown'] as $list){$values=$ec[$list]??[];if(!is_array($values)||count($values)>30)fail('Слишком много статей');$clean['economy'][$list]=[];foreach($values as $v){$s=textField(['value'=>$v],'value',180);if($s)$clean['economy'][$list][]=$s;}}
- query('UPDATE companies SET name=?,passport=?,revision=revision+1 WHERE id=?',[$name,j($clean),$c['id']]);audit('passport_saved',['section'=>$input['section']??'all']);return ['saved'=>true,'revision'=>$c['revision']+1];
- });
+ return $clean;
 }
