@@ -11,6 +11,7 @@ if(isset($_GET['api'])){
    if(str_starts_with(strtolower($_SERVER['CONTENT_TYPE']??''),'multipart/form-data'))$input=$_POST;else{$raw=file_get_contents('php://input');$input=json_decode($raw?:'{}',true,64,JSON_THROW_ON_ERROR);}if(!is_array($input))fail('Некорректные данные');
    $token=$_SERVER['HTTP_X_CSRF_TOKEN']??'';if(!is_string($token)||!hash_equals($_SESSION['csrf'],$token))fail('Сессия обновилась. Перезагрузите страницу.',419);
   }
+  if($action==='export_xlsx'){require_once __DIR__.'/lib/export.php';$export=exportWorkbook($input);header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');header('Content-Disposition: attachment; filename="'.$export['filename'].'"');echo $export['bytes'];exit;}
   $data=apiRun($action,$input);echo j(['ok'=>true,'data'=>$data]);
  }catch(AppError $e){http_response_code($e->getCode()?:422);if($e instanceof AiGatewayError&&$e->retryAfter>0)header('Retry-After: '.$e->retryAfter);$extra=$e instanceof AiGatewayError?['code'=>$e->reason,'retryable'=>$e->retryable,'retry_after'=>$e->retryAfter]:[];echo j(['ok'=>false,'error'=>$e->getMessage()]+$extra);}
  catch(JsonException){http_response_code(400);echo j(['ok'=>false,'error'=>'Не удалось прочитать данные запроса']);}
