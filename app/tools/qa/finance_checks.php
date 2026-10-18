@@ -5,7 +5,7 @@ $checks=[];
 function verify(string $name,bool $value):void{global $checks;if(!$value)throw new RuntimeException($name);$checks[]=$name;echo "OK $name\n";}
 $orders=[['id'=>'a','title'=>'A','status'=>'active','mode'=>'CONTRACT','quantity'=>100],['id'=>'own','title'=>'OWN','status'=>'active','mode'=>'OWN','quantity'=>100]];
 $ec=['value_cents'=>100000,'cost_cents'=>60000,'result_cents'=>40000];
-$plans=[['id'=>'p','state'=>'published','version_no'=>1,'snapshot'=>['economy'=>['a'=>$ec],'schedule'=>[['order_id'=>'a','quantity'=>100]]]]];
+$plans=[['id'=>'p','state'=>'published','version_no'=>1,'snapshot'=>['economy'=>['a'=>$ec],'schedule'=>[['order_id'=>'a','quantity'=>100,'is_final'=>true]]]]];
 $tasks=[['order_id'=>'a','is_final'=>true,'state'=>'completed','accepted'=>20,'quantity'=>100,'plan_id'=>'p']];
 $obs=[['order_id'=>'a','revision'=>1,'accepted_quantity'=>20,'recognized_cents'=>20000,'direct_cents'=>5000,'labor_cents'=>4000,'common_cents'=>1000]];
 $current=['a'=>$ec,'own'=>$ec];
@@ -24,7 +24,7 @@ $tasks[0]['accepted']=25;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
 verify('Новый выпуск требует подтверждения затрат, частичный факт остаётся виден',$r['actual_cents']===null&&$r['known_actual_cents']===20000);
 $obs[]=['order_id'=>'a','revision'=>2,'accepted_quantity'=>25,'recognized_cents'=>25000,'direct_cents'=>30000,'labor_cents'=>10000,'common_cents'=>5000];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
 verify('Уточнения не суммируют прежние затраты повторно',$r['actual_cents']===-20000&&$r['covered']===25);
-$plans[]=['id'=>'p2','state'=>'published','version_no'=>2,'snapshot'=>['economy'=>['a'=>$current['a']],'schedule'=>[['order_id'=>'a','quantity'=>100]]]];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
+$plans[]=['id'=>'p2','state'=>'published','version_no'=>2,'snapshot'=>['economy'=>['a'=>$current['a']],'schedule'=>[['order_id'=>'a','quantity'=>100,'is_final'=>true]]]];$r=financeRollup($orders,$plans,$tasks,$obs,$current);
 verify('Первый опубликованный план остаётся базой',$r['expected_cents']===40000);
 $orders[0]['quantity']=120;$r=financeRollup($orders,$plans,$tasks,$obs,$current);
 verify('Несопоставимый объём явно лишает отклонение базы',$r['expected_cents']===null&&$r['deviation_cents']===null);

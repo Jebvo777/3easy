@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
 /** Only the local server sees original identifiers. Sanitized text is reviewable before sending. */
-function aiSanitizeText(string $text,array $company,array $aliases=[]):array{
- $count=0;$known=[$company['name'],user()['name'],...array_column($company['passport']['people']??[],'name')];foreach(rows('SELECT customer FROM orders WHERE company_id=?',[$company['id']]) as $r)if($r['customer'])$known[]=$r['customer'];
+function aiPrivacyNames(array $company):array{
+ $known=[$company['name'],user()['name'],...array_column($company['passport']['people']??[],'name')];foreach(rows('SELECT customer FROM orders WHERE company_id=?',[$company['id']]) as $r)if($r['customer'])$known[]=$r['customer'];return array_unique($known);
+}
+function aiSanitizeText(string $text,array $company,array $aliases=[],?array $knownNames=null):array{
+ $count=0;$known=$knownNames??aiPrivacyNames($company);
  foreach($aliases as $name=>$alias)if(strlen($name)>=3)$text=preg_replace('~'.preg_quote($name,'~').'~iu',$alias,$text,-1,$n)??$text;
  foreach(array_unique($known) as $name)if(strlen(trim((string)$name))>=3){$text=preg_replace('~'.preg_quote(trim((string)$name),'~').'~iu','[идентификатор скрыт]',$text,-1,$n)??$text;$count+=$n;}
  $patterns=[

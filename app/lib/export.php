@@ -4,7 +4,7 @@ require_once __DIR__.'/xlsx.php';require_once __DIR__.'/garment.php';require_onc
 function exportDate(?string $v,bool $time=false):?EasyXlsxDate{return $v?new EasyXlsxDate($v,$time):null;}
 function exportMoney(?int $cents):EasyXlsxMoney{return new EasyXlsxMoney($cents);}
 function exportSheet(string $name,string $title,string $subtitle,array $headers,array $data,array $widths=[]):array{
- return ['name'=>$name,'header'=>4,'freeze'=>4,'widths'=>$widths?:array_fill(0,count($headers),24),'rows'=>[['values'=>[$title],'style'=>1,'height'=>32],['values'=>[$subtitle],'style'=>2,'height'=>29],['values'=>[]],['values'=>$headers,'style'=>3,'height'=>34],...$data]];
+ return ['name'=>$name,'header'=>4,'freeze'=>4,'widths'=>$widths?:array_fill(0,count($headers),24),'rows'=>[['values'=>[$title],'style'=>1,'height'=>32],['values'=>[$subtitle],'style'=>2,'height'=>29],['values'=>[]],['values'=>$headers,'style'=>3,'height'=>44],...$data]];
 }
 function exportTechnologyRoute(array $raw):array{
  if(!array_is_list($raw)||count($raw)>15000)fail('Слишком большой или некорректный маршрут');$out=[];
