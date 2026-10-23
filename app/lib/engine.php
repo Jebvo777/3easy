@@ -12,7 +12,7 @@ function sortedRoute(array $route):array{$map=array_column($route,null,'id');$de
 function minuteOfDay(string $s):int{[$h,$m]=array_map('intval',explode(':',$s));return $h*60+$m;}
 function dayWindows(DateTimeImmutable $day,array $shift):array{
  if(!in_array((int)$day->format('N'),$shift['days']??[],true))return [];
- $start=minuteOfDay($shift['start']);$end=minuteOfDay($shift['end']);if($end<=$start)$end+=1440;$break=minuteOfDay($shift['break_start']);if($break<$start)$break+=1440;$breakEnd=$break+(int)$shift['break_minutes'];$midnight=$day->setTime(0,0)->getTimestamp();
+ $start=minuteOfDay($shift['start']);$end=minuteOfDay($shift['end']);if($end<=$start)$end+=1440;$extra=$shift['scenario_overtime']??null;if($extra&&$day->format('Y-m-d')>=$extra['from']&&$day->format('Y-m-d')<=$extra['until'])$end+=(int)$extra['minutes'];$break=minuteOfDay($shift['break_start']);if($break<$start)$break+=1440;$breakEnd=$break+(int)$shift['break_minutes'];$midnight=$day->setTime(0,0)->getTimestamp();
  if((int)$shift['break_minutes']<=0||$break>=$end||$breakEnd<=$start)return [[$midnight+$start*60,$midnight+$end*60]];
  $out=[];if($break>$start)$out[]=[$midnight+$start*60,$midnight+min($break,$end)*60];if($breakEnd<$end)$out[]=[$midnight+max($breakEnd,$start)*60,$midnight+$end*60];return $out;
 }
