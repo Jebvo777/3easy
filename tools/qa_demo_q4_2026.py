@@ -68,6 +68,10 @@ def adapt(statement,variables):
     result=''.join(out)
     result=re.sub(r'\s+FOR UPDATE\s*$','',result,flags=re.I)
     result=re.sub(r'\s+FROM DUAL(?=\s|$)','',result,flags=re.I)
+    # Only the adapter maps MySQL's binary string cast to SQLite's text cast.
+    # SQLite AS BINARY has numeric affinity and would turn ASCII UUIDs into 0.
+    # Native collation checks must still be run on a MySQL-compatible server.
+    result=re.sub(r'\bAS BINARY\)', 'AS TEXT)', result, flags=re.I)
     return result
 
 
@@ -112,6 +116,8 @@ def execute_seed(db,seed):
             m=re.match(r'SET\s+(@\w+)\s*=(.*)',statement,re.S|re.I)
             if m:variables[m[1]]=db.execute('SELECT '+adapt(m[2],variables)).fetchone()[0]
             elif statement=='START TRANSACTION':db.execute('BEGIN')
+            elif statement=='ROLLBACK':
+                if db.in_transaction:db.rollback()
             else:db.execute(adapt(statement,variables)).fetchall()
         except Exception as e:
             if db.in_transaction:db.rollback()
