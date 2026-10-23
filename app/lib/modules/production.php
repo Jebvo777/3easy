@@ -2,11 +2,11 @@
 declare(strict_types=1);require_once __DIR__.'/../preparation.php';
 function taskRecord(string $id,bool $lock=false):array{$c=context();$t=one('SELECT * FROM tasks WHERE id=? AND company_id=?'.($lock?lockSuffix():''),[$id,$c['id']]);if(!$t||$t['state']==='cancelled')fail('Задание не найдено',404);return $t;}
 function availableInput(array $t):int{
- $remaining=(int)$t['quantity']-(int)$t['released'];foreach(decode($t['dependencies']) as $id){$dep=one('SELECT * FROM tasks WHERE id=? AND company_id=?',[$id,$t['company_id']]);if(!$dep)fail('Источник партии отсутствует');if(!empty(decode($dep['planning_meta']??null)['cutting'])&&(int)$dep['transferred']<(int)$dep['quantity'])return 0;$remaining=min($remaining,(int)$dep['transferred']-(int)$t['released']);}$prepared=preparationTaskAllowance($t);if($prepared!==null)$remaining=min($remaining,$prepared);return max(0,$remaining);
+ $rawOrder=one('SELECT route FROM orders WHERE id=? AND company_id=?',[$t['order_id'],$t['company_id']]);$prepIds=array_column(productionPreparationRoute(decode($rawOrder['route']??null)),'id');$remaining=(int)$t['quantity']-(int)$t['released'];foreach(decode($t['dependencies']) as $id){$dep=one('SELECT * FROM tasks WHERE id=? AND company_id=?',[$id,$t['company_id']]);if(!$dep||$dep['order_id']!==$t['order_id'])fail('Источник относится к другой цели или отсутствует');if(in_array($dep['operation_id'],$prepIds,true)||!empty(decode($dep['planning_meta']??null)['cutting']))continue;$remaining=min($remaining,(int)$dep['transferred']-(int)$t['released']);}$prepared=preparationTaskAllowance($t);if($prepared!==null)$remaining=min($remaining,$prepared);return max(0,$remaining);
 }
 function productionAction(string $action,array $input):array{
  permit(['owner','foreman','chief','worker','qc']);return command($action,$input,function(array $c)use($input){
- $t=taskRecord(textField($input,'task_id',32,true),true);$kind=textField($input,'kind',30,true);$details=[];$qty=null;
+ $t=taskRecord(textField($input,'task_id',32,true),true);$kind=textField($input,'kind',30,true);$rawOrder=one('SELECT route FROM orders WHERE id=? AND company_id=?',[$t['order_id'],$c['id']]);if(in_array($t['operation_id'],array_column(productionPreparationRoute(decode($rawOrder['route']??null)),'id'),true))fail('Это историческая работа подготовки. Готовность компонентов подтверждается в отдельной комплектации.');$details=[];$qty=null;
  $quality=in_array($kind,['quality','rework_quality'],true);if($quality){if(!in_array($c['role'],['owner','qc'],true))fail('Качество подтверждает ОТК',403);}else{
   if($c['role']==='qc')fail('Эта роль подтверждает качество',403);
   if($c['role']==='worker'&&$t['worker_id']!==($_SESSION['worker_resource']??'p-sew-1'))fail('Это задание другого исполнителя',403);

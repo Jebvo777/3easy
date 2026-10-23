@@ -14,7 +14,7 @@ function optimizationCandidates(array $settings):array{
  return $out;
 }
 function optimizationPlan(array $source,array $settings,array $change):array{
- $copy=$source;$c=$copy['company'];$c['_simulation_now']=$source['as_of'];$c['_optimization']=true;$overrides=[];
+ $copy=$source;$c=$copy['company'];$c['_simulation_now']=$source['as_of'];$c['_optimization']=true;$c['_preparation_records']=$source['preparations']??[];$overrides=[];
  if($change['release_assignments'])foreach($c['passport']['resources'] as &$r)$r['worker']='';unset($r);
  foreach($copy['orders'] as &$o){
   if($settings['use_estimates'])foreach($o['route'] as &$op)if($op['seconds']===null&&($op['estimated_seconds']??null)!==null){$op['seconds']=$op['estimated_seconds'];$op['norm_reviewed']=true;$op['source']='Предварительная оценка; оптимизация условная';}unset($op);
