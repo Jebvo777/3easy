@@ -70,20 +70,31 @@ function seedCompany(PDO $db,string $companyId): void {
 }
 function seedInitialPlan(PDO $db,string $companyId,string $ownerId):void{
  $c=one('SELECT * FROM companies WHERE id=?',[$companyId]);$c['passport']=decode($c['passport']);$c['layout']=decode($c['layout']);
+ $c=productionCompanyView($c);
+ // The small fallback is synthetic too: explicitly prepare its components.
+ if(preparationAvailable())foreach(rows('SELECT * FROM orders WHERE company_id=?',[$companyId]) as $order){
+  if(one('SELECT id FROM order_preparations WHERE company_id=? AND order_id=?',[$companyId,$order['id']]))continue;
+  $raw=decode($order['route']);$order['route']=productionAssemblyRoute($raw);$order['preparation_route']=productionPreparationRoute($raw);$state=preparationDefault($c,$order);
+  foreach($state['items'] as &$item){$item['ready']=$item['quantity'];$item['expected']=0;$item['ready_date']=null;}unset($item);
+  $state['cost_mode']='included';$state['cost_cents']=null;$state['source']='Вымышленный стартовый сценарий: комплекты подготовлены; стоимость учтена в статье «Лекала и подготовка».';
+  $id=uid();query('INSERT INTO order_preparations (id,company_id,order_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[$id,$companyId,$order['id'],1,j($state),$ownerId]);
+  query('INSERT INTO preparation_revisions (id,preparation_id,company_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[uid(),$id,$companyId,1,j($state),$ownerId]);
+ }
  [$orders,$tasks]=engineInputs($c);$snapshot=calculatePlan($c,$orders,$tasks);if($snapshot['status']!=='feasible')return;
  $id=uid();$hash=engineHash($c,$orders,$tasks);$snapshot['input_hash']=$hash;$snapshot['company_revision']=(int)$c['revision'];$snapshot['source_event_count']=0;
  $approvals=[];foreach(['foreman','technologist','chief'] as $stage)$approvals[]=['stage'=>$stage,'actor_id'=>$ownerId,'at'=>date('c'),'input_hash'=>$hash,'source'=>'Учебный план'];
  query('INSERT INTO plan_versions (id,company_id,version_no,state,snapshot,input_hash,approvals,creator_id) VALUES (?,?,?,?,?,?,?,?)',[$id,$companyId,1,'approved',j($snapshot),$hash,j($approvals),$ownerId]);
  publishSchedule($c,['id'=>$id,'snapshot'=>j($snapshot)]);
  $first=array_values(array_filter($orders,fn($o)=>$o['mode']==='CONTRACT'))[0];$all=rows('SELECT * FROM tasks WHERE company_id=? AND order_id=? ORDER BY planned_start',[$companyId,$first['id']]);
+ $sampleAccepted=0;
  foreach($all as $t){if(!$t['is_final']){query("UPDATE tasks SET released=quantity,transferred=quantity,state='completed',revision=2 WHERE id=?",[$t['id']]);}
- else{query("UPDATE tasks SET released=20,transferred=20,accepted=18,rework=2,state='paused',revision=2 WHERE id=?",[$t['id']]);
- query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'quality',20,j(['accepted'=>18,'rework'=>2,'scrap'=>0,'reason'=>'Учебный пример: неровная строчка','source'=>'Тестовые данные'])]);
+ else{if($sampleAccepted)continue;$released=min(20,(int)$t['quantity']);$sampleAccepted=max(0,$released-2);$rework=$released-$sampleAccepted;query("UPDATE tasks SET released=?,transferred=?,accepted=?,rework=?,state='paused',revision=2 WHERE id=?",[$released,$released,$sampleAccepted,$rework,$t['id']]);
+ query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'quality',$released,j(['accepted'=>$sampleAccepted,'rework'=>$rework,'scrap'=>0,'reason'=>'Учебный пример: неровная строчка','source'=>'Тестовые данные'])]);
  query('INSERT INTO production_events (id,company_id,task_id,actor_id,kind,quantity,details) VALUES (?,?,?,?,?,?,?)',[uid(),$companyId,$t['id'],$ownerId,'pause',null,j(['reason'=>'Учебный пример: следующая партия ещё в работе','source'=>'Тестовые данные'])]);}}
- seedFinance($db,$companyId,$first['id'],$ownerId,((int)$first['price_cents'])*18);
+ if($sampleAccepted)seedFinance($db,$companyId,$first['id'],$ownerId,((int)$first['price_cents'])*$sampleAccepted,$sampleAccepted);
 }
 
-function seedFinance(PDO $db,string $companyId,string $orderId,string $ownerId,int $recognized):void{
+function seedFinance(PDO $db,string $companyId,string $orderId,string $ownerId,int $recognized,int $accepted=18):void{
  require_once __DIR__.'/finance.php';if(!financeAvailable())return;
- query('INSERT INTO economy_observations (id,company_id,order_id,actor_id,revision,accepted_quantity,recognized_cents,direct_cents,labor_cents,common_cents,source) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[uid(),$companyId,$orderId,$ownerId,1,18,$recognized,380000,700000,130000,'Учебный факт: вымышленные подтверждённые затраты 18 принятых изделий.']);
+ query('INSERT INTO economy_observations (id,company_id,order_id,actor_id,revision,accepted_quantity,recognized_cents,direct_cents,labor_cents,common_cents,source) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[uid(),$companyId,$orderId,$ownerId,1,$accepted,$recognized,380000,700000,130000,'Учебный факт: вымышленные подтверждённые затраты принятой части.']);
 }

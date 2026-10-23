@@ -14,7 +14,7 @@ export async function api(action,input=null){
  if(result.data.csrf)S.csrf=result.data.csrf;return result.data;
 }
 export function toast(message,error=false){const el=document.createElement('div');el.className='toast'+(error?' error':'');el.textContent=message;document.querySelector('#toasts').append(el);setTimeout(()=>el.remove(),error?6500:3800);}
-export function setData(data){S.data=data;if(data.csrf)S.csrf=data.csrf;if(!S.selectedOrder||!data.orders.some(o=>o.id===S.selectedOrder))S.selectedOrder=data.orders[0]?.id??null;}
+export function setData(data){if(S.data?.company.id!==data.company.id){S.financePeriod='all';S.selectedOrder=null;}S.data=data;if(data.csrf)S.csrf=data.csrf;if(!S.selectedOrder||!data.orders.some(o=>o.id===S.selectedOrder))S.selectedOrder=data.orders[0]?.id??null;}
 export async function refresh(){setData(await api('state'));return S.data;}
 export function selected(){return S.data?.orders.find(o=>o.id===S.selectedOrder)||S.data?.orders[0];}
 export const badge=(label,type='',ico='')=>`<span class="badge ${type}">${ico?icon(ico):'<i class="dot"></i>'}${e(label)}</span>`;

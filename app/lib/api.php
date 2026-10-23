@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__.'/demo.php';
 function authLimit(string $email):string{
  $ip=(string)($_SERVER['REMOTE_ADDR']??'cli');$bucket=hash('sha256',$ip.'|'.$email);
  $row=one('SELECT * FROM auth_limits WHERE bucket=?',[$bucket]);
@@ -37,7 +38,7 @@ function stateData():array{
  $finance=null;if($economic){require_once __DIR__.'/finance.php';$finance=financeState($orders,$plans,$tasks,$economy,$c['id']);}
  $demoRoles=[];if(!empty($_SESSION['demo_company'])&&$_SESSION['demo_company']===$c['id'])$demoRoles=rows('SELECT u.id,u.name,m.role FROM memberships m JOIN users u ON u.id=m.user_id WHERE m.company_id=?',[$c['id']]);
  require_once __DIR__.'/ai/gateway.php';
- return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'preparation_tasks'=>$c['role']==='worker'?[]:$preparationTasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale,'ai'=>aiCapability(),...($economic?['finance'=>$finance]:[])];
+ return ['user'=>$u,'company'=>$c,'companies'=>$companies,'orders'=>$orders,'plans'=>$plans,'tasks'=>$tasks,'preparation_tasks'=>$c['role']==='worker'?[]:$preparationTasks,'events'=>$events,'audit'=>$audit,'demoRoles'=>$demoRoles,'demo'=>demoSessionInfo($c,$orders,$plans,$tasks,$audit),'csrf'=>$_SESSION['csrf'],'permissions'=>['economy'=>$economic],'economy'=>(object)$economy,'forecast_stale'=>(bool)$forecastStale,'ai'=>aiCapability(),...($economic?['finance'=>$finance]:[])];
 }
 function apiRun(string $action,array $input):array{
  global $config;
@@ -58,14 +59,7 @@ function apiRun(string $action,array $input):array{
   if(one('SELECT id FROM users WHERE email=?',[$email]))fail('Эта почта уже зарегистрирована',409);
   db()->beginTransaction();try{$id=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$id,$email,$name,password_hash($password,PASSWORD_DEFAULT)]);$cid=companyNew($company,$id);db()->commit();establish($id,$cid);return stateData();}catch(Throwable $e){if(db()->inTransaction())db()->rollBack();throw $e;}
  }
- if($action==='demo_enter'){
-  if(empty($config['demo_enabled']))fail('Демо-сеанс отключён',403);$bucket=authLimit('demo-session');query('UPDATE auth_limits SET failures=failures+1 WHERE bucket=?',[$bucket]);
-  db()->beginTransaction();try{$id=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$id,'session-'.$id.'@demo.easy3.local','Собственник',password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);$cid=companyNew('Ателье Север',$id,true);
-   foreach(['foreman'=>'Мастер','technologist'=>'Технолог','chief'=>'Начальник производства','worker'=>'Швея 01','qc'=>'Контролёр ОТК'] as $role=>$name){$rid=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$rid,$role.'-'.$rid.'@demo.easy3.local',$name,password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);query('INSERT INTO memberships (user_id,company_id,role) VALUES (?,?,?)',[$rid,$cid,$role]);}
-   require_once __DIR__.'/engine.php'; seedInitialPlan(db(),$cid,$id);
-   db()->commit();establish($id,$cid);$_SESSION['demo_company']=$cid;$_SESSION['worker_resource']='p-sew-1';return stateData();
-  }catch(Throwable $e){if(db()->inTransaction())db()->rollBack();throw $e;}
- }
+ if($action==='demo_enter')return demoEnter();
  if($action==='logout'){$_SESSION=[];session_regenerate_id(true);$_SESSION['csrf']=bin2hex(random_bytes(24));return ['csrf'=>$_SESSION['csrf']];}
  if($action==='state')return stateData();
  if($action==='catalog_search'){permit(['owner','technologist','chief']);require_once __DIR__.'/catalog.php';return ['operations'=>catalogFind(textField($input,'query',300),40)];}
