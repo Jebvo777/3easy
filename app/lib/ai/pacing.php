@@ -3,7 +3,7 @@ declare(strict_types=1);
 /** Per-job pacing is stored in existing JSON; another job never inherits this penalty. */
 function aiPacingThrottle(array $state,int $retryAfter,array $config=[],?int $now=null):array{
  $now??=time();$base=max(3,min(60,(int)($config['min_interval_seconds']??$config['min_interval']??10)));$old=(int)($state['interval_seconds']??$base);
- $interval=min(180,max($base+4,(int)ceil($old*1.5),min(60,$retryAfter)));
+ $interval=min(240,max(45,$base+15,(int)ceil($old*1.8),min(240,$retryAfter)));
  return ['interval_seconds'=>$interval,'throttle_count'=>(int)($state['throttle_count']??0)+1,'last_rate_at'=>$now,'next_request_at'=>$now+max($interval,min(3600,max(1,$retryAfter)))];
 }
 function aiPacingSuccess(array $state,bool $ready=false,?int $now=null):array{

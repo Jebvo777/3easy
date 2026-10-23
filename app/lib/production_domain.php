@@ -34,7 +34,7 @@ function productionCompanyView(array $company):array{
  foreach($structure['workshops'] as $w)if($w['kind']==='preparation'){$prep=$w['id'];break;}
  if($needsPrep&&!$prep){$prep='w-preparation';$ids=array_column($structure['workshops'],'id');if(in_array($prep,$ids,true))$prep='w-preparation-legacy';$structure['workshops'][]=['id'=>$prep,'name'=>'Подготовка · раскрой и комплектация','kind'=>'preparation'];}
  $resourcePeople=[];foreach($p['resources']??[] as $r)if(!empty($r['worker'])&&$r['type']!=='cut')$resourcePeople[$r['worker']]=true;
- $prepPeople=[];foreach($cut as $r)if(!empty($r['worker'])&&!isset($resourcePeople[$r['worker']]))$prepPeople[$r['worker']]=true;
+ $leads=array_column($structure['brigades']??[],'lead');$prepPeople=[];foreach($cut as $r)if(!empty($r['worker'])&&!isset($resourcePeople[$r['worker']])&&!in_array($r['worker'],$leads,true))$prepPeople[$r['worker']]=true;
  foreach($p['people'] as &$person){$person=productionPerson($person);if(isset($prepPeople[$person['id']])){$person['workshop']=$prep;$person['brigade']='';}}unset($person);
  foreach($p['resources'] as &$r){$r=productionItem($r);if($r['type']==='cut'){$r['workshop']=$prep;if(!empty($r['worker'])&&!isset($prepPeople[$r['worker']]))$r['worker']='';}}unset($r);
  // A named machine documents a worker's existing assignment, not new qualifications.

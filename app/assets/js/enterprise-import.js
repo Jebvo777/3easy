@@ -2,7 +2,7 @@ import {S,api,button,e,formData,key,modal,num,setData,toast} from './core.js';
 import {icon} from './icons.js';
 import {workingScene} from './assistant-job.js';
 import {jobOverlay} from './assistant-flow.js';
-const types={cut:'Раскрой',sew:'Шитьё',overlock:'Обмётка',iron:'ВТО',hand:'Ручная работа',qc:'ОТК',pack:'Упаковка'};
+const types={cut:'Раскрой',sew:'Шитьё',special:'Спецмашина',overlock:'Оверлок (прежний тип)',iron:'ВТО',hand:'Ручная работа',qc:'ОТК',pack:'Упаковка'};
 export function importEnterprise(){
  let open=true,busy=false,document=null,job=null,proposal=null,overlay=null;const requestKey=key(),applyKey=key();
  const m=modal('Предприятие из документа','<div class="enterprise-import-flow"></div>',{large:true,onClose:()=>{open=false;overlay?.close();}}),root=m.el.querySelector('.enterprise-import-flow'),alive=()=>open&&m.el.isConnected&&!m.el.classList.contains('closing');

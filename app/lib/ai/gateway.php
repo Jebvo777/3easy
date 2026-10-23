@@ -101,7 +101,7 @@ function aiGateway(array $technical,array $job,?array $cfg=null,?callable $trans
    elseif($code===402||str_contains($providerCode,'insufficient_quota')||str_contains($providerCode,'balance'))$last='balance';
    elseif($code===404)$last='model_unavailable';elseif($code===429||str_contains($providerCode,'rate_limit')||str_contains($providerMessage,'requests per minute'))$last='rate_limit';elseif($code===413||str_contains($providerCode,'context_length'))$last='request_size';
    $attempts[]=['model'=>$model,'http'=>$code,'reason'=>$last];
-   if($last==='rate_limit'){$retryAfter=max(15,(int)($response['retry_after']??0));if($transport==='aiHttp')aiProviderGate($cfg,false,$retryAfter);break 2;}
+   if($last==='rate_limit'){$retryAfter=max(45,(int)($response['retry_after']??0));if($transport==='aiHttp')aiProviderGate($cfg,false,$retryAfter);break 2;}
    if(in_array($last,['configuration','key_rejected','provider_blocked','access_denied','balance','request_size'],true))break 2;
    if(in_array($code,[400,422],true)&&$variant===0&&($compatible=aiCompatiblePayload($payload,$providerError))){$payload=$compatible;continue;}
    if($response['error']||$code<200||$code>=300)break;
@@ -115,14 +115,14 @@ function aiGateway(array $technical,array $job,?array $cfg=null,?callable $trans
   }
   if($attempts)$attempts[array_key_last($attempts)]['reason']=$last;
  }
- $next=$models?($models[($lastIndex+1)%count($models)]):null;$retryable=in_array($last,['rate_limit','timeout','transport','provider','unavailable','truncated','invalid'],true);
+ $next=$models?($models[($lastIndex+1)%count($models)]):null;$retryable=in_array($last,['rate_limit','timeout','transport','provider','unavailable','truncated','invalid','model_unavailable'],true);
  $message=match($last){
   'key_rejected'=>'Провайдер отклонил серверный ключ AI (401). Проверьте прежний ключ в config.ai.local.php.',
   'provider_blocked'=>'Провайдер AI заблокировал подключение с сервера (403 / Cloudflare). Разрешите IP хостинга в настройках провайдера или обратитесь в его поддержку.',
   'access_denied'=>'Провайдер AI запретил доступ (403). Проверьте разрешения ключа и доступ с хостинга.',
   'balance'=>'На аккаунте провайдера AI недостаточно средств или исчерпана квота.',
   'rate_limit'=>'Провайдер ограничил частоту запросов (429). Прогресс сохранён; продолжите немного позже.',
-  'model_unavailable'=>'Основная и доступные резервные модели не приняли запрос. Проверьте список моделей у провайдера.',
+  'model_unavailable'=>'Провайдер не предоставил выбранную и резервные модели. Узлы сохранены; продолжите позже или выберите образец / справочник в редакторе.',
   'request_size'=>'Провайдер не принял размер технического описания. Сократите описание текущего изделия; число операций не ограничивается.',
   'timeout'=>'Провайдер не ответил за время одной части. Прогресс сохранён; продолжим с резервной моделью.',
   'truncated','invalid'=>'Модель не вернула целую корректную часть. Готовые узлы сохранены; повторим эту часть.',
