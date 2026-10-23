@@ -8,7 +8,7 @@ function organizationStructure(array $passport):array{
  if(!is_array($raw))fail('Некорректная структура предприятия');$workshops=$raw['workshops']??[];$brigades=$raw['brigades']??[];
  if(!is_array($workshops)||!count($workshops)||count($workshops)>20||!is_array($brigades)||count($brigades)>40)fail('Укажите от одного до 20 цехов и до 40 бригад');
  $clean=['workshops'=>[],'brigades'=>[]];$ids=[];$names=[];
- foreach($workshops as $w){if(!is_array($w))fail('Некорректный цех');$id=organizationId($w);$name=textField($w,'name',100,true);if(isset($ids[$id])||isset($names[$name]))fail('Цех должен иметь уникальный код и название');$ids[$id]=true;$names[$name]=true;$clean['workshops'][]=['id'=>$id,'name'=>$name];}
+ foreach($workshops as $w){if(!is_array($w))fail('Некорректный цех');$id=organizationId($w);$name=textField($w,'name',100,true);if(isset($ids[$id])||isset($names[$name]))fail('Цех должен иметь уникальный код и название');$ids[$id]=true;$names[$name]=true;$kind=$w['kind']??'assembly';if(!in_array($kind,['assembly','preparation'],true))fail('Выберите назначение подразделения');$clean['workshops'][]=['id'=>$id,'name'=>$name,'kind'=>$kind];}
  $bids=[];$leads=[];$bnames=[];foreach($brigades as $b){if(!is_array($b))fail('Некорректная бригада');$id=organizationId($b);$workshop=organizationId($b,'workshop');$lead=organizationId($b,'lead');$name=textField($b,'name',100,true);if(isset($bids[$id])||isset($leads[$lead])||isset($bnames[$workshop.'|'.$name]))fail('Бригада и её бригадир должны быть уникальными');if(!isset($ids[$workshop]))fail('Цех бригады отсутствует');$bids[$id]=true;$leads[$lead]=true;$bnames[$workshop.'|'.$name]=true;$clean['brigades'][]=['id'=>$id,'name'=>$name,'workshop'=>$workshop,'lead'=>$lead];}
  return $clean;
 }
@@ -19,7 +19,7 @@ function validateOrganization(array $passport):void{
  $people=array_column($passport['people'],null,'id');$brigades=array_column($passport['structure']['brigades'],null,'id');
  foreach($passport['people'] as $person){$bid=$person['brigade'];if($bid&&(!isset($brigades[$bid])||$brigades[$bid]['workshop']!==$person['workshop']))fail('Бригада человека должна относиться к его цеху');}
  foreach($brigades as $b){$p=$people[$b['lead']]??null;if(!$p||!in_array('foreman',$p['roles'],true)||$p['workshop']!==$b['workshop']||$p['brigade']!==$b['id'])fail('Бригаде нужен бригадир с соответствующей ролью в этом цехе');}
- foreach($passport['resources'] as $r){if(!$r['worker'])continue;$p=$people[$r['worker']];if($p['workshop']!==$r['workshop'])fail('Исполнитель и центр должны относиться к одному цеху. Переназначьте центр.');if(!in_array($r['type'],$p['skills'],true))fail('У исполнителя нет навыка для назначенного центра');}
+ foreach($passport['resources'] as $r){$kind=array_column($passport['structure']['workshops'],'kind','id')[$r['workshop']]??'assembly';if(($r['type']==='cut'&&$kind!=='preparation')||($kind==='preparation'&&in_array($r['type'],['sew','special'],true)))fail('Раскрой относится к отдельному подразделению подготовки; пошив и спецмашины — к сборке');if(!$r['worker'])continue;$p=$people[$r['worker']];if($p['workshop']!==$r['workshop'])fail('Исполнитель и центр должны относиться к одному цеху. Переназначьте центр.');if(!productionCanWork(array_replace($p,['active'=>true]),$r))fail('У исполнителя нет навыка для назначенного центра');}
 }
 
 function validateLayoutOrganization(array $company,array $passport):void{

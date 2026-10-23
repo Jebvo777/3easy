@@ -36,7 +36,7 @@ function context(bool $lock=false):array{
  $u=user();$id=$_SESSION['company_id']??'';
  $r=one('SELECT c.*,m.role FROM companies c JOIN memberships m ON m.company_id=c.id WHERE c.id=? AND m.user_id=?'.($lock?lockSuffix():''),[$id,$u['id']]);
  if(!$r)fail('Нет доступа к предприятию',403);
- $r['passport']=decode($r['passport']);$r['layout']=decode($r['layout']);$r['revision']=(int)$r['revision'];return $r;
+ $r['passport']=decode($r['passport']);$r['layout']=decode($r['layout']);$r['revision']=(int)$r['revision'];return productionCompanyView($r);
 }
 function permit(array $roles):array{$c=context();if(!in_array($c['role'],$roles,true))fail('Для этого действия нужна другая роль',403);return $c;}
 function owner():array{return permit(['owner']);}
@@ -60,4 +60,4 @@ function command(string $action,array $input,callable $run):array{
  $out=$run($c);query('INSERT INTO idempotency (company_id,actor_id,command_key,request_hash,response) VALUES (?,?,?,?,?)',[$c['id'],$_SESSION['user_id'],$key,$hash,j($out)]);$db->commit();return $out;
  }catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;}
 }
-require_once __DIR__.'/seed.php';
+require_once __DIR__.'/production_domain.php';require_once __DIR__.'/seed.php';

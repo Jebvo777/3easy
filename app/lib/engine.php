@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-const ENGINE_VERSION='easy3-calendar-list/1.0';
+require_once __DIR__.'/preparation.php';
+const ENGINE_VERSION='easy3-assembly-preparation/3.0';
 function routeCheck(array $route):array{
  if(!$route)return ['Технология ещё не собрана'];$errors=[];$map=[];$used=[];$degree=[];$next=[];
  foreach($route as $op){$id=$op['id'];if(isset($map[$id]))$errors[]='Повторяется код операции';$map[$id]=$op;$degree[$id]=0;if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if(!empty($op['ai_origin'])&&empty($op['norm_reviewed']))$errors[]='Нет подтверждения нормы AI: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];}
@@ -32,8 +33,8 @@ function engineHash(array $c,array $orders,array $tasks):string{
  return hash('sha256',j(['version'=>ENGINE_VERSION,'company_revision'=>(int)$c['revision'],'orders'=>array_map(fn($o)=>[$o['id'],(int)$o['revision']],$orders),'tasks'=>array_map(fn($t)=>[$t['id'],(int)$t['revision'],$t['state']],$tasks)]));
 }
 function engineInputs(array $c):array{
- $orders=rows("SELECT * FROM orders WHERE company_id=? AND status<>'archived' ORDER BY deadline,id",[$c['id']]);foreach($orders as &$o){$o['route']=decode($o['route']);$o['expenses']=decode($o['expenses']);}unset($o);
- $tasks=rows("SELECT * FROM tasks WHERE company_id=? AND state<>'cancelled' ORDER BY id",[$c['id']]);return [$orders,$tasks];
+ $orders=rows("SELECT * FROM orders WHERE company_id=? AND status<>'archived' ORDER BY deadline,id",[$c['id']]);foreach($orders as &$o){$raw=decode($o['route']);$o['preparation_route']=productionPreparationRoute($raw);$o['route']=productionAssemblyRoute($raw);$o['expenses']=decode($o['expenses']);$o['preparation']=preparationState($c,$o);$o['_preparation_cost_unknown']=($o['preparation']['cost_mode']??'unknown')==='unknown';}unset($o);
+ $tasks=rows("SELECT * FROM tasks WHERE company_id=? AND state<>'cancelled' ORDER BY id",[$c['id']]);return [$orders,productionAssemblyTasks($orders,$tasks)];
 }
 // Exact integer cents, rounded half up; no floating-point money arithmetic.
 const DEMO_MONEY_LIMIT=1000000000000;
@@ -46,7 +47,7 @@ function roundedRatio(int $a,int $b,int $denominator):?int{
  if($r>=intdiv($denominator,2)+$denominator%2)$q++;return $q>DEMO_MONEY_LIMIT?null:$q;
 }
 function orderEconomy(array $order,array $passport,?int $plannedSeconds=null):array{
- $ec=$passport['economy']??[];$seconds=$plannedSeconds??0;$missing=[];foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];elseif($plannedSeconds===null)$seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
+ $ec=$passport['economy']??[];$seconds=$plannedSeconds??0;$missing=[];if(!empty($order['_preparation_cost_unknown']))$missing[]='Уточните стоимость подготовки и комплектации отдельно от пошива';foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];elseif($plannedSeconds===null)$seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
  $labor=isset($ec['labor_hour_cents'])?roundedRatio($seconds,(int)$ec['labor_hour_cents'],3600):null;
  $common=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?roundedRatio($seconds,(int)$ec['monthly_common_cents'],3600*(int)$ec['monthly_hours']):null;
  $direct=array_sum(array_column($order['expenses'],'cents'));

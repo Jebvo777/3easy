@@ -1,8 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types=1);require_once __DIR__.'/../preparation.php';
 function taskRecord(string $id,bool $lock=false):array{$c=context();$t=one('SELECT * FROM tasks WHERE id=? AND company_id=?'.($lock?lockSuffix():''),[$id,$c['id']]);if(!$t||$t['state']==='cancelled')fail('Задание не найдено',404);return $t;}
 function availableInput(array $t):int{
- $remaining=(int)$t['quantity']-(int)$t['released'];foreach(decode($t['dependencies']) as $id){$dep=one('SELECT * FROM tasks WHERE id=? AND company_id=?',[$id,$t['company_id']]);if(!$dep)fail('Источник партии отсутствует');if(!empty(decode($dep['planning_meta']??null)['cutting'])&&(int)$dep['transferred']<(int)$dep['quantity'])return 0;$remaining=min($remaining,(int)$dep['transferred']-(int)$t['released']);}return max(0,$remaining);
+ $remaining=(int)$t['quantity']-(int)$t['released'];foreach(decode($t['dependencies']) as $id){$dep=one('SELECT * FROM tasks WHERE id=? AND company_id=?',[$id,$t['company_id']]);if(!$dep)fail('Источник партии отсутствует');if(!empty(decode($dep['planning_meta']??null)['cutting'])&&(int)$dep['transferred']<(int)$dep['quantity'])return 0;$remaining=min($remaining,(int)$dep['transferred']-(int)$t['released']);}$prepared=preparationTaskAllowance($t);if($prepared!==null)$remaining=min($remaining,$prepared);return max(0,$remaining);
 }
 function productionAction(string $action,array $input):array{
  permit(['owner','foreman','chief','worker','qc']);return command($action,$input,function(array $c)use($input){
