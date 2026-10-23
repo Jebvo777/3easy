@@ -1,8 +1,9 @@
-export const centreSizes={cut:[2.8,1.6],sew:[1.5,1],overlock:[1.5,1],iron:[1.8,1],hand:[1.8,1],qc:[1.8,1],pack:[1.8,1],storage:[1.7,.8]};
+import {canWork} from './production-domain.js';
+export const centreSizes={cut:[2.8,1.6],sew:[1.5,1],special:[1.5,1],overlock:[1.5,1],iron:[1.8,1],hand:[1.8,1],qc:[1.8,1],pack:[1.8,1],storage:[1.7,.8]};
 export function clampCentre(layout,object,x,z){let [w,d]=centreSizes[object.type];if(object.rotation%180)[w,d]=[d,w];return {x:Math.max(-layout.width/2+w/2+.1,Math.min(layout.width/2-w/2-.1,Math.round(x*2)/2)),z:Math.max(-layout.depth/2+d/2+.1,Math.min(layout.depth/2-d/2-.1,Math.round(z*2)/2))};}
 export function distributePeople(resources,people){
  const active=people.filter(p=>p.active),loads=new Map(active.map(p=>[p.id,0])),result={};
- const compatible=r=>active.filter(p=>p.skills.includes(r.type));
+ const compatible=r=>active.filter(p=>p.workshop===r.workshop&&canWork(p,r));
  for(const r of resources.filter(r=>r.active).slice().sort((a,b)=>compatible(a).length-compatible(b).length||a.id.localeCompare(b.id))){
   const choices=compatible(r).sort((a,b)=>(loads.get(a.id)-loads.get(b.id))||(a.id===r.worker?-1:b.id===r.worker?1:0)||a.id.localeCompare(b.id));
   const p=choices[0];result[r.id]=p?.id||'';if(p)loads.set(p.id,loads.get(p.id)+1);
@@ -10,7 +11,7 @@ export function distributePeople(resources,people){
  return result;
 }
 export function arrangeFactory(layout){
- const types=['cut','sew','overlock','iron','hand','qc','pack','storage'],objects=layout.objects.slice().sort((a,b)=>types.indexOf(a.type)-types.indexOf(b.type)||a.id.localeCompare(b.id));
+ const types=['cut','sew','special','overlock','iron','hand','qc','pack','storage'],objects=layout.objects.slice().sort((a,b)=>types.indexOf(a.type)-types.indexOf(b.type)||a.id.localeCompare(b.id));
  const columns=Math.min(6,Math.max(2,Math.ceil(Math.sqrt(objects.length*1.5)))),rows=Math.ceil(objects.length/columns);
  layout.width=Math.max(layout.width,columns*3.4+1.2);layout.depth=Math.max(layout.depth,rows*2.5+1.8);
  objects.forEach((o,i)=>{o.rotation=0;o.x=Math.round(((i%columns-(columns-1)/2)*3.4)*2)/2;o.z=Math.round((Math.floor(i/columns)-(rows-1)/2)*2.5*2)/2;});
