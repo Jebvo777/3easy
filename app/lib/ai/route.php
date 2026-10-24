@@ -2,7 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__.'/../catalog.php';
 function technologyMetadata(array $op,array $company,array $order):array{
- $extra=['equipment'=>textField($op,'equipment',300),'grade'=>numberField($op,'grade',1,6,true),'notes'=>textField($op,'notes',1200),'node_id'=>textField($op,'node_id',60)?:'node-main','node_name'=>textField($op,'node_name',180)?:'Основные работы','estimated_seconds'=>numberField($op,'estimated_seconds',1,86400,true)];
+ $extra=['equipment'=>textField($op,'equipment',300),'grade'=>numberField($op,'grade',1,99,true),'grade_reviewed'=>($op['grade_reviewed']??false)===true,'notes'=>textField($op,'notes',1200),'node_id'=>textField($op,'node_id',60)?:'node-main','node_name'=>textField($op,'node_name',180)?:'Основные работы','estimated_seconds'=>numberField($op,'estimated_seconds',1,86400,true)];
  if(isset($op['catalog_ref'])&&is_array($op['catalog_ref'])){$v=catalogVariant(textField($op['catalog_ref'],'variant',60));if($v)$extra['catalog_ref']=['operation'=>$v['operation'],'variant'=>$v['id'],'condition'=>$v['condition'],'construction'=>$v['construction'],'source'=>'1С ТехОперации 27.09.2026'];}
  if(!isset($op['ai_origin']))return $extra;
  $origin=$op['ai_origin'];if(!is_array($origin))fail('Некорректное происхождение технологии');$id=textField($origin,'generation_id',32,true);if(!preg_match('/^[a-f0-9]{32}$/',$id))fail('Некорректный код AI');

@@ -10,7 +10,7 @@ function companyEconomyValidate(array $raw,array $old):array{
    if($kind==='tariffs'){$level=numberField($v,'level',1,3);$row+=['level'=>$level,'grade'=>$level===1?0:numberField($v,'grade',1,99),'rate_micros'=>numberField($v,'rate_micros',0,1000000000000,true)];}
    elseif($kind==='fixed_expenses'){$cycle=textField($v,'period',20,true);if(!in_array($cycle,['month','year','week','day','once'],true))fail('Выберите периодичность расхода');$row+=['category'=>textField($v,'category',100,true),'name'=>textField($v,'name',180,true),'cents'=>numberField($v,'cents',0,1000000000000),'period'=>$cycle];}
    else{$row+=['name'=>textField($v,'name',180,true),'basis'=>textField($v,'basis',60,true),'basis_points'=>numberField($v,'basis_points',0,100000)];if(!in_array($row['basis'],['revenue','payroll'],true))fail('Неизвестная база примера начисления');}
-   if(isset($oldMap[$id])){foreach($row as $key=>$value)if(!in_array($key,['until','archived'],true)&&($oldMap[$id][$key]??null)!==$value)fail('Для изменения сохранённой ставки или статьи создайте новую редакцию');if(($oldMap[$id]['until']??null)!==null&&$row['until']!==$oldMap[$id]['until'])fail('Архивная граница уже сохранена');}
+   if(isset($oldMap[$id])){foreach($row as $key=>$value)if(!in_array($key,['until','archived'],true)&&($oldMap[$id][$key]??null)!==$value)fail('Для изменения сохранённой ставки или статьи создайте новую редакцию');$oldEnd=$oldMap[$id]['until']??null;if($oldEnd!==null&&$row['until']!==$oldEnd&&($oldEnd<date('Y-m-d')||$row['until']===null||$row['until']<date('Y-m-d',time()-86400)||$row['until']>$oldEnd))fail('Нельзя переписать прошедший период ставки или расхода');}
    $clean[]=$row;
   }
   foreach($oldMap as $id=>$v)if(!isset($ids[$id]))$clean[]=$v;$out[$kind]=$clean;
@@ -36,4 +36,13 @@ function companyMonthlyFixed(array $ec,string $day):?int{
 }
 function companyMonthlyHours(array $p,string $day):?int{
  $shift=$p['shift']??[];if(empty($shift['days']))return null;$people=array_filter($p['people']??[],fn($x)=>!empty($x['active'])&&($x['group']??'executors')==='executors'&&in_array($x['workshop']??'',array_column(array_filter($p['structure']['workshops']??[],fn($w)=>($w['kind']??'assembly')==='assembly'),'id'),true));$seconds=0;$d=(new DateTimeImmutable($day))->modify('first day of this month')->setTime(0,0);$month=$d->format('m');while($d->format('m')===$month){foreach(dayWindows($d,$shift) as [$a,$b])$seconds+=$b-$a;$d=$d->modify('+1 day');}return count($people)?max(1,(int)round($seconds*count($people)/3600)):null;
+}
+
+function companyWageBucket(array $c,string $order,int $stamp):string{
+ $p=$c['passport'];$d=(new DateTimeImmutable('@'.$stamp))->setTimezone(new DateTimeZone($p['timezone']));$period=$p['economy']['balance_period']??'goal';
+ if($period==='month')return 'month:'.$d->format('Y-m');if($period==='shift'){if($d->format('H:i')<($p['shift']['start']??'09:00'))$d=$d->modify('-1 day');return 'shift:'.$d->format('Y-m-d');}return 'goal:'.$order;
+}
+function companyWorkplaceFor(array $p,string $resource):?string{foreach(companyWorkplaces($p) as $w)if(in_array($resource,$w['equipment'],true))return $w['id'];return null;}
+function companyRedactEconomicFields(mixed $value):mixed{
+ if(!is_array($value))return $value;$out=[];foreach($value as $k=>$v){if(in_array($k,['wage_cents','tariff_snapshot','economy_rules_snapshot','earnings','balance_earnings','legacy_labor_hour_cents'],true))continue;$out[$k]=companyRedactEconomicFields($v);}return $out;
 }

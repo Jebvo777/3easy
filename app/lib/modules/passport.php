@@ -30,7 +30,7 @@ function validatedPassport(array $p,array $c):array{
  $clean['shift']=['start'=>validTime($sh['start']??null),'end'=>validTime($sh['end']??null),'break_start'=>validTime($sh['break_start']??null),'break_minutes'=>numberField($sh,'break_minutes',0,180),'days'=>array_values(array_unique(array_map('intval',$days)))];
  if($clean['shift']['start']===$clean['shift']['end'])fail('Начало и конец смены должны различаться');
  $ec=$p['economy']??[];$clean['economy']=['labor_hour_cents'=>numberField($ec,'labor_hour_cents',0,100000000,true),'monthly_common_cents'=>numberField($ec,'monthly_common_cents',0,100000000000,true),'monthly_hours'=>numberField($ec,'monthly_hours',1,100000,true),'currency'=>'RUB','common_breakdown'=>array_values(array_filter(array_map(function($v){return ['name'=>textField($v,'name',180,true),'cents'=>numberField($v,'cents',0,100000000000)];},$ec['common_breakdown']??[])))];if($clean['economy']['common_breakdown'])$clean['economy']['monthly_common_cents']=array_sum(array_column($clean['economy']['common_breakdown'],'cents'));
- $clean['economy']=companyEconomyValidate(array_replace($clean['economy'],$ec),$c['passport']['economy']??[]);
+ $modern=companyEconomyValidate($ec,$c['passport']['economy']??[]);foreach(['schema','tariffs','fixed_expenses','variable_expenses','balance_period','variable_enabled','legacy_labor_hour_cents'] as $field)if(array_key_exists($field,$modern))$clean['economy'][$field]=$modern[$field];
  foreach(['excluded','unknown'] as $list){$values=$ec[$list]??[];if(!is_array($values)||count($values)>30)fail('Слишком много статей');$clean['economy'][$list]=[];foreach($values as $v){$s=textField(['value'=>$v],'value',180);if($s)$clean['economy'][$list][]=$s;}}
  return $clean;
 }

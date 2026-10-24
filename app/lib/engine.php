@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/preparation.php';
-const ENGINE_VERSION='easy3-assembly-preparation/3.0';
+const ENGINE_VERSION='easy3-company-piecework/3.1';
 function routeCheck(array $route):array{
  if(!$route)return ['Технология ещё не собрана'];$errors=[];$map=[];$used=[];$degree=[];$next=[];
  foreach($route as $op){$id=$op['id'];if(isset($map[$id]))$errors[]='Повторяется код операции';$map[$id]=$op;$degree[$id]=0;if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if(!empty($op['ai_origin'])&&empty($op['norm_reviewed']))$errors[]='Нет подтверждения нормы AI: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];}
@@ -48,13 +48,18 @@ function roundedRatio(int $a,int $b,int $denominator):?int{
 }
 function orderEconomy(array $order,array $passport,?int $plannedSeconds=null):array{
  $ec=$passport['economy']??[];$seconds=$plannedSeconds??0;$missing=[];if(!empty($order['_preparation_cost_unknown']))$missing[]='Уточните стоимость подготовки и комплектации отдельно от пошива';foreach($order['route'] as $op){if(($op['seconds']??null)===null)$missing[]='Нет нормы: '.$op['name'];elseif($plannedSeconds===null)$seconds+=(int)$op['seconds']*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;}
- $labor=isset($ec['labor_hour_cents'])?roundedRatio($seconds,(int)$ec['labor_hour_cents'],3600):null;
- $common=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?roundedRatio($seconds,(int)$ec['monthly_common_cents'],3600*(int)$ec['monthly_hours']):null;
+ $day=$order['start_date']??date('Y-m-d');$mode=$order['_labor_mode']??'flow';$labor=null;$rateMissing=[];
+ if((int)($ec['schema']??0)<2)$labor=isset($ec['labor_hour_cents'])?roundedRatio($seconds,(int)$ec['labor_hour_cents'],3600):null;
+ else{$labor=0;$entries=$order['_labor_entries']??null;$opMap=array_column($order['route'],null,'id');if($entries!==null){foreach($entries as $entry){$op=$opMap[$entry['operation_id']]??null;if(!$op)continue;$wage=$entry['meta']['wage_cents']??null;if($wage===null){$count=(int)($entry['meta']['norm_seconds']??((int)$op['seconds']*(int)$entry['quantity']));$pay=companyOperationWage($passport,$op,$count,$entry['meta']['mode']??$mode,substr($entry['start'],0,10));$wage=$pay['cents']??null;if($wage===null&&!empty($entry['pinned'])&&isset($ec['legacy_labor_hour_cents']))$wage=roundedRatio($count,(int)$ec['legacy_labor_hour_cents'],3600);}if($wage===null){$rateMissing[]=$op['name'];$labor=null;break;}$labor+=$wage;}}
+  else foreach($order['route'] as $op){$duration=(int)($op['seconds']??0)*(int)$order['quantity']+(int)($op['setup_minutes']??0)*60;$pay=companyOperationWage($passport,$op,$duration,$mode,$day);if($pay===null){$labor=null;$rateMissing[]=$op['name'];break;}$labor+=$pay['cents'];}
+ }
+ $monthly=companyMonthlyFixed($ec,$day);$hours=(int)($ec['schema']??0)===2?companyMonthlyHours($passport,$day):($ec['monthly_hours']??null);$common=$monthly!==null&&$hours?roundedRatio($seconds,(int)$monthly,3600*(int)$hours):null;
+ foreach($rateMissing as $name)$missing[]='Не определена ставка уровня/разряда: '.$name;
  $direct=array_sum(array_column($order['expenses'],'cents'));
  $cost=$labor===null||$common===null||$missing||!$order['route']?null:$labor+$common+$direct;if($cost!==null&&$cost>DEMO_MONEY_LIMIT){$cost=null;$missing[]='Масштаб суммы превышает границу демо';}
  if($labor===null)$missing[]=isset($ec['labor_hour_cents'])?'Масштаб труда превышает границу демо':'Неизвестна ставка труда';if($common===null)$missing[]=isset($ec['monthly_common_cents'])&&!empty($ec['monthly_hours'])?'Масштаб общих расходов превышает границу демо':'Неизвестны общие расходы';$missing=array_merge($missing,$ec['unknown']??[]);
  $price=$order['price_cents'];$value=$order['mode']==='CONTRACT'&&$price!==null?(int)$price*($order['price_basis']==='total'?1:(int)$order['quantity']):null;
- return ['quantity'=>(int)$order['quantity'],'norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:roundedRatio($cost,1,(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'method'=>'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
+ return ['quantity'=>(int)$order['quantity'],'norm_seconds'=>$seconds,'scope'=>'Производственный контур','status'=>'partial','cost_cents'=>$cost,'labor_cents'=>$labor,'common_cents'=>$common,'direct_cents'=>$direct,'unit_cents'=>$cost===null?null:roundedRatio($cost,1,(int)$order['quantity']),'value_cents'=>$value,'result_cents'=>$cost===null||$value===null?null:$value-$cost,'unknown'=>$missing,'excluded'=>$ec['excluded']??[],'labor_mode'=>$mode,'method'=>(int)($ec['schema']??0)===2?'Прямые статьи + независимый тариф выбранной организации и разряда + доля постоянных расходов; процентные начисления не включены':'Прямые статьи + нормированный труд + доля общих расходов по трудочасам'];
 }
 function calculateLegacyPlan(array $c,array $orders,array $tasks,string $strategy='deadline'):array{
  $p=$c['passport'];$zone=$p['timezone']??'Europe/Moscow';$tz=new DateTimeZone($zone);$shift=$p['shift']??[];$now=time();$errors=[];$warnings=[];$schedule=[];$busy=[];$done=[];

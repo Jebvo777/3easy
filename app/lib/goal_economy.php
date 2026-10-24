@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__.'/engine.php';
 function goalEconomyDraft(array $input,array $company,?array $stored=null):array{
  $raw=$input['goal']??[];if(!is_array($raw))fail('Нет условий цели');$mode=textField($raw,'mode',12,true);if(!in_array($mode,['OWN','CONTRACT'],true))fail('Выберите основание производства');
- $goal=['mode'=>$mode,'product'=>textField($raw,'product',180),'quantity'=>numberField($raw,'quantity',1,100000),'price_cents'=>numberField($raw,'price_cents',0,100000000000,true),'price_basis'=>textField($raw,'price_basis',12),'target_cents'=>numberField($raw,'target_cents',0,1000000000,true),'expenses'=>[],'route'=>$stored['route']??[]];
+ $goal=['mode'=>$mode,'product'=>textField($raw,'product',180),'quantity'=>numberField($raw,'quantity',1,100000),'price_cents'=>numberField($raw,'price_cents',0,100000000000,true),'price_basis'=>textField($raw,'price_basis',12),'target_cents'=>numberField($raw,'target_cents',0,1000000000,true),'expenses'=>[],'route'=>$stored['route']??[],'start_date'=>$stored['start_date']??($raw['start_date']??date('Y-m-d')),'_labor_mode'=>$stored?workspaceRecord($company,$stored)['state']['mode']??'flow':'flow'];
  if(!in_array($goal['price_basis'],['unit','total'],true))$goal['price_basis']='unit';
  $expenses=$raw['expenses']??[];if(!is_array($expenses)||count($expenses)>40)fail('Слишком много статей расхода');foreach($expenses as $i=>$ex)$goal['expenses'][]=['name'=>textField($ex,'name',100,true),'cents'=>numberField($ex,'cents',0,100000000000),'id'=>'cost-'.($i+1)];
  $a=$input['assumptions']??[];if(!is_array($a))fail('Некорректные предположения');
@@ -16,8 +16,9 @@ function goalEconomyCalculate(array $goal,array $passport,array $a):array{
  if($a['minutes_per_unit']!==null){$seconds=$a['minutes_per_unit']*60*$q;$timeSource='Предположение пользователя о труде; не производственная норма';$conditional=true;}
  if($seconds===null)$missing[]='Укажите предположение о трудоёмкости либо подтвердите маршрут.';
  $ec=$passport['economy']??[];$rate=$a['labor_hour_cents']??$ec['labor_hour_cents']??null;
- $labor=$seconds!==null&&$rate!==null?roundedRatio($seconds,(int)$rate,3600):null;
+ $labor=$seconds!==null&&$rate!==null?roundedRatio($seconds,(int)$rate,3600):null;if((int)($ec['schema']??0)===2&&$a['labor_hour_cents']===null){$labor=$goal['route']?orderEconomy($goal+['expenses'=>[],'price_cents'=>null,'price_basis'=>'unit'],$passport,$seconds)['labor_cents']:null;}
  if($a['labor_hour_cents']!==null&&$a['labor_hour_cents']!==($ec['labor_hour_cents']??null))$conditional=true;
+ $day=$goal['start_date']??date('Y-m-d');if((int)($ec['schema']??0)===2){$ec['monthly_common_cents']=companyMonthlyFixed($ec,$day);$ec['monthly_hours']=companyMonthlyHours($passport,$day);}
  $common=$a['common_total_cents'];if($common!==null)$conditional=true;elseif($seconds!==null&&($ec['monthly_common_cents']??null)!==null&&($ec['monthly_hours']??null)>0)$common=roundedRatio($seconds,(int)$ec['monthly_common_cents'],3600*(int)$ec['monthly_hours']);
  $direct=$a['direct_complete']?array_sum(array_column($goal['expenses'],'cents')):null;
  if($direct===null)$missing[]='Подтвердите полноту прямых статей, в том числе явный ноль.';if($labor===null)$missing[]='Не определены труд или ставка.';if($common===null)$missing[]='Не определена доля общих расходов.';
