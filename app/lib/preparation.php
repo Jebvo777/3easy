@@ -7,7 +7,7 @@ function preparationDefault(array $c,array $o):array{
  $workspace=function_exists('workspaceRecord')?workspaceRecord($c,$o):null;$old=$workspace['state']['input']??null;$items=[];
  $oldCut=[];foreach($o['preparation_route']??[] as $op)$oldCut[]=$op['id'];
  $completed=0;if($oldCut){$r=one('SELECT MAX(transferred) AS n FROM tasks WHERE company_id=? AND order_id=? AND operation_id IN ('.implode(',',array_fill(0,count($oldCut),'?')).')',[$c['id'],$o['id'],...$oldCut]);$completed=(int)($r['n']??0);}
- foreach($old['variants']??[['id'=>'variant-main','color'=>'Основной','size'=>'Единый','quantity'=>(int)$o['quantity'],'ready'=>0]] as $v)$items[]=['id'=>$v['id'],'color'=>$v['color'],'size'=>$v['size'],'quantity'=>(int)$v['quantity'],'ready'=>min((int)$v['quantity'],max((int)($v['ready']??0),$completed>=(int)$o['quantity']?(int)$v['quantity']:0)),'expected'=>0,'ready_date'=>null];
+ foreach($old['variants']??array_map(fn($v)=>$v+['ready'=>0],goalVariants($o)) as $v)$items[]=['id'=>$v['id'],'color'=>$v['color'],'size'=>$v['size'],'quantity'=>(int)$v['quantity'],'ready'=>min((int)$v['quantity'],max((int)($v['ready']??0),$completed>=(int)$o['quantity']?(int)$v['quantity']:0)),'expected'=>0,'ready_date'=>null];
  $department='';foreach($c['passport']['structure']['workshops']??[] as $w)if(($w['kind']??'assembly')==='preparation'){$department=$w['id'];break;}
  return ['schema'=>1,'department_id'=>$department,'unit'=>'комплект','items'=>$items,'source'=>'Перенос прежних сведений; будущая готовность требует подтверждения.','operations'=>$o['preparation_route']??[],'cost_mode'=>'unknown','cost_cents'=>null];
 }

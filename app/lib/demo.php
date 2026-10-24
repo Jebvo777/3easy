@@ -33,7 +33,7 @@ function demoActors(string $owner,string $company):array{
 
 /** Copy in bounded batches: no N+1 round trips for thousands of demo facts. */
 function demoInsertRows(string $table,array $records):void{
- $allowed=['orders','order_preparations','preparation_revisions','plan_workspaces','plan_workspace_revisions','plan_versions','tasks','production_events','economy_observations'];
+ $allowed=['orders','order_preparations','preparation_revisions','plan_workspaces','plan_workspace_revisions','plan_versions','tasks','production_events','economy_observations','order_variant_revisions'];
  if(!in_array($table,$allowed,true)||!$records)return;
  $columns=array_keys($records[0]);$fields=implode(',',array_map(fn($c)=>'`'.$c.'`',$columns));$slot='('.implode(',',array_fill(0,count($columns),'?')).')';
  foreach(array_chunk($records,32) as $chunk){$values=[];foreach($chunk as $row)foreach($columns as $column)$values[]=$row[$column];query('INSERT INTO `'.$table.'` ('.$fields.') VALUES '.implode(',',array_fill(0,count($chunk),$slot)),$values);}
@@ -49,8 +49,9 @@ function demoRemap(string $value,array $map):string{
 function demoCloneTemplate(array $template,string $owner):string{
  $company=companyNew($template['name'],$owner);$actors=demoActors($owner,$company);$source=$template['id'];
  query('UPDATE companies SET is_demo=1,passport=?,layout=?,revision=? WHERE id=?',[$template['passport'],$template['layout'],(int)$template['revision'],$company]);
- $tables=['orders','order_preparations','preparation_revisions','plan_workspaces','plan_workspace_revisions','plan_versions','tasks','production_events','economy_observations'];$records=[];$map=[$source=>$company];
+ $tables=['orders','order_preparations','preparation_revisions','plan_workspaces','plan_workspace_revisions','plan_versions','tasks','production_events','economy_observations','order_variant_revisions'];$records=[];$map=[$source=>$company];
  foreach(rows('SELECT user_id,role FROM memberships WHERE company_id=?',[$source]) as $member)$map[$member['user_id']]=$actors[$member['role']]??$owner;
+ if(!companyStorage('order_variant_revisions'))$tables=array_values(array_diff($tables,['order_variant_revisions']));
  foreach($tables as $table){$records[$table]=rows('SELECT * FROM `'.$table.'` WHERE company_id=?',[$source]);foreach($records[$table] as $row)$map[$row['id']]=uid();}
  foreach($records['plan_versions'] as $plan)$map[$plan['input_hash']]=hash('sha256',$plan['input_hash'].':'.$company.':'.$map[$plan['id']]);
  foreach($tables as $table){

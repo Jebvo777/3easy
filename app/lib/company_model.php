@@ -38,7 +38,10 @@ function companySaveAccounts(array $raw,array $clean,array $c):void{
  if(companyStorage('person_accounts'))foreach(rows('SELECT person_id,user_id FROM person_accounts WHERE company_id=?',[$c['id']]) as $link){$p=array_column($clean['people'],null,'id')[$link['person_id']]??null;if(!$p)fail('Участника с доступом нельзя удалить: сначала оставьте его недоступным');if($link['user_id']===$_SESSION['user_id']&&$p['group']!=='owner')fail('Нельзя снять свой доступ владельца');}
 }
 function goalVariants(array $o):array{
- if(isset($o['variants']))return $o['variants'];if(companyStorage('order_variant_revisions')){$r=one('SELECT variants_json FROM order_variant_revisions WHERE company_id=? AND order_id=? AND revision<=? ORDER BY revision DESC LIMIT 1',[$o['company_id'],$o['id'],(int)$o['revision']]);if($r)return decode($r['variants_json']);}
+ $clean=fn($list)=>array_map(fn($v)=>['id'=>$v['id'],'color'=>$v['color'],'size'=>$v['size'],'quantity'=>(int)$v['quantity']],$list);
+ if(isset($o['variants']))return $clean($o['variants']);if(companyStorage('order_variant_revisions')){$r=one('SELECT variants_json FROM order_variant_revisions WHERE company_id=? AND order_id=? AND revision<=? ORDER BY revision DESC LIMIT 1',[$o['company_id'],$o['id'],(int)$o['revision']]);if($r)return $clean(decode($r['variants_json']));}
+ if(companyStorage('plan_workspaces')){$r=one('SELECT state_json FROM plan_workspaces WHERE company_id=? AND order_id=?',[$o['company_id'],$o['id']]);$v=$r?decode($r['state_json'])['input']['variants']??[]:[];if($v&&array_sum(array_column($v,'quantity'))===(int)$o['quantity'])return $clean($v);}
+ if(companyStorage('order_preparations')){$r=one('SELECT state_json FROM order_preparations WHERE company_id=? AND order_id=?',[$o['company_id'],$o['id']]);$v=$r?decode($r['state_json'])['items']??[]:[];if($v&&array_sum(array_column($v,'quantity'))===(int)$o['quantity'])return $clean($v);}
  return [['id'=>'variant-main','color'=>'Основной','size'=>'Единый','quantity'=>(int)$o['quantity']]];
 }
 function goalValidateVariants(mixed $raw,int $quantity):array{
@@ -46,4 +49,13 @@ function goalValidateVariants(mixed $raw,int $quantity):array{
  if(!is_array($raw)||!array_is_list($raw)||!$raw||count($raw)>250)fail('Добавьте цвета и размеры модели');$out=[];$ids=[];$labels=[];$total=0;
  foreach($raw as $v){$id=organizationId($v);$color=textField($v,'color',100,true);$size=textField($v,'size',60,true);$q=numberField($v,'quantity',1,100000);$label=mb_strtolower($color).'|'.mb_strtolower($size);if(isset($ids[$id])||isset($labels[$label]))fail('Цвет и размер не должны повторяться');$ids[$id]=true;$labels[$label]=true;$total+=$q;$out[]=['id'=>$id,'color'=>$color,'size'=>$size,'quantity'=>$q];}
  if($total!==$quantity||$total>100000)fail('Общее количество должно совпадать с суммой цветов и размеров');return $out;
+}
+
+function goalSaveVariants(array $c,string $order,int $revision,array $variants,bool $changed):void{
+ if(!companyStorage('order_variant_revisions'))fail('Для цветов и размеров импортируйте SQL обновления 25.10.2026',503);
+ query('INSERT INTO order_variant_revisions (id,company_id,order_id,revision,variants_json) VALUES (?,?,?,?,?)',[uid(),$c['id'],$order,$revision,j($variants)]);
+ if(!$changed)return;$workspace=companyStorage('plan_workspaces')?one('SELECT * FROM plan_workspaces WHERE company_id=? AND order_id=?',[$c['id'],$order]):null;
+ if($workspace){$state=decode($workspace['state_json']);$state['input']['variants']=array_map(fn($v)=>$v+['ready'=>0],$variants);$sizes=[];foreach($variants as $v)$sizes[$v['size']]=1;$state['input']['markers']=[['id'=>'marker-main','name'=>'Размеры модели','sizes'=>$sizes,'length_m'=>null,'width_cm'=>null]];$state['input']['lays']=[];$revisionW=(int)$workspace['revision']+1;query('UPDATE plan_workspaces SET state_json=?,revision=?,actor_id=? WHERE id=? AND company_id=?',[j($state),$revisionW,$_SESSION['user_id'],$workspace['id'],$c['id']]);query('INSERT INTO plan_workspace_revisions (id,workspace_id,company_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[uid(),$workspace['id'],$c['id'],$revisionW,j($state),$_SESSION['user_id']]);}
+ $prep=companyStorage('order_preparations')?one('SELECT * FROM order_preparations WHERE company_id=? AND order_id=?',[$c['id'],$order]):null;
+ if($prep){$state=decode($prep['state_json']);$state['items']=array_map(fn($v)=>$v+['ready'=>0,'expected'=>0,'ready_date'=>null],$variants);$state['source']='Изменён состав модели. Подтвердите готовность комплектации заново.';$state['cost_mode']='unknown';$state['cost_cents']=null;$revisionP=(int)$prep['revision']+1;query('UPDATE order_preparations SET state_json=?,revision=?,actor_id=? WHERE id=? AND company_id=?',[j($state),$revisionP,$_SESSION['user_id'],$prep['id'],$c['id']]);query('INSERT INTO preparation_revisions (id,preparation_id,company_id,revision,state_json,actor_id) VALUES (?,?,?,?,?,?)',[uid(),$prep['id'],$c['id'],$revisionP,j($state),$_SESSION['user_id']]);}
 }
