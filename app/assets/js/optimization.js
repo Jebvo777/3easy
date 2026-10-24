@@ -5,7 +5,7 @@ import {icon} from './icons.js';
 const memory=new Map(),modes={whole:'Целое изделие',nodes:'По узлам',flow:'Поток'};
 const date=v=>v?new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric'}).format(new Date(v.replace(' ','T'))):'Нужны данные';
 export async function render(host){
- if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Оптимизация производства</h3><p>Сравнение ресурсов и экономики доступно собственнику.</p></div>';return()=>{};}
+ if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Оптимизация производства</h3><p>Сравнение ресурсов и экономики доступно владельцу.</p></div>';return()=>{};}
  const cacheId=S.data.company.id+':'+S.data.user.id,c=memory.get(cacheId)||{settings:{focus:'deadline',horizon_days:30,max_batch_percent:200,allow_reassign:true,protect_lateness:true,use_estimates:false,power_watts:{},electricity_cents:null},result:null,job:null,aiJob:null,ai:null,selected:0,dirty:false};memory.set(cacheId,c);
  let active=true,busy=false,overlay=null,calculationKey=key(),aiKey=key();const live=()=>active&&host.isConnected;
  function readSettings(){

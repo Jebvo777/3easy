@@ -36,7 +36,7 @@ function context(bool $lock=false):array{
  $u=user();$id=$_SESSION['company_id']??'';
  $r=one('SELECT c.*,m.role FROM companies c JOIN memberships m ON m.company_id=c.id WHERE c.id=? AND m.user_id=?'.($lock?lockSuffix():''),[$id,$u['id']]);
  if(!$r)fail('Нет доступа к предприятию',403);
- $r['passport']=decode($r['passport']);$r['layout']=decode($r['layout']);$r['revision']=(int)$r['revision'];return productionCompanyView($r);
+ $r['passport']=decode($r['passport']);$r['account_roles']=[$r['role']];if(companyStorage('person_accounts')){$link=one('SELECT person_id FROM person_accounts WHERE company_id=? AND user_id=?',[$id,$u['id']]);$person=$link?array_column($r['passport']['people']??[],null,'id')[$link['person_id']]??null:null;if($person){$pr=companyPerson($person);$r['account_roles']=$pr['group']==='owner'?['owner']:($pr['group']==='management'?$pr['roles']:['worker',...(in_array('qc',$pr['duties'],true)?['qc']:[])]);$chosen=$_SESSION['active_roles'][$id]??$r['role'];$r['role']=in_array($chosen,$r['account_roles'],true)?$chosen:$r['account_roles'][0];}}$r['layout']=decode($r['layout']);$r['revision']=(int)$r['revision'];return productionCompanyView($r);
 }
 function permit(array $roles):array{$c=context();if(!in_array($c['role'],$roles,true))fail('Для этого действия нужна другая роль',403);return $c;}
 function owner():array{return permit(['owner']);}

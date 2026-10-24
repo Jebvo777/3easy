@@ -6,7 +6,7 @@ const memory=new Map();
 const day=v=>new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',year:'numeric'}).format(new Date(v+'T12:00:00'));
 function today(zone){const p=Object.fromEntries(new Intl.DateTimeFormat('en',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return p.year+'-'+p.month+'-'+p.day;}
 export async function render(host){
- if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Аналитика периода</h3><p>Аналитика с экономикой и AI доступна собственнику предприятия.</p></div>';return()=>{};}
+ if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Аналитика периода</h3><p>Аналитика с экономикой и AI доступна владельцу предприятия.</p></div>';return()=>{};}
  const id=S.data.company.id+':'+S.data.user.id,t=today(S.data.company.passport.timezone||'Europe/Moscow'),c=memory.get(id)||{from:t.slice(0,8)+'01',to:t,snapshot:null,ai:null,job:null,metric:'accepted'};memory.set(id,c);
  let active=true,busy=false,overlay=null,aiKey=key();const live=()=>active&&host.isConnected;
  function draw(){

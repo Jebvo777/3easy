@@ -11,7 +11,7 @@ const defaults=()=>({schema:2,until:null,available_count:null,overtime_from:null
 const quantity=v=>v==null?'Не определён':num(v);
 const amount=v=>v==null?'Пока неизвестно':money(v,true),statusLabel={feasible:'Рассчитано',conditional:'Условный прогноз',incomplete:'Нужны данные'};
 export async function render(host){
- if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Прогноз и симуляция</h3><p>Экономические сценарии доступны собственнику предприятия.</p></div>';return;}
+ if(S.data.company.role!=='owner'){host.innerHTML='<div class="empty"><h3>Прогноз и симуляция</h3><p>Экономические сценарии доступны владельцу предприятия.</p></div>';return;}
  const cacheKey=S.data.company.id+':'+S.data.user.id,cache=memory.get(cacheKey)||{settings:defaults(),result:null,job:null,aiJob:null,aiResult:null,intent:'',tab:'conditions'};memory.set(cacheKey,cache);
  let active=true,running=false,aiBusy=false,inspecting=false,loadingCase=false,savingCase=false,paused=false,dirty=cache.dirty||false,timer=null,metric='result',savedVariant=cache.selectedVariant??null,progress=null,notice='',failure='';
  let aiOverlay=null,aiOverlayDismissed=false;

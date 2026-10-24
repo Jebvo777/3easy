@@ -1,10 +1,12 @@
-export const structureRoles={owner:'Собственник',chief:'Начальник производства',technologist:'Технолог',foreman:'Бригадир',worker:'Исполнитель',qc:'Контроль качества'};
+export const structureRoles={owner:'Владелец',chief:'Начальник производства',technologist:'Технолог',foreman:'Бригадир',worker:'Исполнитель',qc:'Контроль качества'};
 export function organizationPassport(input){
  const p=structuredClone(input||{}),raw=p.structure||{};
  const workshops=raw.workshops?.length?raw.workshops.map(w=>({...w,kind:w.kind||'assembly'})):[{id:'w-main',name:'Швейный цех',kind:'assembly'}];
  const defaultWorkshop=workshops[0].id,validWorkshop=id=>workshops.some(w=>w.id===id)?id:defaultWorkshop;
  const brigades=(raw.brigades||[]).map(b=>({...b,workshop:validWorkshop(b.workshop)}));
  p.structure={workshops,brigades};p.people=(p.people||[]).map(person=>({...person,roles:person.roles?.length?[...person.roles]:['worker'],workshop:validWorkshop(person.workshop),brigade:brigades.some(b=>b.id===person.brigade)?person.brigade:''}));
+ p.people=p.people.map(x=>({...x,group:x.group||(x.roles.includes('owner')?'owner':x.roles.some(r=>['chief','technologist','foreman'].includes(r))?'management':'executors'),duties:x.duties||[...(x.skills||[]).filter(v=>['cut','sew','qc','pack','iron','hand'].includes(v)),...((x.skills||[]).includes('special')?['sew']:[])],universal:x.universal??true}));
+ p.workplaces=p.workplaces||((p.resources||[]).map(r=>({id:'wp-'+r.id,name:r.name,workshop:r.workshop||defaultWorkshop,equipment:[r.id]})));
  p.resources=(p.resources||[]).map(r=>({...r,workshop:validWorkshop(r.workshop)}));return p;
 }
 export function distributeBrigades(input){
@@ -15,27 +17,19 @@ export function distributeBrigades(input){
  return changes;
 }
 export function organizationGraph(company,input){
- const p=organizationPassport(input),nodes=[],links=[],seen=new Set(),W=210,H=74,G=18;
- const leaders=p.people.filter(person=>person.roles.some(r=>['owner','chief','technologist'].includes(r)));
- const columns=p.structure.workshops.map(w=>{
-  const members=p.people.filter(person=>person.workshop===w.id&&!leaders.includes(person));
-  const groups=p.structure.brigades.filter(b=>b.workshop===w.id).map(b=>({brigade:b,lead:members.find(person=>person.id===b.lead),people:members.filter(person=>person.brigade===b.id&&person.id!==b.lead)}));
-  const free=members.filter(person=>!groups.some(group=>group.lead?.id===person.id||group.people.includes(person)));if(free.length)groups.push({brigade:null,lead:null,people:free});
-  groups.forEach(group=>group.width=Math.max(250,Math.min(3,Math.max(1,group.people.length))*(W+G)-G+30));
-  return {w,members,groups,width:Math.max(280,groups.reduce((sum,group)=>sum+group.width,0)+G*Math.max(0,groups.length-1))};
- });
- const width=Math.max(840,columns.reduce((sum,c)=>sum+c.width,0)+G*(columns.length+1),leaders.length*(W+G)+G);
- const add=node=>{nodes.push({...node,width:node.width||W,height:node.height||H});return node.id;};
- const personNode=(person,x,y,extra={})=>{seen.add(person.id);return add({id:'person:'+person.id,kind:'person',person,name:person.name,subtitle:person.roles.map(r=>structureRoles[r]).join(' · '),x,y,...extra});};
- add({id:'company',kind:'company',name:company,subtitle:'Предприятие',x:(width-260)/2,y:18,width:260});
- leaders.forEach((person,i)=>{const id=personNode(person,(width-leaders.length*(W+G)+G)/2+i*(W+G),122);links.push(['company',id]);});
- const workY=leaders.length?234:122;let left=G,maxY=workY+H+24;
- for(const c of columns){const wid=add({id:'workshop:'+c.w.id,kind:'workshop',workshop:c.w,name:c.w.name,subtitle:`${c.w.kind==='preparation'?'Подготовка':'Пошив'} · ${c.members.length} участников · ${p.resources.filter(r=>r.workshop===c.w.id).length} центров`,x:left+(c.width-250)/2,y:workY,width:250});
-  const chiefs=leaders.filter(person=>person.roles.includes('chief'));if(chiefs.length)chiefs.forEach(person=>links.push(['person:'+person.id,wid]));else links.push(['company',wid]);leaders.filter(person=>person.roles.includes('technologist')&&!chiefs.includes(person)).forEach(person=>links.push(['person:'+person.id,wid,'technical']));
-  let gx=left;for(const group of c.groups){let parent=wid,y=workY+110;
-   if(group.brigade){if(group.lead&&!seen.has(group.lead.id))parent=personNode(group.lead,gx+(group.width-250)/2,y,{kind:'brigade',brigade:group.brigade,name:group.brigade.name,subtitle:'Бригадир · '+group.lead.name,width:250});else parent=add({id:'brigade:'+group.brigade.id,kind:'brigade',brigade:group.brigade,name:group.brigade.name,subtitle:'Бригада',x:gx+(group.width-250)/2,y,width:250});links.push([wid,parent]);y+=110;}
-   const count=Math.min(3,Math.max(1,group.people.length)),rowWidth=count*(W+G)-G;
-   group.people.forEach((person,i)=>{if(seen.has(person.id))return;const id=personNode(person,gx+(group.width-rowWidth)/2+(i%count)*(W+G),y+Math.floor(i/count)*(H+G));links.push([parent,id]);maxY=Math.max(maxY,y+Math.floor(i/count)*(H+G)+H+24);});gx+=group.width+G;
+ const p=organizationPassport(input),nodes=[],links=[],W=210,H=74,G=22;
+ const owners=p.people.filter(x=>x.group==='owner'),chiefs=p.people.filter(x=>x.group!=='owner'&&x.roles.includes('chief')),technologists=p.people.filter(x=>x.group!=='owner'&&x.roles.includes('technologist')&&!chiefs.includes(x));
+ const heads=[...chiefs,...technologists],columns=p.structure.workshops.map(w=>({w,people:p.people.filter(x=>x.group!=='owner'&&!heads.includes(x)&&x.workshop===w.id)}));
+ for(const col of columns){col.groups=p.structure.brigades.filter(b=>b.workshop===col.w.id).map(b=>({b,lead:col.people.find(x=>x.id===b.lead),people:col.people.filter(x=>x.brigade===b.id&&x.id!==b.lead)}));const free=col.people.filter(x=>!col.groups.some(g=>g.lead===x||g.people.includes(x)));if(free.length)col.groups.push({b:null,lead:null,people:free});col.width=Math.max(300,col.groups.reduce((sum,g)=>sum+Math.max(250,Math.min(3,Math.max(1,g.people.length))*(W+G)),0));}
+ const width=Math.max(840,columns.reduce((sum,c)=>sum+c.width+G,0)+G,Math.max(chiefs.length,technologists.length)*(W+G)+G);let maxY=560;
+ const add=n=>{nodes.push({width:W,height:H,...n});return n.id;},person=(x,px,y,extra={})=>add({id:'person:'+x.id,kind:'person',person:x,name:x.name,subtitle:x.group==='executors'?(x.role||'Универсальный исполнитель'):x.roles.map(r=>structureRoles[r]).join(' · '),x:px,y,...extra});
+ add({id:'company',kind:'company',name:company,subtitle:owners.length?'Владельцы: '+owners.map(x=>x.name).join(', '):'Компания',x:(width-330)/2,y:18,width:330});
+ chiefs.forEach((x,i)=>{person(x,(width-chiefs.length*(W+G)+G)/2+i*(W+G),130);links.push(['company','person:'+x.id]);});
+ technologists.forEach((x,i)=>{person(x,(width-technologists.length*(W+G)+G)/2+i*(W+G),246);chiefs.forEach(c=>links.push(['person:'+c.id,'person:'+x.id]));});
+ let left=G;for(const c of columns){add({id:'workshop:'+c.w.id,kind:'workshop',workshop:c.w,name:c.w.name,subtitle:c.people.length+' участников',x:left+(c.width-260)/2,y:362,width:260});let gx=left;
+  for(const g of c.groups){const gw=Math.max(250,Math.min(3,Math.max(1,g.people.length))*(W+G));let parent=null;
+   if(g.lead){parent=person(g.lead,gx+(gw-250)/2,466,{kind:'brigade',brigade:g.b,name:g.b.name,subtitle:'Бригадир · '+g.lead.name,width:250});for(const tech of technologists.length?technologists:chiefs.filter(x=>x.roles.includes('technologist')))links.push(['person:'+tech.id,parent]);}
+   const count=Math.min(3,Math.max(1,g.people.length));g.people.forEach((x,i)=>{const y=580+Math.floor(i/count)*(H+G),id=person(x,gx+(gw-count*(W+G))/2+(i%count)*(W+G),y);if(parent)links.push([parent,id]);maxY=Math.max(maxY,y+H+30);});gx+=gw;
   }left+=c.width+G;
  }
  return {nodes,links,width,height:maxY,passport:p};

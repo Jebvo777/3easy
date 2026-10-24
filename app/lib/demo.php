@@ -83,7 +83,7 @@ function demoEnter():array{
  $bucket=authLimit('demo-session');query('UPDATE auth_limits SET failures=failures+1 WHERE bucket=?',[$bucket]);$db=db();
  $db->beginTransaction();
  try{
-  $owner=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$owner,'session-'.$owner.'@demo.easy3.local','Собственник',password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);
+  $owner=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$owner,'session-'.$owner.'@demo.easy3.local','Владелец',password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);
   $template=demoTemplateSource();
   if($template)$company=demoCloneTemplate($template,$owner);
   else{$company=companyNew('Ателье Север',$owner,true);demoActors($owner,$company);require_once __DIR__.'/engine.php';seedInitialPlan($db,$company,$owner);}
