@@ -60,4 +60,4 @@ function command(string $action,array $input,callable $run):array{
  $out=$run($c);query('INSERT INTO idempotency (company_id,actor_id,command_key,request_hash,response) VALUES (?,?,?,?,?)',[$c['id'],$_SESSION['user_id'],$key,$hash,j($out)]);$db->commit();return $out;
  }catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;}
 }
-require_once __DIR__.'/production_domain.php';require_once __DIR__.'/seed.php';
+require_once __DIR__.'/production_domain.php';require_once __DIR__.'/company_model.php';require_once __DIR__.'/company_economy.php';require_once __DIR__.'/seed.php';
