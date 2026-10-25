@@ -8,7 +8,7 @@ function companyPerson(array $p):array{
  $p['universal']=$p['universal']??true;return $p;
 }
 function companyWorkplaces(array $p):array{
- if(array_key_exists('workplaces',$p))return array_map(fn($w)=>array_replace(['equipment'=>[]],$w,['active'=>(bool)($w['active']??true)]),$p['workplaces']);$out=[];
+ if(isset($p['workplaces'])&&is_array($p['workplaces']))return array_map(fn($w)=>array_replace(['equipment'=>[]],$w,['active'=>(bool)($w['active']??true)]),$p['workplaces']);$out=[];
  foreach($p['resources']??[] as $r)$out[]=['id'=>'wp-'.$r['id'],'name'=>$r['name'],'workshop'=>$r['workshop']??'w-main','equipment'=>[$r['id']],'active'=>true];
  return $out;
 }
