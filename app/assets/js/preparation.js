@@ -1,5 +1,6 @@
+import {mountCutting} from './cutting.js';
 import {S,e,key,api,refresh,button,toast,num} from './core.js';
-export function mountPreparation(host,order,{onSaved=()=>{}}={}){
+function mountLegacyPreparation(host,order,{onSaved=()=>{}}={}){
  let record=null,state=null,orderRevision=order.revision,dirty=false,busy=false,disposed=false;
  const editable=['owner','foreman','technologist','chief'].includes(S.data.company.role);
  const amount=S.data.permissions.economy;
@@ -12,4 +13,10 @@ export function mountPreparation(host,order,{onSaved=()=>{}}={}){
  }
  async function save(){if(busy||!editable)return false;capture();const f=host.querySelector('form');if(!f.reportValidity())return false;busy=true;host.querySelectorAll('button,input,select').forEach(b=>b.disabled=true);host.querySelector('#prep-state').textContent='Сохраняем комплектацию…';try{const r=await api('preparation_save',{key:key(),order_id:order.id,revision:record.revision,order_revision:orderRevision,state});record={...record,revision:r.revision,state:structuredClone(state)};orderRevision=r.order_revision;order.revision=r.order_revision;dirty=false;await refresh();await onSaved();if(!disposed)draw();toast('Комплектация сохранена отдельно от пошива');return true;}catch(err){if(!disposed){draw();host.querySelector('.error-box').textContent=err.message;}return false;}finally{busy=false;}}
  load();return {get dirty(){return dirty;},get busy(){return busy;},save,dispose(){disposed=true;}};
+}
+
+export function mountPreparation(host,order,options={}){
+ let child=null,mode='supply',disposed=false;
+ function draw(){child?.dispose();host.innerHTML=`<div class="preparation-tabs"><button class="btn ${mode==='supply'?'active':''}" data-prep-view="supply">Крой для пошива</button><button class="btn ${mode==='cutting'?'active':''}" data-prep-view="cutting">Раскрой · калькулятор</button></div><div data-preparation-content></div>`;host.querySelectorAll('[data-prep-view]').forEach(b=>b.onclick=()=>{if(child?.dirty||child?.busy){toast('Сначала сохраните текущие изменения',true);return;}mode=b.dataset.prepView;draw();});child=(mode==='cutting'?mountCutting:mountLegacyPreparation)(host.querySelector('[data-preparation-content]'),order,options);}
+ draw();return {get dirty(){return child?.dirty||false;},get busy(){return child?.busy||false;},save(){return child?.save();},dispose(){disposed=true;child?.dispose();}};
 }
