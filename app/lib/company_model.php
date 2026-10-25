@@ -24,7 +24,7 @@ function companyWorkerId(array $c):string{
 }
 function companyAccountSummaries(array $c):array{
  if($c['role']!=='owner'||!companyStorage('person_accounts'))return [];
- return rows('SELECT p.person_id,u.email FROM person_accounts p JOIN users u ON u.id=p.user_id WHERE p.company_id=?',[$c['id']]);
+ return rows('SELECT p.person_id,u.email FROM person_accounts p JOIN users u ON BINARY u.id=BINARY p.user_id WHERE p.company_id=?',[$c['id']]);
 }
 function companySaveAccounts(array $raw,array $clean,array $c):void{
  foreach($raw['people']??[] as $source){$access=$source['access']??null;if(!is_array($access)||empty($access['email']))continue;if(!companyStorage('person_accounts'))fail('Для доступа участников импортируйте SQL обновления 25.10.2026',503);$person=array_column($clean['people'],null,'id')[$source['id']]??null;if(!$person)fail('Участник не найден');$email=mb_strtolower(textField($access,'email',190,true));if(!filter_var($email,FILTER_VALIDATE_EMAIL))fail('Укажите корректную почту участника');$password=(string)($access['password']??'');if($password!==''&&(strlen($password)<10||strlen($password)>128))fail('Пароль участника: от 10 до 128 символов');$linked=one('SELECT user_id FROM person_accounts WHERE company_id=? AND person_id=?',[$c['id'],$person['id']]);$user=one('SELECT id FROM users WHERE email=?',[$email]);
