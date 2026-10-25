@@ -6,7 +6,17 @@ function workplaceRecord(array $c,string $id):array{
  foreach(companyWorkplaces($c['passport']) as $w)if($w['id']===$id)return $w;fail('Рабочее место не найдено в этой компании',404);
 }
 function workplaceWorker(array $c,array $w):?array{
- $id=companyWorkerId($c);$p=$id?array_column($c['passport']['people'],null,'id')[$id]??null:null;
+ $id=companyWorkerId($c);$people=array_column($c['passport']['people'],null,'id');$p=$id?($people[$id]??null):null;
+ if(!empty($c['is_demo'])&&($_SESSION['demo_company']??null)===$c['id']){
+  $current=companyStorage('workplace_sessions')?one('SELECT person_id FROM workplace_sessions WHERE company_id=? AND workplace_id=? AND user_id=? AND finished_at IS NULL',[$c['id'],$w['id'],$_SESSION['user_id']]):null;
+  if($current&&isset($people[$current['person_id']]))$p=$people[$current['person_id']];
+  if(!$p||$p['group']!=='executors'||empty($p['active'])||$p['workshop']!==$w['workshop']){
+   $preferred=[];foreach($c['passport']['resources'] as $resource)if(in_array($resource['id'],$w['equipment'],true)&&!empty($resource['worker']))$preferred[]=$resource['worker'];
+   $pool=array_values(array_filter($people,fn($person)=>$person['group']==='executors'&&!empty($person['active'])&&$person['workshop']===$w['workshop']));usort($pool,fn($a,$b)=>(in_array($b['id'],$preferred,true)<=>in_array($a['id'],$preferred,true))?:strcmp($a['id'],$b['id']));$p=$pool[0]??null;
+  }
+  if($p)$_SESSION['worker_resource']=$p['id'];
+ }
+
  return $p&&$p['group']==='executors'&&!empty($p['active'])&&$p['workshop']===$w['workshop']?$p:null;
 }
 function workplaceView(array $c,array $w):array{

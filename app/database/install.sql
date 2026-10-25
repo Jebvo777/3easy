@@ -342,3 +342,16 @@ CREATE TABLE IF NOT EXISTS workplace_sessions (
  KEY workplace_day (company_id,workplace_id,started_at),
  KEY employee_day (company_id,user_id,started_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- One-time demo environment revision. The application applies it when a demo
+-- company is next opened. Existing production facts and published plans stay intact.
+-- No routines, dynamic DDL, ALTER, PREPARE or collation conversion are required.
+CREATE TABLE IF NOT EXISTS demo_environment_revisions (
+ company_id CHAR(32) NOT NULL,
+ migration_version INT NOT NULL,
+ passport_before LONGTEXT NOT NULL,
+ layout_before LONGTEXT NOT NULL,
+ company_revision INT NOT NULL,
+ applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (company_id,migration_version)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

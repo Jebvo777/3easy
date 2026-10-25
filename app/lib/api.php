@@ -11,7 +11,8 @@ function authLimit(string $email):string{
 function establish(string $userId,string $companyId):void{session_regenerate_id(true);unset($_SESSION['active_roles']);$_SESSION['user_id']=$userId;$_SESSION['company_id']=$companyId;$_SESSION['csrf']=bin2hex(random_bytes(24));}
 function companyNew(string $name,string $userId,bool $demo=false):string{
  $id=uid();$passport=$demo?demoPassport():['industry'=>'Швейное производство','city'=>'','timezone'=>'Europe/Moscow','people'=>[],'resources'=>[],'shift'=>['start'=>'09:00','end'=>'18:00','break_start'=>'13:00','break_minutes'=>60,'days'=>[1,2,3,4,5]],'economy'=>['labor_hour_cents'=>null,'monthly_common_cents'=>null,'monthly_hours'=>null,'excluded'=>['Продажи и налоги компании'],'unknown'=>['Расходы ещё не заполнены'],'currency'=>'RUB']];
- query('INSERT INTO companies (id,name,is_demo,passport,layout) VALUES (?,?,?,?,?)',[$id,$name,$demo?1:0,j($passport),j($demo?demoLayout():['width'=>18,'depth'=>12,'objects'=>[],'links'=>[]])]);
+ $layout=$demo?demoLayout():['width'=>18,'depth'=>12,'objects'=>[],'links'=>[]];if($demo){$ready=demoBuildEnvironment(['passport'=>$passport,'layout'=>$layout]);$passport=$ready['passport'];$layout=$ready['layout'];}
+ query('INSERT INTO companies (id,name,is_demo,passport,layout) VALUES (?,?,?,?,?)',[$id,$name,$demo?1:0,j($passport),j($layout)]);
  query('INSERT INTO memberships (user_id,company_id,role) VALUES (?,?,?)',[$userId,$id,'owner']);if($demo)seedCompany(db(),$id);return $id;
 }
 function stateData():array{

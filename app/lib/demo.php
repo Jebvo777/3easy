@@ -9,7 +9,7 @@ function demoTemplateSource():?array{
  foreach($candidates as $c){
   $seed=decode($c['seed_details']);
   if(($seed['source']??'')!=='easy3-demo-q4-20261023-v2'||empty($seed['synthetic'])||(int)$c['goal_count']<24)continue;
-  $template=$c;break;
+  $ready=$c;$ready['passport']=decode($c['passport']);$ready['layout']=decode($c['layout']);$ready=demoEnsureEnvironment($ready);$c['passport']=j($ready['passport']);$c['layout']=j($ready['layout']);$c['revision']=$ready['revision'];$template=$c;break;
  }
  return $template;
 }
@@ -24,7 +24,7 @@ function demoSessionInfo(array $company,array $orders,array $plans,array $tasks,
 
 function demoActors(string $owner,string $company):array{
  $actors=['owner'=>$owner];
- foreach(['foreman'=>'Мастер','technologist'=>'Технолог','chief'=>'Начальник производства','worker'=>'Швея 01','qc'=>'Контролёр ОТК'] as $role=>$name){
+ foreach(['foreman'=>'Мастер','technologist'=>'Технолог','chief'=>'Начальник производства','worker'=>'Универсальный исполнитель','qc'=>'Контролёр ОТК'] as $role=>$name){
   $id=uid();query('INSERT INTO users (id,email,name,password_hash) VALUES (?,?,?,?)',[$id,$role.'-'.$id.'@demo.easy3.local',$name,password_hash(bin2hex(random_bytes(24)),PASSWORD_DEFAULT)]);
   query('INSERT INTO memberships (user_id,company_id,role) VALUES (?,?,?)',[$id,$company,$role]);$actors[$role]=$id;
  }
@@ -48,7 +48,8 @@ function demoRemap(string $value,array $map):string{
 /** New company, new actors and new IDs. The populated source remains untouched. */
 function demoCloneTemplate(array $template,string $owner):string{
  $company=companyNew($template['name'],$owner);$actors=demoActors($owner,$company);$source=$template['id'];
- query('UPDATE companies SET is_demo=1,passport=?,layout=?,revision=? WHERE id=?',[$template['passport'],$template['layout'],(int)$template['revision'],$company]);
+ $environment=demoBuildEnvironment(['passport'=>decode($template['passport']),'layout'=>decode($template['layout'])]);
+ query('UPDATE companies SET is_demo=1,passport=?,layout=?,revision=? WHERE id=?',[j($environment['passport']),j($environment['layout']),(int)$template['revision'],$company]);
  $tables=['orders','order_preparations','preparation_revisions','plan_workspaces','plan_workspace_revisions','plan_versions','tasks','production_events','economy_observations','order_variant_revisions'];$records=[];$map=[$source=>$company];
  foreach(rows('SELECT user_id,role FROM memberships WHERE company_id=?',[$source]) as $member)$map[$member['user_id']]=$actors[$member['role']]??$owner;
  if(!companyStorage('order_variant_revisions'))$tables=array_values(array_diff($tables,['order_variant_revisions']));
@@ -71,7 +72,7 @@ function demoCloneTemplate(array $template,string $owner):string{
   demoInsertRows($table,$batch);
  }
  // The latest copied snapshot refers to the identities of this private copy.
- require_once __DIR__.'/engine.php';$c=$template;$c['id']=$company;$c['passport']=decode($template['passport']);$c['layout']=decode($template['layout']);$c=productionCompanyView($c);
+ require_once __DIR__.'/engine.php';$c=$template;$c['id']=$company;$c['passport']=$environment['passport'];$c['layout']=$environment['layout'];$c=productionCompanyView($c);
  [$orders,$tasks]=engineInputs($c);$hash=engineHash($c,$orders,$tasks);$latest=one('SELECT * FROM plan_versions WHERE company_id=? ORDER BY version_no DESC LIMIT 1',[$company]);
  if($latest){$snapshot=decode($latest['snapshot']);$snapshot['input_hash']=$hash;$approvals=decode($latest['approvals']);foreach($approvals as &$approval)$approval['input_hash']=$hash;unset($approval);query('UPDATE plan_versions SET snapshot=?,input_hash=?,approvals=? WHERE id=? AND company_id=?',[j($snapshot),$hash,j($approvals),$latest['id'],$company]);}
  query('INSERT INTO audit_log (id,company_id,actor_id,action,details) VALUES (?,?,?,?,?)',[uid(),$company,$owner,'demo_template_cloned',j(['source'=>'easy3-demo-q4-20261023-v2','synthetic'=>true,'goals'=>count($records['orders']),'notice'=>'Изолированная учебная копия: исходная фабрика и работа других сеансов не изменяются.'])]);
