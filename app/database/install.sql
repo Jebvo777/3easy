@@ -430,5 +430,5 @@ CREATE TABLE IF NOT EXISTS preparation_movements (
  actor_id CHAR(32) NOT NULL,
  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  KEY preparation_lot (company_id,order_id,tranche_id),
- KEY preparation_batch (company_id,order_id,batch_key,kind)
+ KEY preparation_batch (company_id,order_id,batch_key(100),kind)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
