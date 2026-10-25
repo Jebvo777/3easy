@@ -44,5 +44,5 @@ function companyWageBucket(array $c,string $order,int $stamp):string{
 }
 function companyWorkplaceFor(array $p,string $resource):?string{foreach(companyWorkplaces($p) as $w)if(in_array($resource,$w['equipment'],true))return $w['id'];return null;}
 function companyRedactEconomicFields(mixed $value):mixed{
- if(!is_array($value))return $value;$out=[];foreach($value as $k=>$v){if(in_array($k,['wage_cents','tariff_snapshot','economy_rules_snapshot','earnings','balance_earnings','legacy_labor_hour_cents'],true))continue;$out[$k]=companyRedactEconomicFields($v);}return $out;
+ if(!is_array($value))return $value;$out=[];foreach($value as $k=>$v){if((is_string($k)&&preg_match('/cents|micros|tariff|earnings/',$k))||in_array($k,['wage_cents','tariff_snapshot','economy_rules_snapshot','earnings','balance_earnings','legacy_labor_hour_cents'],true))continue;$out[$k]=companyRedactEconomicFields($v);}return $out;
 }

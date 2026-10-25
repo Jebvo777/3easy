@@ -5,7 +5,7 @@ require_once __DIR__.'/manufacturing.php';
 const ENGINE_VERSION='easy3-manufacturing/7.4';
 function routeCheck(array $route):array{
  if(!$route)return ['Технология ещё не собрана'];$errors=[];$map=[];$used=[];$degree=[];$next=[];
- foreach($route as $op){$id=$op['id'];if(isset($map[$id]))$errors[]='Повторяется код операции';$map[$id]=$op;$degree[$id]=0;if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if((isset($op['norm'])&&($op['norm']['status']??'unknown')!=='confirmed')||(!empty($op['ai_origin'])&&empty($op['norm_reviewed'])))$errors[]='Нет подтверждения нормы AI: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];}
+ foreach($route as $op){$id=$op['id'];if(isset($map[$id]))$errors[]='Повторяется код операции';$map[$id]=$op;$degree[$id]=0;if(($op['seconds']??null)===null)$errors[]='Нет нормы: '.$op['name'];if((isset($op['norm'])&&($op['norm']['status']??'unknown')!=='confirmed')||(!empty($op['ai_origin'])&&empty($op['norm_reviewed'])))$errors[]='Нет подтверждения нормы: '.$op['name'];if(empty($op['source']))$errors[]='Нет источника нормы: '.$op['name'];}
  foreach($route as $op)foreach($op['dependencies']??[] as $d){if(!isset($map[$d])||$d===$op['id']){$errors[]='Некорректная зависимость: '.$op['name'];continue;}$degree[$op['id']]++;$next[$d][]=$op['id'];$used[$d]=true;}
  $queue=[];foreach($degree as $id=>$n)if(!$n)$queue[]=$id;$seen=0;for($i=0;$i<count($queue);$i++){$seen++;foreach($next[$queue[$i]]??[] as $id)if(--$degree[$id]===0)$queue[]=$id;}if($seen!==count($map))$errors[]='В технологии обнаружен цикл';if(count(array_diff_key($map,$used))!==1)$errors[]='Нужна одна конечная операция выпуска';return array_values(array_unique($errors));
 }

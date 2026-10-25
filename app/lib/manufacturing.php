@@ -58,8 +58,9 @@ function manufacturingTechnologySummary(array $route,array $p,int $quantity,stri
  if($financial)$out+=['unit_wage_cents'=>$moneyComplete?$unitCents:null,'volume_wage_cents'=>$moneyComplete?$volumeCents:null,'known_wage_cents'=>$unitCents,'money_complete'=>$moneyComplete];else foreach($out['groups'] as &$group)unset($group['wage_cents'],$group['money_complete']);unset($group);return $out;
 }
 function manufacturingTimestamp(string $value,string $zone):int{
- try{$d=new DateTimeImmutable($value,new DateTimeZone($zone));return $d->getTimestamp();}catch(Throwable){fail('Укажите корректные дату и время');}
+ $value=str_replace('T',' ',trim($value));if(preg_match('/^\d{4}-\d{2}-\d{2}$/D',$value))$value.=' 00:00:00';elseif(preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/D',$value))$value.=':00';if(!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/D',$value))fail('Укажите дату и время в формате ГГГГ-ММ-ДД ЧЧ:ММ');$d=DateTimeImmutable::createFromFormat('!Y-m-d H:i:s',$value,new DateTimeZone($zone));if(!$d||$d->format('Y-m-d H:i:s')!==$value)fail('Укажите корректные дату и время');return $d->getTimestamp();
 }
+function manufacturingLocalStamp(int $stamp,string $zone):string{return (new DateTimeImmutable('@'.$stamp))->setTimezone(new DateTimeZone($zone))->format('Y-m-d H:i:s');}
 function manufacturingRedact(mixed $v):mixed{
  if(!is_array($v))return $v;$out=[];foreach($v as $k=>$x){if(is_string($k)&&(preg_match('/cents|micros|tariff|payroll|earnings/',$k)||in_array($k,['pay','pay_rule','pay_rule_id','basis_points'],true)))continue;$out[$k]=manufacturingRedact($x);}return $out;
 }
