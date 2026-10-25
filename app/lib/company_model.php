@@ -8,13 +8,13 @@ function companyPerson(array $p):array{
  $p['universal']=$p['universal']??true;return $p;
 }
 function companyWorkplaces(array $p):array{
- if(array_key_exists('workplaces',$p))return $p['workplaces'];$out=[];
- foreach($p['resources']??[] as $r)$out[]=['id'=>'wp-'.$r['id'],'name'=>$r['name'],'workshop'=>$r['workshop']??'w-main','equipment'=>[$r['id']]];
+ if(array_key_exists('workplaces',$p))return array_map(fn($w)=>array_replace(['equipment'=>[]],$w,['active'=>(bool)($w['active']??true)]),$p['workplaces']);$out=[];
+ foreach($p['resources']??[] as $r)$out[]=['id'=>'wp-'.$r['id'],'name'=>$r['name'],'workshop'=>$r['workshop']??'w-main','equipment'=>[$r['id']],'active'=>true];
  return $out;
 }
 function companyValidateWorkplaces(array $p,array $old):array{
  $raw=$p['workplaces']??companyWorkplaces($old);if(!is_array($raw)||count($raw)>160)fail('Допускается до 160 рабочих мест');$ids=[];$names=[];$assigned=[];$equipment=array_column($p['resources'],null,'id');$departments=array_column($p['structure']['workshops'],null,'id');$out=[];
- foreach($raw as $w){$id=organizationId($w);$name=textField($w,'name',100,true);$dep=organizationId($w,'workshop');$nk=$dep.'|'.mb_strtolower($name);if(isset($ids[$id])||isset($names[$nk])||!isset($departments[$dep]))fail('Проверьте код, название и подразделение рабочего места');$ids[$id]=true;$names[$nk]=true;$items=$w['equipment']??[];if(!is_array($items)||count($items)>30)fail('Проверьте оборудование рабочего места');foreach($items as $eid){if(!is_string($eid)||!isset($equipment[$eid])||isset($assigned[$eid]))fail('Одна единица оборудования закрепляется только за одним рабочим местом');if($equipment[$eid]['workshop']!==$dep)fail('Оборудование и рабочее место должны быть в одном подразделении');$assigned[$eid]=true;}$out[]=['id'=>$id,'name'=>$name,'workshop'=>$dep,'equipment'=>array_values(array_unique($items))];}
+ foreach($raw as $w){$id=organizationId($w);$name=textField($w,'name',100,true);$dep=organizationId($w,'workshop');$nk=$dep.'|'.mb_strtolower($name);if(isset($ids[$id])||isset($names[$nk])||!isset($departments[$dep]))fail('Проверьте код, название и подразделение рабочего места');$ids[$id]=true;$names[$nk]=true;$items=$w['equipment']??[];if(!is_array($items)||count($items)>30)fail('Проверьте оборудование рабочего места');foreach($items as $eid){if(!is_string($eid)||!isset($equipment[$eid])||isset($assigned[$eid]))fail('Одна единица оборудования закрепляется только за одним рабочим местом');if($equipment[$eid]['workshop']!==$dep)fail('Оборудование и рабочее место должны быть в одном подразделении');$assigned[$eid]=true;}$out[]=['id'=>$id,'name'=>$name,'workshop'=>$dep,'equipment'=>array_values(array_unique($items)),'active'=>(bool)($w['active']??true)];}
  return $out;
 }
 function companyStorage(string $table):bool{static $ready=[];if(!array_key_exists($table,$ready)){try{db()->query('SELECT 1 FROM `'.$table.'` LIMIT 0');$ready[$table]=true;}catch(Throwable){$ready[$table]=false;}}return $ready[$table];}

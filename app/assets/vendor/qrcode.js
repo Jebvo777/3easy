@@ -1,5 +1,4 @@
 /* QR Code Generator, Kazuhiko Arase, MIT. */
-const module={exports:{}};
 //---------------------------------------------------------------------
 //
 // QR Code Generator for JavaScript
@@ -2288,14 +2287,5 @@ var qrcode = function() {
 
 }();
 
-(function (factory) {
-  if (typeof define === 'function' && define.amd) {
-      define([], factory);
-  } else if (typeof exports === 'object') {
-      module.exports = factory();
-  }
-}(function () {
-    return qrcode;
-}));
-
-export default module.exports;
+// Local ES module adapter: export the generator directly.
+export default qrcode;

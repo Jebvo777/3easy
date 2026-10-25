@@ -7,6 +7,7 @@ export function organizationPassport(input){
  p.structure={workshops,brigades};p.people=(p.people||[]).map(person=>({...person,roles:person.roles?.length?[...person.roles]:['worker'],workshop:validWorkshop(person.workshop),brigade:brigades.some(b=>b.id===person.brigade)?person.brigade:''}));
  p.people=p.people.map(x=>({...x,group:x.group||(x.roles.includes('owner')?'owner':x.roles.some(r=>['chief','technologist','foreman'].includes(r))?'management':'executors'),duties:x.duties||[...(x.skills||[]).filter(v=>['cut','sew','qc','pack','iron','hand'].includes(v)),...((x.skills||[]).includes('special')?['sew']:[])],universal:x.universal??true}));
  p.workplaces=p.workplaces||((p.resources||[]).map(r=>({id:'wp-'+r.id,name:r.name,workshop:r.workshop||defaultWorkshop,equipment:[r.id]})));
+ p.workplaces=p.workplaces.map(w=>({active:true,...w}));
  p.resources=(p.resources||[]).map(r=>({...r,workshop:validWorkshop(r.workshop)}));return p;
 }
 export function distributeBrigades(input){
