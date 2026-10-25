@@ -1,10 +1,11 @@
-"""Build an update archive preserving all four installed configuration files."""
+"""Build a public update or a complete private delivery with supplied configuration."""
 from pathlib import Path
 import argparse, shutil, zipfile
 
 p = argparse.ArgumentParser()
 p.add_argument('--output', type=Path, required=True)
 p.add_argument('--commit', required=True)
+p.add_argument('--config-zip', type=Path, help='Private configuration ZIP; produces a complete configured delivery')
 a = p.parse_args()
 root = Path(__file__).resolve().parents[1]
 out = a.output.resolve()
@@ -27,6 +28,25 @@ for src in (root / 'app').rglob('*'):
     dest = stage / rel
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(src, dest)
+if a.config_zip:
+    supplied = {}
+    with zipfile.ZipFile(a.config_zip) as z:
+        for item in z.infolist():
+            name = Path(item.filename).name
+            if not item.is_dir() and name in configs:
+                if name in supplied:
+                    raise ValueError('Duplicate configuration file: ' + name)
+                if item.file_size > 1024 * 1024:
+                    raise ValueError('Configuration file is too large: ' + name)
+                supplied[name] = z.read(item)
+    for example, local in [('config.example.php', 'config.local.php'), ('config.ai.example.php', 'config.ai.local.php')]:
+        if example not in supplied:
+            raise ValueError('Missing supplied configuration: ' + example)
+        supplied.setdefault(local, supplied[example])
+    for name, content in supplied.items():
+        (stage / name).write_bytes(content)
+    (stage / 'storage/imports').mkdir(parents=True, exist_ok=True)
+    (stage / 'storage/imports/.htaccess').write_text('Require all denied\n')
 (stage / 'docs').mkdir(exist_ok=True)
 (stage / 'docs/.htaccess').write_text('Require all denied\n')
 shutil.copyfile(root / 'docs/RELEASE_20261025.md', stage / 'docs/RELEASE_20261025.md')
@@ -43,7 +63,27 @@ install.sql и демонстрационные наполнения при об
 Этот архив предназначен для существующей установки, а не для нового пустого сайта.
 Состав правок: docs/RELEASE_20261025.md. Базовые проверки: QA_REPORT_V73.md.
 ''')
-archive = out / 'EASY3_v7_3_20261025_update.zip'
+if a.config_zip:
+    full_instructions = '''EASY3 7.3 — полный проект с конфигурацией, 25 октября 2026
+
+Архив содержит все файлы приложения, готовые JS/CSS, локальные библиотеки, медиа и вашу конфигурацию. index.php находится в корне архива. Можно загружать в пустой каталог после удаления старых файлов сайта.
+
+1. Перед удалением скачайте с хостинга папку storage: в ней могут быть загруженные документы. Ваши документы с сервера не были присланы, поэтому в архиве их нет. После загрузки проекта верните сохранённое содержимое storage.
+2. Базу данных на сервере оставьте существующую. Если обновление 25.10 ещё не применялось, импортируйте database/update_20261025.sql в эту базу через phpMyAdmin. Отдельный EASY3_update_20261025_mysql57.sql содержит тот же скрипт; повторный импорт не требуется. MySQL 5.7 поддерживается. install.sql и демонаполнения для действующей базы не запускать.
+3. Загрузите ВСЁ содержимое архива в корень сайта, включая .htaccess и папки assets, lib, vendor, storage. Можно заменить старый код целиком, сохранив и затем вернув документы из пункта 1.
+4. Присланные config.example.php и config.ai.example.php включены побайтно без изменений. В config.local.php и config.ai.local.php находятся их точные копии, если отдельные local-файлы не были приложены. Настройки БД и AI повторно вводить не нужно.
+5. Обеспечьте PHP запись в storage/imports. Нужны PHP 8.2+ и прежние расширения. Node, Python и Composer на хостинге не требуются.
+6. Обновите страницу Ctrl+F5.
+
+SQL добавляет три таблицы и не переписывает существующие данные. Архив не является копией вашей базы и пользовательских документов.
+Состав правок: docs/RELEASE_20261025.md. Базовые проверки приложения: QA_REPORT_V73.md.
+'''
+    (stage / 'START-HERE.txt').write_text(full_instructions)
+    (stage / 'UPGRADE.md').write_text('# Полная поставка EASY3 7.3\n\n' + full_instructions)
+    (stage / 'README.md').write_text('# EASY3 7.3 · полный проект с конфигурацией\n\n' + full_instructions)
+    qa = stage / 'QA_REPORT_V73.md'
+    qa.write_text(qa.read_text().replace('Все четыре config-файла исключены из обновления, чтобы при распаковке поверх сайта сохранить текущие настройки.', 'В полной частной поставке два присланных example-файла сохранены побайтно; local-файлы созданы как их точные копии при отсутствии отдельных local-файлов.'))
+archive = out / ('EASY3_v7_3_20261025_full_configured.zip' if a.config_zip else 'EASY3_v7_3_20261025_update.zip')
 with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
     for f in sorted(stage.rglob('*')):
         if f.is_file():
