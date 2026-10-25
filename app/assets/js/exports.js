@@ -23,12 +23,12 @@ export function openExports(options={}){
   try{await downloadXlsx({kind:x.kind,from:x.from,to:x.to,order_id:x.order_id||'',plan_id:x.plan_id||'',deadline_filter:filter.checked,analysis_job_id:x.kind==='statistics'&&x.include_ai&&options.analysis_job_id?options.analysis_job_id:undefined});f.querySelector('.export-download-status').textContent='Файл подготовлен. Проверьте загрузки браузера.';}catch(err){f.querySelector('.error-box').textContent=err.message;f.querySelector('.export-download-status').textContent='';}finally{busy=false;inputs.forEach(el=>el.disabled=false);select();}
  };return m;
 }
-export function openTechnologyExport(order,{route,illustration}){
+export function openTechnologyExport(order,{route,illustration,mode='flow',quantity=order.quantity}){
  let busy=false;const m=modal('Экспорт технологии','<p class="muted">Текущий черновик: '+e(order.product)+'. Excel следует образцу с узлами и операциями; схема включается на отдельном листе.</p><div class="export-format-grid">'+[['xlsx','Excel','Таблицы и схема'],['json','JSON','Прежний обмен данными'],['svg','SVG','Векторная схема изделия']].map(([id,title,desc])=>'<button type="button" data-format="'+id+'" '+(id==='svg'&&!illustration?'disabled':'')+'>'+icon(id==='svg'?'shirt':'download')+'<strong>'+title+'</strong><span>'+desc+'</span></button>').join('')+'</div><div class="export-download-status" role="status"></div><p class="error-box" role="alert"></p>');
  m.el.querySelectorAll('[data-format]').forEach(btn=>btn.onclick=async()=>{
   if(busy)return;const format=btn.dataset.format;busy=true;m.el.querySelectorAll('[data-format]').forEach(b=>b.disabled=true);m.el.querySelector('.error-box').textContent='';m.el.querySelector('[role=status]').textContent='Готовим файл…';
   try{
-   if(format==='xlsx')await downloadXlsx({kind:'technology',order_id:order.id,route,illustration});
+   if(format==='xlsx')await downloadXlsx({kind:'technology',order_id:order.id,route,illustration,mode,quantity});
    if(format==='json')download(new Blob([JSON.stringify({schema_version:illustration?3:2,product:order.product,route,...(illustration?{illustration}:{})},null,2)],{type:'application/json'}),'EASY3-technology.json');
    if(format==='svg'){
     if(!garmentSketch(illustration))throw Error('Нет корректной схемы изделия.');
