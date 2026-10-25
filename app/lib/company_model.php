@@ -2,10 +2,18 @@
 declare(strict_types=1);
 
 const COMPANY_DUTIES=['sew'=>'Швея','qc'=>'ОТК','cut'=>'Раскрой','pack'=>'Упаковка','iron'=>'ВТО','hand'=>'Ручная работа'];
+function companyPersonWorkshops(array $person):array{
+ $roles=$person['roles']??['worker'];$group=$person['group']??(in_array('owner',$roles,true)?'owner':(array_intersect($roles,['chief','technologist','foreman'])?'management':'executors'));
+ if($group==='owner')return [];
+ $primary=(string)($person['workshop']??'');
+ if($group!=='management')return $primary!==''?[$primary]:[];
+ $raw=$person['workshops']??[];$ids=is_array($raw)?array_values(array_unique(array_filter($raw,fn($id)=>is_string($id)&&$id!==''))):[];
+ return $ids?:($primary!==''?[$primary]:[]);
+}
 function companyPerson(array $p):array{
  $roles=$p['roles']??['worker'];$p['roles']=$roles;$p['group']=$p['group']??(in_array('owner',$roles,true)?'owner':(array_intersect($roles,['chief','technologist','foreman'])?'management':'executors'));
  if(!isset($p['duties'])){$p['duties']=array_values(array_intersect($p['skills']??[],array_keys(COMPANY_DUTIES)));if(in_array('special',$p['skills']??[],true)&&!in_array('sew',$p['duties'],true))$p['duties'][]='sew';if(in_array('qc',$roles,true))$p['duties'][]='qc';}
- $p['universal']=$p['universal']??true;return $p;
+ $p['universal']=$p['universal']??true;$p['workshops']=companyPersonWorkshops($p);if($p['group']==='management'&&$p['workshops']&&!in_array($p['workshop']??'', $p['workshops'],true))$p['workshop']=$p['workshops'][0];return $p;
 }
 function companyWorkplaces(array $p):array{
  if(isset($p['workplaces'])&&is_array($p['workplaces']))return array_map(fn($w)=>array_replace(['equipment'=>[]],$w,['active'=>(bool)($w['active']??true)]),$p['workplaces']);$out=[];

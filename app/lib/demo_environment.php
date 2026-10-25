@@ -24,7 +24,7 @@ function demoBuildEnvironment(array $company):array{
   foreach($people as &$person)if($person['group']==='executors'&&$person['workshop']===$donor){$person['workshop']=$department;$person['brigade']='';$counts[$donor]--;$counts[$department]++;break;}unset($person);
  }
  $brigades=[];$leads=[];
- foreach($structure['brigades']??[] as $brigade){$lead=$people[$brigade['lead']]??null;if(!isset($workshops[$brigade['workshop']])||!$lead||!in_array('foreman',$lead['roles'],true)||$lead['workshop']!==$brigade['workshop']||isset($leads[$lead['id']]))continue;$brigades[$brigade['id']]=$brigade;$leads[$lead['id']]=true;}
+ foreach($structure['brigades']??[] as $brigade){$lead=$people[$brigade['lead']]??null;if(!isset($workshops[$brigade['workshop']])||!$lead||!in_array('foreman',$lead['roles'],true)||!in_array($brigade['workshop'],companyPersonWorkshops($lead),true)||isset($leads[$lead['id']]))continue;$brigades[$brigade['id']]=$brigade;$leads[$lead['id']]=true;}
  foreach($people as $person)if(in_array('foreman',$person['roles'],true)&&!isset($leads[$person['id']])){$id='b-demo-'.substr(hash('sha256',$person['id']),0,16);$brigades[$id]=['id'=>$id,'name'=>'Бригада · '.$person['name'],'workshop'=>$person['workshop'],'lead'=>$person['id']];$leads[$person['id']]=true;}
  foreach($brigades as $brigade)$people[$brigade['lead']]['brigade']=$brigade['id'];
  foreach($people as &$person)if($person['group']!=='executors'&&!isset($leads[$person['id']])&&!isset($brigades[$person['brigade']??'']))$person['brigade']='';unset($person);
