@@ -15,11 +15,12 @@ function productionAction(string $action,array $input):array{
  $state=$t['state'];$released=(int)$t['released'];$transferred=(int)$t['transferred'];$accepted=(int)$t['accepted'];$rework=(int)$t['rework'];$reworkReady=(int)$t['rework_ready'];$scrap=(int)$t['scrap'];$total=(int)$t['quantity'];
  if($kind==='start'){
   if(!in_array($state,['ready','paused'],true))fail('Задание уже начато или завершено');if(availableInput($t)<=0)fail('Сначала нужна передача партии из предыдущей операции');
+  manufacturingAssertResourcesFree($c,[$t['worker_id']],[$t['resource_id']],$t['id']);preparationReserveTaskInput($c,$t);
   $busy=one("SELECT id,title FROM tasks WHERE company_id=? AND id<>? AND state='running' AND (resource_id=? OR worker_id=?) LIMIT 1",[$c['id'],$t['id'],$t['resource_id'],$t['worker_id']]);if($busy)fail('Центр или исполнитель занят: '.$busy['title']);$state='running';
  }elseif($kind==='pause'){
   if($state!=='running')fail('Приостановить можно только начатую работу');$details['reason']=textField($input,'reason',200,true);$state='paused';
  }elseif($kind==='release'){
-  if($state!=='running')fail('Сначала начните задание');$qty=numberField($input,'quantity',1,100000);if($qty>availableInput($t))fail('Количество превышает доступную переданную партию или остаток');$released+=$qty;if($released===$total)$state='awaiting_transfer';
+  if($state!=='running')fail('Сначала начните задание');$qty=numberField($input,'quantity',1,100000);if($qty>availableInput($t))fail('Количество превышает доступную переданную партию или остаток');preparationIssueForTask($c,$t,$qty);$released+=$qty;if($released===$total)$state='awaiting_transfer';
  }elseif($kind==='transfer'){
   $qty=numberField($input,'quantity',1,100000);if($qty>$released-$transferred)fail('Можно передать только выпущенный остаток');$transferred+=$qty;if($transferred===$total)$state=$t['is_final']?'quality':'completed';
  }elseif($kind==='quality'||$kind==='rework_quality'){

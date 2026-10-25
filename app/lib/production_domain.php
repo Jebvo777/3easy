@@ -47,6 +47,7 @@ function productionCompanyView(array $company):array{
 }
 function productionAssemblyPeople(array $passport):array{$kinds=array_column($passport['structure']['workshops']??[], 'kind','id');$ids=[];foreach($passport['resources']??[] as $r)if($r['type']!=='cut'&&($kinds[$r['workshop']??'']??'assembly')==='assembly'&&!empty($r['worker']))$ids[$r['worker']]=true;return array_values(array_filter($passport['people']??[],fn($p)=>!empty($p['active'])&&isset($ids[$p['id']])));}
 function productionAssemblyTasks(array $orders,array $tasks):array{
- $allowed=[];foreach($orders as $o)$allowed[$o['id']]=array_column($o['route'],'id');$remove=[];foreach($tasks as $t)if(!in_array($t['operation_id'],$allowed[$t['order_id']]??[],true)||!empty(decode($t['planning_meta']??null)['cutting']))$remove[$t['id']]=true;
+ $allowed=[];foreach($orders as $o)$allowed[$o['id']]=array_column($o['route'],'id');$remove=[];foreach($tasks as $t){$meta=decode($t['planning_meta']??null);if(!empty($meta['cutting'])){$remove[$t['id']]=true;continue;}if(in_array($t['operation_id'],$allowed[$t['order_id']]??[],true))continue;$old=function_exists('manufacturingTaskOperation')?manufacturingTaskOperation($t):null;if(!$old||($old['type']??'')==='cut'||($old['domain']??'assembly')==='preparation')$remove[$t['id']]=true;}
+
  $out=[];foreach($tasks as $t)if(!isset($remove[$t['id']])){$t['dependencies']=j(array_values(array_filter(decode($t['dependencies']),fn($d)=>!isset($remove[$d]))));$out[]=$t;}return $out;
 }

@@ -3,4 +3,4 @@ export function canWork(person,operation){if(!person?.active)return false;const 
 export function resourceFits(resource,operation){const a=resource.type==='overlock'?'special':resource.type,b=operation.type==='overlock'?'special':operation.type;return a===b&&(a!=='special'||(resource.specialization||(resource.type==='overlock'?'overlock':''))===(operation.specialization||(operation.type==='overlock'?'overlock':'')));}
 export const assemblyWorkshops=passport=>(passport.structure?.workshops||[]).filter(w=>(w.kind||'assembly')==='assembly');
 export const assemblyResources=passport=>{const ids=new Set(assemblyWorkshops(passport).map(w=>w.id));return (passport.resources||[]).filter(r=>r.type!=='cut'&&ids.has(r.workshop));};
-export const assemblyPeople=passport=>{const ids=new Set(assemblyWorkshops(passport).map(w=>w.id));return (passport.people||[]).filter(p=>ids.has(p.workshop));};
+export const assemblyPeople=passport=>{const ids=new Set(assemblyWorkshops(passport).map(w=>w.id));return (passport.people||[]).filter(p=>ids.has(p.workshop)&&(p.group||'executors')==='executors');};
