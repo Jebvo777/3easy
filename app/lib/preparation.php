@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/production_domain.php';
+require_once __DIR__.'/production_domain.php';require_once __DIR__.'/preparation_v74.php';
 function preparationAvailable():bool{try{db()->query('SELECT id FROM order_preparations LIMIT 0');return true;}catch(Throwable){return false;}}
 function preparationRecord(array $c,array $o):?array{if(array_key_exists('_preparation_records',$c))return $c['_preparation_records'][$o['id']]??null;if(!preparationAvailable())return null;$row=one('SELECT * FROM order_preparations WHERE company_id=? AND order_id=?',[$c['id'],$o['id']]);if(!$row)return null;$row['state']=decode($row['state_json']);$row['revision']=(int)$row['revision'];unset($row['state_json']);return $row;}
 function preparationDefault(array $c,array $o):array{
@@ -11,7 +11,7 @@ function preparationDefault(array $c,array $o):array{
  $department='';foreach($c['passport']['structure']['workshops']??[] as $w)if(($w['kind']??'assembly')==='preparation'){$department=$w['id'];break;}
  return ['schema'=>1,'department_id'=>$department,'unit'=>'комплект','items'=>$items,'source'=>'Перенос прежних сведений; будущая готовность требует подтверждения.','operations'=>$o['preparation_route']??[],'cost_mode'=>'unknown','cost_cents'=>null];
 }
-function preparationState(array $c,array $o):array{return preparationRecord($c,$o)['state']??preparationDefault($c,$o);}
+function preparationState(array $c,array $o):array{$state=preparationRecord($c,$o)['state']??preparationDefault($c,$o);return manufacturingAvailable()?preparationUpgrade($state,$c,$o):$state;}
 function preparationNormalize(array $state,array $c,array $o):array{
  $department=textField($state,'department_id',60);if($department){$w=array_column($c['passport']['structure']['workshops'],null,'id')[$department]??null;if(!$w||($w['kind']??'assembly')!=='preparation')fail('Выберите отдельное подразделение подготовки');}
  $items=[];$ids=[];$total=0;foreach($state['items']??[] as $v){$id=textField($v,'id',60,true);if(!preg_match('/^[a-zA-Z0-9_-]+$/',$id)||isset($ids[$id]))fail('Проверьте коды позиций комплектации');$ids[$id]=true;$q=numberField($v,'quantity',1,100000);$ready=numberField($v,'ready',0,$q);$expected=numberField($v,'expected',0,$q-$ready);$date=!empty($v['ready_date'])?dateField($v,'ready_date'):null;if($expected&&!$date)fail('Для ожидаемых комплектов укажите дату готовности');$total+=$q;$items[]=['id'=>$id,'color'=>textField($v,'color',100,true),'size'=>textField($v,'size',60,true),'quantity'=>$q,'ready'=>$ready,'expected'=>$expected,'ready_date'=>$date];}
@@ -21,6 +21,7 @@ function preparationNormalize(array $state,array $c,array $o):array{
  return ['schema'=>1,'department_id'=>$department,'unit'=>textField($state,'unit',40,true),'items'=>$items,'source'=>textField($state,'source',1000,true),'operations'=>$ops,'cost_mode'=>$mode,'cost_cents'=>$cost];
 }
 function preparationSupply(array $c,array $o,array $covered,int $start):array{
+ if(manufacturingAvailable())return preparationTrancheSupply(preparationState($c,$o),$c,$o,$covered,$start);
  $state=preparationState($c,$o);$supply=[];$deficit=0;$variants=[];$zone=$c['passport']['timezone'];if(isset($covered['variant-main'])&&!in_array('variant-main',array_column($state['items'],'id'),true)){$rest=(int)$covered['variant-main'];unset($covered['variant-main']);foreach($state['items'] as $v){$n=min($rest,max(0,$v['quantity']-($covered[$v['id']]??0)));$covered[$v['id']]=($covered[$v['id']]??0)+$n;$rest-=$n;}}
  foreach($state['items'] as $v){$q=max(0,(int)$v['quantity']-($covered[$v['id']]??0));$already=$covered[$v['id']]??0;$ready=max(0,(int)$v['ready']-$already);$expected=max(0,(int)$v['expected']-max(0,$already-(int)$v['ready']));$ready=min($q,$ready);$expected=min($q-$ready,$expected);$variants[]=$v;
   foreach([['available',$ready,$start],['expected',$expected,!empty($v['ready_date'])?plannerTime($v['ready_date'].' 00:00:00',$zone):$start]] as [$kind,$quantity,$time])if($quantity)$supply[]=['id'=>'supply-'.$kind.'-'.$v['id'].'-offset-'.$already,'variant_id'=>$v['id'],'color'=>$v['color'],'size'=>$v['size'],'quantity'=>$quantity,'ready'=>max($start,$time),'dependency'=>null];$deficit+=$q-$ready-$expected;
@@ -28,6 +29,7 @@ function preparationSupply(array $c,array $o,array $covered,int $start):array{
  return ['supply'=>$supply,'deficit'=>$deficit,'state'=>$state,'variants'=>$variants];
 }
 function preparationTaskAllowance(array $t):?int{
+ if(manufacturingAvailable())return preparationV74TaskAllowance($t);
  $order=one('SELECT * FROM orders WHERE id=? AND company_id=?',[$t['order_id'],$t['company_id']]);if(!$order)return null;$order['route']=decode($order['route']);$order['preparation_route']=productionPreparationRoute($order['route']);$route=productionAssemblyRoute($order['route']);$op=array_column($route,null,'id')[$t['operation_id']]??null;if(!$op||$op['dependencies'])return null;
  $c=context();$state=preparationState($c,$order);$meta=decode($t['planning_meta']??null);$variant=$meta['variant_id']??'variant-main';$ready=0;foreach($state['items'] as $v)if($v['id']===$variant||$variant==='variant-main')$ready+=(int)$v['ready'];
  $used=0;$usedAll=0;$readyAll=array_sum(array_column($state['items'],'ready'));foreach(rows("SELECT * FROM tasks WHERE company_id=? AND order_id=? AND operation_id=? AND state<>'cancelled'",[$t['company_id'],$t['order_id'],$t['operation_id']]) as $other){$m=decode($other['planning_meta']??null);$usedAll+=(int)$other['released'];if(($m['variant_id']??'variant-main')===$variant)$used+=(int)$other['released'];}

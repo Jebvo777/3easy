@@ -60,3 +60,6 @@ function manufacturingTechnologySummary(array $route,array $p,int $quantity,stri
 function manufacturingTimestamp(string $value,string $zone):int{
  try{$d=new DateTimeImmutable($value,new DateTimeZone($zone));return $d->getTimestamp();}catch(Throwable){fail('Укажите корректные дату и время');}
 }
+function manufacturingRedact(mixed $v):mixed{
+ if(!is_array($v))return $v;$out=[];foreach($v as $k=>$x){if(is_string($k)&&(preg_match('/cents|micros|tariff|payroll|earnings/',$k)||in_array($k,['pay','pay_rule','pay_rule_id','basis_points'],true)))continue;$out[$k]=manufacturingRedact($x);}return $out;
+}

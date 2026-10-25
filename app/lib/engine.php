@@ -34,7 +34,7 @@ function engineHash(array $c,array $orders,array $tasks):string{
  return hash('sha256',j(['version'=>ENGINE_VERSION,'company_revision'=>(int)$c['revision'],'orders'=>array_map(fn($o)=>[$o['id'],(int)$o['revision']],$orders),'tasks'=>array_map(fn($t)=>[$t['id'],(int)$t['revision'],$t['state']],$tasks)]));
 }
 function engineInputs(array $c):array{
- $orders=rows("SELECT * FROM orders WHERE company_id=? AND status<>'archived' ORDER BY deadline,id",[$c['id']]);foreach($orders as &$o){$o['variants']=goalVariants($o);$raw=decode($o['route']);$o['preparation_route']=productionPreparationRoute($raw);$o['route']=productionAssemblyRoute($raw);$o['expenses']=decode($o['expenses']);$o['preparation']=preparationState($c,$o);$o['_preparation_cost_unknown']=($o['preparation']['cost_mode']??'unknown')==='unknown';}unset($o);
+ $orders=rows("SELECT * FROM orders WHERE company_id=? AND status<>'archived' ORDER BY deadline,id",[$c['id']]);foreach($orders as &$o){$o['variants']=goalVariants($o);$raw=decode($o['route']);$o['preparation_route']=productionPreparationRoute($raw);$o['route']=productionAssemblyRoute($raw);$o['expenses']=decode($o['expenses']);$o['preparation']=preparationState($c,$o);$o['_preparation_cost_unknown']=(($o['preparation']['cost_mode']??'unknown')==='unknown'||($o['preparation']['cost_complete']??true)===false);}unset($o);
  $tasks=rows("SELECT * FROM tasks WHERE company_id=? AND state<>'cancelled' ORDER BY id",[$c['id']]);return [$orders,productionAssemblyTasks($orders,$tasks)];
 }
 // Exact integer cents, rounded half up; no floating-point money arithmetic.

@@ -1,3 +1,4 @@
+import {mountSupplyPreparation} from './preparation-supply.js';
 import {mountCutting} from './cutting.js';
 import {S,e,key,api,refresh,button,toast,num} from './core.js';
 function mountLegacyPreparation(host,order,{onSaved=()=>{}}={}){
@@ -17,6 +18,6 @@ function mountLegacyPreparation(host,order,{onSaved=()=>{}}={}){
 
 export function mountPreparation(host,order,options={}){
  let child=null,mode='supply',disposed=false;
- function draw(){child?.dispose();host.innerHTML=`<div class="preparation-tabs"><button class="btn ${mode==='supply'?'active':''}" data-prep-view="supply">Крой для пошива</button><button class="btn ${mode==='cutting'?'active':''}" data-prep-view="cutting">Раскрой · калькулятор</button></div><div data-preparation-content></div>`;host.querySelectorAll('[data-prep-view]').forEach(b=>b.onclick=()=>{if(child?.dirty||child?.busy){toast('Сначала сохраните текущие изменения',true);return;}mode=b.dataset.prepView;draw();});child=(mode==='cutting'?mountCutting:mountLegacyPreparation)(host.querySelector('[data-preparation-content]'),order,options);}
+ function draw(){child?.dispose();host.innerHTML=`<div class="preparation-tabs"><button class="btn ${mode==='supply'?'active':''}" data-prep-view="supply">Крой для пошива</button><button class="btn ${mode==='cutting'?'active':''}" data-prep-view="cutting">Раскрой · калькулятор</button></div><div data-preparation-content></div>`;host.querySelectorAll('[data-prep-view]').forEach(b=>b.onclick=()=>{if(child?.dirty||child?.busy){toast('Сначала сохраните текущие изменения',true);return;}mode=b.dataset.prepView;draw();});child=(mode==='cutting'?mountCutting:mountSupplyPreparation)(host.querySelector('[data-preparation-content]'),order,{...options,legacy:mountLegacyPreparation});}
  draw();return {get dirty(){return child?.dirty||false;},get busy(){return child?.busy||false;},save(){return child?.save();},dispose(){disposed=true;child?.dispose();}};
 }
