@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/preparation.php';
+require_once __DIR__.'/manufacturing.php';
 const ENGINE_VERSION='easy3-company-piecework/3.1';
 function routeCheck(array $route):array{
  if(!$route)return ['Технология ещё не собрана'];$errors=[];$map=[];$used=[];$degree=[];$next=[];
