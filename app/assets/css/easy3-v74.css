@@ -3,3 +3,73 @@
 .preparation-tabs,.cutting-steps{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 18px}.cutting-steps>span{flex:1}.cutting-space{padding-bottom:20px}.cutting-space .field-grid{margin:16px 0}.cutting-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0;padding:16px;background:#f2f7ef;border:1px solid #dbe7d6;border-radius:16px}.cutting-metrics strong,.cutting-metrics small,.cutting-metrics span{display:block}.cutting-metrics strong{font-size:19px;margin:6px 0}.cutting-metrics small,.cutting-metrics span{font-size:12px;color:#5d7566}.cutting-crew{border:1px solid #dce5da;border-radius:12px;display:flex;gap:12px;flex-wrap:wrap;padding:12px;margin:16px 0}.cutting-norms{margin:18px 0}.cut-norm-row{display:grid;grid-template-columns:2fr 1.5fr 90px 70px 2fr 30px;gap:8px;margin:10px 0}.cutting-jobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:18px 0}.cutting-jobs article{border:1px solid #dce5da;padding:16px;border-radius:14px}.cutting-version-list{margin-top:22px}.cutting-version-list select{max-width:650px}.cutting-space .prep-table td{vertical-align:top}.cutting-space .prep-table input,.cutting-space .prep-table select{min-width:85px}.btn.active{background:#dcebd9;color:#1a4b38}@media(max-width:800px){.cut-norm-row{grid-template-columns:1fr 1fr}.cutting-space .panel-head{align-items:start;flex-direction:column}}
 
 .shift-projection,.shift-work{margin:18px 0;padding:18px;border:1px solid #dbe5da;background:rgba(255,255,255,.7);border-radius:16px}.shift-projection .prep-table td{vertical-align:top}.shift-projection .prep-table small{display:block;margin-top:5px}.shift-work>details,.shift-work [data-shift-projections]>details{margin:12px 0}.planning-scope-controls{background:#f4f8f1;border-radius:14px;padding:16px;margin-bottom:16px}.production-shift-work{max-height:560px;overflow:auto}.shift-work .shift-projection{background:#fafcf8}.preparation-supply .prep-table small{display:block;margin-top:5px;color:#617967}
+
+/* 7.4.1: keep the three production maps and their details in one scroll area. */
+.plan-space{min-width:0}
+.plan-space .plan-body{scrollbar-width:thin;scrollbar-color:#b6c8b8 transparent;overscroll-behavior:contain;padding-right:6px}
+.plan-space .plan-body::-webkit-scrollbar{display:block;width:6px;height:6px}
+.plan-space .plan-body::-webkit-scrollbar-thumb{background:#b6c8b8;border-radius:6px}
+.plan-body.map-body{overflow:auto;gap:14px;padding:1px 6px 8px 1px}
+.plan-body.map-body>*{flex-shrink:0;min-width:0}
+.plan-body.map-body>.shop-toolbar{align-items:center;flex-wrap:wrap;gap:12px;margin:0;padding:0}
+.plan-body.map-body>.shop-toolbar>.row{flex-wrap:wrap;gap:8px}
+.plan-body.map-body>.shop-layout{flex:1 0 clamp(360px,45dvh,640px);min-height:360px;grid-template-columns:minmax(0,1fr) 280px;gap:16px;overflow:hidden}
+.plan-body.map-body .shop-map{min-width:0;min-height:0;border-radius:14px}
+.plan-body.map-body .production-map-scroll{height:100%;min-height:0;max-height:none;scrollbar-width:thin;scrollbar-color:#b0c3ac transparent;overscroll-behavior:contain}
+.plan-body.map-body .production-map-scroll::-webkit-scrollbar{display:block;width:6px;height:6px}
+.plan-body.map-body .production-map-scroll::-webkit-scrollbar-thumb{background:#b0c3ac;border-radius:6px}
+.plan-body.map-body .shop-inspector{min-width:0;min-height:0;padding:18px;border:1px solid #d4dfd1;border-radius:14px;background:#f7faf3;scrollbar-width:thin;overscroll-behavior:contain}
+.plan-body.map-body .shop-inspector>h3{overflow-wrap:anywhere}
+.plan-space .planning-scope-controls,.plan-space .plan-shift-details{flex:none;margin:0 0 16px;padding:0;border:1px solid #d4e0d3;border-radius:14px;background:#f7faf3;overflow:hidden}
+.plan-body.map-body>.planning-scope-controls,.plan-body.map-body>.plan-shift-details,.plan-body.map-body>.plan-wage-summary{margin:0}
+.plan-space .planning-scope-controls>summary,.plan-space .plan-shift-details>summary{display:flex;align-items:center;gap:16px;min-height:68px;list-style:none;padding:13px 17px;cursor:pointer;user-select:none}
+.plan-space .planning-scope-controls>summary::-webkit-details-marker,.plan-space .plan-shift-details>summary::-webkit-details-marker{display:none}
+.plan-space .planning-scope-controls>summary::marker,.plan-space .plan-shift-details>summary::marker{content:''}
+.plan-space .planning-scope-controls>summary:hover,.plan-space .plan-shift-details>summary:hover{background:#eef4e9}
+.plan-space .planning-scope-controls>summary:focus-visible,.plan-space .plan-shift-details>summary:focus-visible{outline:2px solid #52795b;outline-offset:-3px;border-radius:12px}
+.plan-panel-title{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
+.plan-panel-title>svg{width:19px;height:19px;flex:none;color:#55775b}
+.plan-panel-title>span{display:grid;gap:5px;min-width:0}
+.plan-panel-title strong{font-size:13px;font-weight:600;line-height:1.4}
+.plan-panel-title small{font-size:11px;color:#617560;line-height:1.4}
+.plan-panel-value{font-size:12px;color:#46644c;line-height:1.5;text-align:right;max-width:48%;overflow-wrap:anywhere}
+.plan-space .planning-scope-controls>summary>svg,.plan-space .plan-shift-details>summary>svg{width:15px;height:15px;flex:none;color:#64816a;transform:rotate(90deg)}
+.plan-space .planning-scope-controls[open]>summary>svg,.plan-space .plan-shift-details[open]>summary>svg{transform:rotate(-90deg)}
+.planning-scope-fields{padding:16px 17px 17px;border-top:1px solid #dce6d8}
+.planning-scope-fields>.field-grid{grid-template-columns:minmax(240px,1.6fr) minmax(170px,1fr) minmax(140px,.7fr);gap:16px;align-items:end}
+.planning-scope-fields label{min-width:0;font-size:12px;line-height:1.5}
+.planning-scope-fields input,.planning-scope-fields select{width:100%;min-width:0;padding:11px 12px;font-size:13px}
+.planning-scope-fields>.hint{margin-top:12px;font-size:11px;line-height:1.65;max-width:1050px}
+.plan-shift-details>.shift-projection,.plan-shift-details>[data-plan-shift-content]>.shift-projection{margin:0;padding:18px;border:0;border-top:1px solid #dce6d8;border-radius:0;background:#fbfdf8}
+.plan-shift-details [data-plan-shift-content]>.hint{padding:0 18px 18px;line-height:1.6}
+.plan-shift-details .panel-head{align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:16px}
+.plan-shift-details .panel-head h3{font-size:18px;margin-top:6px}
+.plan-shift-details .panel-head label{min-width:160px;font-size:12px}
+.plan-shift-details .cutting-metrics{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:0 0 16px;gap:16px;background:#f0f6eb}
+.plan-shift-details .prep-table-scroll{margin:0 0 14px;background:#fff}
+.plan-shift-details .prep-table{font-size:12px}
+.plan-space .plan-wage-summary{flex:none;background:#f7faf3;min-width:0}
+@media(max-width:1100px){
+ .planning-scope-fields>.field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .planning-scope-fields>.field-grid>label:first-child{grid-column:1/-1}
+ .plan-body.map-body>.shop-layout{grid-template-columns:minmax(0,1fr) 240px;gap:12px}
+ .plan-body.map-body .shop-inspector{padding:14px}
+}
+@media(max-width:760px){
+ .plan-body.map-body{gap:12px}
+ .plan-body.map-body>.shop-toolbar>.segmented{display:flex;width:100%;min-width:0}
+ .plan-body.map-body>.shop-toolbar>.segmented>button{min-width:0;white-space:normal;flex:1;line-height:1.4;padding:10px 6px}
+ .plan-body.map-body>.shop-toolbar>.row{width:100%;justify-content:flex-end}
+ .plan-body.map-body>.shop-layout{flex:none;min-height:0;grid-template-columns:minmax(0,1fr);grid-template-rows:320px auto;gap:12px;overflow:visible}
+ .plan-body.map-body .shop-inspector{max-height:340px;padding:16px}
+ .plan-space .planning-scope-controls>summary,.plan-space .plan-shift-details>summary{flex-wrap:wrap;gap:8px 12px;padding:13px 14px}
+ .plan-panel-title{flex-basis:calc(100% - 30px);order:0}
+ .plan-panel-value{order:2;flex-basis:100%;max-width:none;text-align:left;padding-left:30px;font-size:11px}
+ .planning-scope-fields{padding:14px}
+ .planning-scope-fields>.field-grid{grid-template-columns:minmax(0,1fr);gap:13px}
+ .planning-scope-fields>.field-grid>label:first-child{grid-column:auto}
+ .plan-shift-details>[data-plan-shift-content]>.shift-projection{padding:14px}
+ .plan-shift-details .panel-head label{width:100%}
+ .plan-shift-details .cutting-metrics{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px;gap:14px}
+ .plan-shift-details .cutting-metrics strong{font-size:17px}
+}
